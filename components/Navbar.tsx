@@ -2,11 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useWaitlist } from "./WaitlistProvider";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const { openWaitlist } = useWaitlist();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -48,12 +46,12 @@ export default function Navbar() {
         >
           How it works
         </Link>
-        <button
-          onClick={() => openWaitlist("navbar")}
+        <Link
+          href="/onboarding"
           className="px-4 py-2 bg-terracotta text-parchment text-[0.8rem] font-bold rounded-lg hover:bg-burnt transition-all hover:scale-[1.04]"
         >
-          Get early access
-        </button>
+          Get started
+        </Link>
       </div>
     </nav>
   );

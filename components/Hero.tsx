@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import Reveal from "./Reveal";
-import { useWaitlist } from "./WaitlistProvider";
 
 function HeroCard({
   label,
@@ -45,7 +44,6 @@ function HeroCard({
 }
 
 export default function Hero() {
-  const { openWaitlist } = useWaitlist();
   return (
     <section className="min-h-screen flex items-center pt-16 relative overflow-hidden">
       {/* Glow */}
@@ -75,15 +73,15 @@ export default function Hero() {
             </Reveal>
             <Reveal delay={240}>
               <div className="flex gap-3 items-center flex-wrap">
-                <button
-                  onClick={() => openWaitlist("landing_hero")}
+                <Link
+                  href="/onboarding"
                   className="inline-flex items-center gap-2 px-7 py-3.5 bg-terracotta text-parchment rounded-[10px] text-[0.92rem] font-semibold hover:bg-burnt hover:scale-[1.03] transition-all group"
                 >
-                  Get early access{" "}
+                  Get started{" "}
                   <span className="inline-block transition-transform group-hover:translate-x-[3px]">
                     →
                   </span>
-                </button>
+                </Link>
                 <Link
                   href="#features"
                   className="px-6 py-3.5 bg-transparent text-espresso border-[1.5px] border-sand rounded-[10px] text-[0.92rem] font-medium hover:border-clay hover:scale-[1.02] transition-all"

@@ -1,6 +1,5 @@
 import Reveal from "./Reveal";
 import Link from "next/link";
-import WaitlistButton from "./WaitlistButton";
 
 const tiers = [
   {
@@ -140,8 +139,8 @@ export default function Pricing() {
                     </li>
                   ))}
                 </ul>
-                <WaitlistButton
-                  source={`pricing_${t.name.toLowerCase()}`}
+                <Link
+                  href="/onboarding"
                   className={`block w-full py-3 rounded-[10px] text-center text-[0.85rem] font-semibold transition-all hover:scale-[1.02] ${
                     t.popular
                       ? "bg-terracotta text-parchment hover:bg-burnt"
@@ -149,7 +148,7 @@ export default function Pricing() {
                   }`}
                 >
                   {t.cta}
-                </WaitlistButton>
+                </Link>
               </div>
             </Reveal>
           ))}

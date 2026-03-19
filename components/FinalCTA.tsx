@@ -1,6 +1,5 @@
 import Reveal from "./Reveal";
 import Link from "next/link";
-import WaitlistButton from "./WaitlistButton";
 
 export default function FinalCTA() {
   return (
@@ -21,15 +20,15 @@ export default function FinalCTA() {
         </Reveal>
         <Reveal delay={160}>
           <div className="flex gap-3 justify-center flex-wrap">
-            <WaitlistButton
-              source="final_cta"
+            <Link
+              href="/onboarding"
               className="inline-flex items-center gap-2 px-7 py-3.5 bg-terracotta text-parchment rounded-[10px] text-[0.92rem] font-semibold hover:bg-burnt hover:scale-[1.03] transition-all group"
             >
-              Get early access{" "}
+              Get started{" "}
               <span className="inline-block transition-transform group-hover:translate-x-[3px]">
                 →
               </span>
-            </WaitlistButton>
+            </Link>
             <Link
               href="#features"
               className="px-6 py-3.5 bg-transparent text-espresso border-[1.5px] border-sand rounded-[10px] text-[0.92rem] font-medium hover:border-clay hover:scale-[1.02] transition-all"

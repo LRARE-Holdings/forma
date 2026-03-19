@@ -8,11 +8,10 @@ import HowItWorks from "@/components/HowItWorks";
 import Pricing from "@/components/Pricing";
 import FinalCTA from "@/components/FinalCTA";
 import Footer from "@/components/Footer";
-import WaitlistProvider from "@/components/WaitlistProvider";
 
 export default function Home() {
   return (
-    <WaitlistProvider>
+    <>
       <Navbar />
       <Hero />
       <TrustStrip />
@@ -25,6 +24,6 @@ export default function Home() {
       <Pricing />
       <FinalCTA />
       <Footer />
-    </WaitlistProvider>
+    </>
   );
 }
