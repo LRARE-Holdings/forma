@@ -1,26 +1,73 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-parchment: #FFFCF9;
+  --color-linen: #F5EDE4;
+  --color-sand: #E8DDD1;
+  --color-clay: #D4C4B0;
+  --color-terracotta: #C2714F;
+  --color-burnt: #A85A3A;
+  --color-blush: #F5D5C3;
+  --color-espresso: #2C1810;
+  --color-bark: #5C3D2E;
+  --color-driftwood: #8B7265;
+  --color-fog: #B09E93;
+  --color-charcoal: #1A1210;
+  --color-cocoa: #2A1F1A;
+  --color-bisque: #E8CEB8;
+  --color-sandstone: #9C8474;
+  --color-sage: #2E7D5B;
+  --color-amber: #D97706;
+
+  --font-serif: "Instrument Serif", Georgia, serif;
+  --font-sans: "Satoshi", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-parchment);
+    color: var(--color-espresso);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  ::selection {
+    background-color: var(--color-blush);
+    color: var(--color-espresso);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes checkIn {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
 }
