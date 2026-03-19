@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import OnboardingShell from "@/components/onboarding/OnboardingShell";
 
 export const metadata: Metadata = {
@@ -7,5 +8,9 @@ export const metadata: Metadata = {
 };
 
 export default function OnboardingPage() {
-  return <OnboardingShell />;
+  return (
+    <Suspense>
+      <OnboardingShell />
+    </Suspense>
+  );
 }

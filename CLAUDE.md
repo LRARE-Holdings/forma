@@ -1,428 +1,202 @@
-# CLAUDE.md — Forma Marketing Website
+# CLAUDE.md — forma-landing
 
-You are building the marketing website for **Forma**, a platform that provides independent fitness studios with beautiful websites, integrated booking, payments, and class management. This site lives at **useforma.co.uk** and is separate from the studio public sites and the admin dashboard.
+## What this project is
 
-This is a marketing and onboarding site — not the product itself. Its job is to explain what Forma is, convert studio owners into signups, and collect the information needed to build their studio site.
+The marketing and onboarding website for **Forma**, a platform that builds websites, booking systems, and payment processing for independent fitness and wellness studios. Domain: **useforma.co.uk**
 
----
+This is not studio-specific. This is where prospective studio owners discover Forma, see pricing, and sign up. It is completely independent from the studio-facing apps (`burn-public` and `forma-admin`).
 
-## Tech Stack
+## Tech stack
 
-- **Framework:** Next.js 16.2.0 (App Router, TypeScript, Tailwind CSS v4)
-- **Hosting:** Vercel — deployed at useforma.co.uk
-- **Database:** Supabase — shared database (same project as studio sites and admin). Onboarding submissions are stored in a `leads` or `onboarding_submissions` table.
-- **Payments:** Stripe — for Forma subscription billing (separate from studio payment processing). Studios pay their Forma subscription from this site.
-- **Email:** Resend — welcome emails, onboarding status updates
-- **Analytics:** Vercel Analytics or Plausible (privacy-friendly, no cookie banner needed)
+- **Framework:** Next.js 15, App Router, TypeScript
+- **Database:** Supabase (writes to `onboarding_submissions`, `email_signups`, and provisions `studios`, `profiles`, `studio_memberships` via webhook)
+- **Payments:** Stripe Billing (subscription checkout for Forma tiers, Customer Portal for plan management)
+- **Hosting:** Vercel
+- **Email:** Resend (welcome emails, onboarding follow-ups, subscription confirmations)
 
----
+## What this app handles
 
-## Brand System
+- **Marketing pages:** Homepage, features, pricing, about/story, FAQ, contact
+- **Pricing display:** Four tiers with CTAs linking into the onboarding wizard
+- **Onboarding wizard:** 5-step flow ending with tier selection and Stripe Checkout for subscription payment
+- **Stripe subscription billing:** Checkout Sessions in subscription mode, webhook handles provisioning, Customer Portal for plan management
+- **Email signup:** Newsletter / waitlist capture
+- **Legal pages:** Privacy policy, terms of service
 
-### Name & Logo
-- **Name:** Forma
-- **Logo:** Wordmark only. "forma" in Satoshi Black (900 weight), rendered as outline stroke with no fill. Stroke colour: Bark (#5C3D2E) on light backgrounds, Bisque (#E8CEB8) on dark backgrounds.
-- **Tagline:** Book. Pay. Breathe.
+## What this app does NOT handle
 
-### Colours
+- Studio websites, booking, payments → that's `burn-public` (per-studio)
+- Studio admin dashboards, class management → that's `forma-admin`
 
-| Name | Hex | Role |
-|------|-----|------|
-| Parchment | #FFFCF9 | Page background |
-| Linen | #F5EDE4 | Cards, raised surfaces, alt sections |
-| Sand | #E8DDD1 | Borders, dividers |
-| Clay | #D4C4B0 | Muted fills, disabled states |
-| Terracotta | #C2714F | Primary CTA, accent, links |
-| Burnt Clay | #A85A3A | CTA hover/pressed |
-| Blush | #F5D5C3 | Tags, badges, soft highlights |
-| Espresso | #2C1810 | Headings, primary text |
-| Bark | #5C3D2E | Body text, logo outline |
-| Driftwood | #8B7265 | Secondary text, captions |
-| Fog | #B09E93 | Tertiary text, placeholders |
-| Charcoal | #1A1210 | Dark section background (features) |
-| Cocoa | #2A1F1A | Dark cards, raised dark surfaces |
-| Bisque | #E8CEB8 | Primary text on dark |
-| Sandstone | #9C8474 | Secondary text on dark |
-| Sage | #2E7D5B | Success, availability badges |
-| Amber | #D97706 | Warning, low availability |
+## Forma business context
+
+### Positioning
+
+Forma targets the ~8,000 independent fitness and wellness studios in the UK that are underserved by existing tools. Studios like Burn Mat Studio fall between generic website builders (too rigid), enterprise platforms like Mindbody/Glofox (overpriced, clunky), and custom freelance builds (can't scale).
+
+Forma's approach: productised builds that look custom. Every studio gets a unique visual identity — no cookie-cutter sites. Hybrid model starting with manual builds, evolving toward a multi-tenant platform.
+
+**Tagline:** "Book. Pay. Breathe."
+
+### Pricing tiers
+
+| Tier | Price | Notes |
+|---|---|---|
+| Launch | £39/mo | — |
+| Studio | £59/mo | Most popular |
+| Pro | £89/mo | — |
+| Partner | £129/mo | White-label |
+
+- No setup fees, no contracts, no revenue commission
+- Stripe Connect Standard accounts for per-studio payments (studios own their Stripe account)
+- Blended ARPU target: ~£67/mo
+
+### Market
+
+- UK TAM: ~8,000 independent studios
+- ARR potential: ~£5.7M
+- Target customers: Pilates, yoga, HIIT, barre, dance fitness, PT studios — small teams (1-5 instructors), class-based businesses
+
+## Forma brand
+
+### Palette
+
+| Token | Colour | Hex |
+|---|---|---|
+| Parchment | Off-white background | `#FFFCF9` |
+| Terracotta | Primary accent | `#C2714F` |
+| Espresso | Dark text / headings | `#2C1810` |
+| Bark | Secondary dark | `#5C3D2E` |
+
+Warm, earthy, premium but approachable. Not tech-bro SaaS energy. Think artisan coffee shop, not dashboard factory.
 
 ### Typography
-- **Headings:** Instrument Serif (Google Fonts) — warm, editorial, premium
-- **Body/UI:** Satoshi (Fontshare) — weights 400, 500, 700, 900
-- **Data/labels:** IBM Plex Mono (Google Fonts) — eyebrow labels, pricing figures
 
-### Tailwind v4 Setup
-All colours defined as `@theme` tokens in `globals.css`:
-```css
-@theme {
-  --color-parchment: #FFFCF9;
-  --color-linen: #F5EDE4;
-  --color-sand: #E8DDD1;
-  --color-clay: #D4C4B0;
-  --color-terracotta: #C2714F;
-  --color-burnt: #A85A3A;
-  --color-blush: #F5D5C3;
-  --color-espresso: #2C1810;
-  --color-bark: #5C3D2E;
-  --color-driftwood: #8B7265;
-  --color-fog: #B09E93;
-  --color-charcoal: #1A1210;
-  --color-cocoa: #2A1F1A;
-  --color-bisque: #E8CEB8;
-  --color-sandstone: #9C8474;
-  --color-sage: #2E7D5B;
-  --color-amber: #D97706;
-  --font-serif: "Instrument Serif", Georgia, serif;
-  --font-sans: "Satoshi", -apple-system, sans-serif;
-  --font-mono: "IBM Plex Mono", monospace;
-}
-```
+- **Headings:** Instrument Serif
+- **Body & Logo:** Satoshi
+- **Data / Code / Labels:** IBM Plex Mono
 
-### Aesthetic Direction
-Warm, earthy, premium but approachable. Editorial confidence with generous whitespace. Not a SaaS template — it should feel like it was designed by a human who cares about studios. Subtle grain overlay optional. Scroll-triggered reveal animations on every section.
+### Logo
 
----
+Outline-only wordmark in **Satoshi Black**. Simple, clean, no icon. The word "forma" is the logo.
 
-## Site Structure
+## Database
 
-### Pages
+This site reads and writes to the shared Supabase instance. Most tables are append-only from the public site, but the Stripe webhook also provisions studios on successful payment.
 
-```
-/                     Landing page (hero, problem, features, testimonial, how it works, pricing, CTA)
-/onboarding           5-step signup wizard
-/onboarding/success   Post-signup confirmation with timeline
-/blog                 SEO content hub (future — Phase 2)
-/blog/[slug]          Individual blog posts (future)
-/privacy              Privacy policy
-/terms                Terms of service
-```
+**Written by the onboarding wizard:**
+- `onboarding_submissions` — data from the wizard (studio name, owner details, class types, preferences, theme mood selection, selected tier)
+- `email_signups` — newsletter/waitlist captures
 
----
+**Written by the Stripe webhook on successful subscription:**
+- `studios` — new row with name, slug, domain, `email_from`, `email_domain`, `branding` JSON (seeded from onboarding preferences), `stripe_customer_id`, `stripe_subscription_id`, `plan_tier`
+- `profiles` — new row for the studio owner (or linked to existing if they already have an auth account)
+- `studio_memberships` — new row linking the owner to their studio with role = admin
 
-## Page: / (Landing Page)
+The webhook also creates a Supabase Auth account for the owner (if they don't already have one) and sends them a welcome email with login instructions.
 
-The landing page is already built (see existing Next.js project). It consists of these sections in order:
+## Onboarding wizard (5 steps)
 
-### Navbar (fixed, scroll-aware)
-- Outline wordmark "forma" left-aligned
-- Links: Features, Pricing, How it works (hidden on mobile)
-- CTA button: "Get early access" (terracotta, rounded)
-- On scroll: frosted glass background, subtle border, shadow
+1. **Studio basics** — name, location, type of studio
+2. **Class setup** — class types they offer, rough pricing
+3. **Team** — how many instructors, their roles
+4. **Theme mood picker** — visual identity preferences (feeds into the `studios.branding` JSON column when provisioned)
+5. **Plan & pay** — select tier (Launch / Studio / Pro / Partner), review summary of everything entered, owner name + email + phone, then "Start my studio" CTA → redirects to Stripe Checkout in subscription mode
 
-### Hero
-- Eyebrow: "Websites for studios that move" (mono, uppercase, terracotta dash prefix)
-- Headline: "Your studio, online." (Instrument Serif, em on "online" in terracotta)
-- Subhead: one paragraph explaining the value prop
-- Two CTAs: "Get early access →" (terracotta) + "See how it works" (outline)
-- Right column (desktop only): 3 floating UI preview cards (rotated, with hover effects)
-  - Card 1: Today's classes — Hot Pilates · 9:00, spots bar animation
-  - Card 2: Revenue this week — £1,240, ↑ 18%
-  - Card 3: New members — 7 this month
+The wizard saves progress to `onboarding_submissions` as the owner advances through steps (so partial completions are captured even if they don't finish). On step 5, the submission is finalised and the Stripe Checkout Session is created with all onboarding data passed as metadata.
 
-### Trust Strip
-- "Powered by" label + Next.js, Stripe, Supabase, Vercel, Resend logos (text only, low opacity)
+**After Stripe Checkout:** On successful payment, the Stripe webhook auto-provisions the studio. The owner receives a welcome email with login credentials and next steps. They land on a confirmation/success page that explains what happens next (their site is being set up, they'll get access to their admin dashboard, etc.).
 
-### Problem Section
-- 2-column: heading left ("Studios deserve better than this"), description right
-- 3 pain point cards in a 1px-gap grid:
-  1. Enterprise pricing, micro-studio budget (Mindbody £110+/mo)
-  2. Two tools duct-taped together (Squarespace + booking widget)
-  3. Booking tools with no web presence
+## Stripe Billing
 
-### Features Section (dark background — Charcoal #1A1210)
-- Eyebrow + heading + description in Bisque/Sandstone
-- 4 feature cards (2x2 grid) + 1 wide card spanning full width
-- Feature cards: icon (terracotta circle), title (Bisque), description (Sandstone)
-  1. Stunning studio website
-  2. Integrated class booking
-  3. Stripe-powered payments
-  4. Automated emails
-  5. (Wide) Your schedule, always live — includes a mini schedule preview UI with class names, times, and spots badges (Sage for available, Amber for low)
+### Products (4 subscriptions, monthly recurring)
 
-### Testimonial
-- Large italic serif quote from Lucy (Burn Mat Studio, Sheffield)
-- Avatar circle (Blush background, "L" initial), name + studio below
+| Product | Price | Stripe metadata |
+|---|---|---|
+| Forma Launch | £39/mo | plan_tier: launch |
+| Forma Studio | £59/mo | plan_tier: studio |
+| Forma Pro | £89/mo | plan_tier: pro |
+| Forma Partner | £129/mo | plan_tier: partner |
 
-### How It Works (Linen background)
-- 4 steps with numbered circles, dashed connector line (desktop)
-- Each: number (serif, terracotta), title (bold), description
-  1. Sign up
-  2. We build it
-  3. You manage it
-  4. Your studio grows
+All subscriptions are monthly with no commitment — cancel anytime.
 
-### Pricing
-- Centered heading: "Honest prices for real studios"
-- 4-tier grid (responsive: 1-col mobile, 2-col tablet, 4-col desktop):
+### API routes
 
-| Tier | Name | Price | Popular |
-|------|------|-------|---------|
-| Foundation | Launch | £39/mo | No |
-| Growth | Studio | £59/mo | Yes — terracotta border, "Most popular" badge |
-| Scale | Pro | £89/mo | No |
-| White-label | Partner | £129/mo | No |
+**POST `/api/checkout/subscribe`** — Creates a Stripe Checkout Session in subscription mode. Receives: onboarding_submission_id, plan_tier. Looks up the submission data. Creates the Checkout Session with metadata: { onboarding_submission_id, plan_tier, owner_email, studio_name }. Returns the checkout URL.
 
-- Each card: tier label (mono), name (bold), price (serif, large), description, feature list with ✓ marks, CTA button
-- Note below: "Only Stripe's standard processing fees apply. We never take a cut of your revenue."
+**POST `/api/webhooks/stripe`** — Handles Stripe webhook events. Verify signature. Key events:
 
-### Final CTA
-- "Book. Pay. Breathe." (serif, large, "Breathe" in terracotta italic)
-- Subtitle + two CTA buttons
-- Subtle radial glow underneath
+- **checkout.session.completed** (mode = subscription) → Auto-provision the studio:
+  1. Read metadata to get onboarding_submission_id
+  2. Fetch the full submission from `onboarding_submissions`
+  3. Create `studios` row (name, slug, domain placeholder, email config, branding from theme mood, stripe_customer_id, stripe_subscription_id, plan_tier)
+  4. Create Supabase Auth account for the owner (or find existing)
+  5. Create `profiles` row (if new)
+  6. Create `studio_memberships` row (owner as admin at new studio)
+  7. Update `onboarding_submissions` status to 'provisioned'
+  8. Send welcome email via Resend from hello@useforma.co.uk
 
-### Footer
-- Outline wordmark, nav links (Features, Pricing, Privacy, Terms, Contact), copyright "© 2026 Forma. Built in Sheffield."
+- **customer.subscription.updated** → Update `studios.plan_tier` if they upgrade/downgrade
+- **customer.subscription.deleted** → Mark studio as inactive (soft delete — don't destroy data)
+- **invoice.payment_failed** → Flag studio, send dunning email
 
----
+**Idempotency:** Always check if a studio already exists for this stripe_customer_id before provisioning.
 
-## Page: /onboarding (5-Step Wizard)
+### Stripe Customer Portal
 
-Interactive multi-step form. Progress bar at top. Step indicator. Smooth transitions between steps.
+Enabled for plan management. Studio owners can upgrade, downgrade, update payment method, or cancel via a link in their admin dashboard (forma-admin provides the link, but the portal itself is Stripe-hosted). Portal access URL generated via `/api/billing/portal` route.
 
-### Top Bar
-- Outline wordmark "forma" left
-- "Step X of 5" right (mono, fog)
-- Progress bar below (terracotta fill on sand track)
+## Key architectural decisions
 
-### Step 1: Your studio
-Fields:
-- Studio name (text) — placeholder: "e.g. Burn Mat Studio"
-- Location (text) — placeholder: "e.g. Sheffield"
-- Studio type (select) — options: Pilates, Yoga, Pilates & Yoga, HIIT & Functional, Boxing, Barre, Dance, Spin / Cycling, Multi-discipline
-- Your name (text)
-- Email (email)
-- Custom domain (text, optional) — hint: "Already have a domain? We'll connect it. If not, we'll set up a free subdomain."
+1. **Fully decoupled from studio runtime** — this site handles discovery, onboarding, and billing. It provisions studios but doesn't serve them. No shared runtime state with burn-public or forma-admin beyond the Supabase connection.
+2. **No auth for browsing** — marketing pages and the wizard are fully public. The owner only creates an account as part of provisioning (handled by the webhook, not a signup form).
+3. **Onboarding-to-payment is one flow** — the wizard captures everything, tier selection is the final step, Stripe Checkout is the payment gate. No separate "sign up then pay later" path.
+4. **Webhook-driven provisioning** — the studio is created automatically on successful subscription payment. No manual step. The webhook is the source of truth for "this studio exists and is paid for."
+5. **Theme mood picker is aspirational** — it captures preferences that seed the `studios.branding` JSON. It doesn't auto-generate a full theme yet. Over time, this will feed into automated theming.
+6. **SEO matters** — this is a marketing site. Every page should be SSR/SSG with proper meta tags, Open Graph, structured data. Performance and Core Web Vitals are priorities.
+7. **Pricing page CTAs funnel into the wizard** — they don't go straight to Stripe. The wizard needs to collect studio details before payment.
 
-### Step 2: Your classes
-- Dynamic class builder: add/remove class cards
-- Each card: class name (text), price (text, £ prefix, mono), capacity (number, mono)
-- "Add another class" button (dashed border)
-- Class packs section: add/remove pack cards with name and price
+## Email strategy
 
-### Step 3: Choose a mood
-- 6 theme mood options in a 3x2 grid (2x3 on mobile):
+Single Resend account shared across all Forma apps. This site sends from a Forma-branded address (e.g. hello@useforma.co.uk) for onboarding follow-ups and newsletter emails. Studio-specific sending domains are configured per tenant in the `studios` table — but that's not relevant here since this site has no studio context.
 
-| Mood | Preview | Description |
-|------|---------|-------------|
-| Stillness | Pale sage gradient | Serene, Japanese-minimal — Cormorant Garamond + DM Sans |
-| Grit | Dark gradient, yellow text | Raw, industrial — Bebas Neue + Manrope |
-| Meadow | Warm cream gradient | Organic, handmade — Fraunces + Satoshi |
-| Clay | Terracotta/espresso gradient | Editorial warmth — Instrument Serif + Satoshi |
-| Studio | Cool grey gradient | Clean, modern — Satoshi + Satoshi |
-| Velvet | Deep purple gradient | Luxe, moody — Satoshi + Satoshi |
+Auth emails across the platform (password resets, magic links) are sent by Supabase via a project-wide SMTP sender configured as auth@useforma.co.uk.
 
-- Each option: colour preview block with sample text, name label below, selected state with terracotta border
-- Optional: brand colour hex input
-- Optional: free-text textarea for brand description/vibe
-
-### Step 4: Connect payments
-- Stripe Connect explanation card:
-  - Title: "Connect with Stripe"
-  - Description: 5 minutes, need bank details + ID
-  - 3 feature badges: "Payments go directly to you", "No Forma commission", "Standard 1.4% + 20p fees"
-  - "Connect with Stripe →" button (Stripe purple #635BFF)
-  - Skip option: "Skip for now" (secondary button) — can connect later from dashboard
-- Back button
-
-### Step 5: Review & launch
-- Summary cards showing all entered data:
-  - Studio card: name, location, type, domain
-  - Classes card: list of classes with prices and capacity
-  - Theme card: selected mood name
-  - Payments card: connection status (green "Connected" or amber "Skipped")
-  - Plan card: selected tier, price, "First charge in 14 days (free trial)" note
-- "Launch my studio site" primary CTA (full width)
-- Back button
-
-### /onboarding/success
-- Success animation: green check circle
-- Headline: "You're in."
-- Timeline:
-  1. Now: We start designing your site
-  2. Within 48 hours: Preview link to review
-  3. Within 5 days: Site live, bookings active
-  4. Ongoing: You manage, we handle tech
-- "Go to your dashboard" CTA
-
----
-
-## Database Tables (in shared Supabase)
-
-### onboarding_submissions
-```
-id              uuid PK
-studio_name     text NOT NULL
-location        text
-studio_type     text
-owner_name      text NOT NULL
-owner_email     text NOT NULL
-domain          text
-classes         jsonb              -- array of { name, price_pence, capacity }
-packs           jsonb              -- array of { name, price_pence }
-theme_mood      text               -- stillness|grit|meadow|clay|studio|velvet
-brand_colour    text               -- optional hex
-brand_notes     text               -- optional free text
-stripe_connected boolean DEFAULT false
-plan_tier       text DEFAULT 'studio'
-status          text DEFAULT 'pending'  -- pending|designing|review|live|cancelled
-created_at      timestamptz DEFAULT now()
-```
-
-### email_signups (for early access / waitlist before onboarding is live)
-```
-id              uuid PK
-email           text UNIQUE NOT NULL
-source          text               -- e.g. 'landing_hero', 'landing_footer', 'pricing'
-created_at      timestamptz DEFAULT now()
-```
-
----
-
-## API Routes
-
-### POST /api/waitlist
-For "Get early access" buttons before the full onboarding is live.
-- Receives: { email, source }
-- Validates email format
-- Inserts into email_signups (upsert on email)
-- Sends welcome/confirmation email via Resend
-- Returns: { success: true }
-
-### POST /api/onboarding/submit
-Receives the complete onboarding form data from step 5.
-- Validates required fields
-- Inserts into onboarding_submissions
-- If Stripe was connected, stores the connected account reference
-- Sends confirmation email to the studio owner
-- Sends notification to you (the Forma admin) via email or Slack webhook
-- Returns: { success: true, submission_id }
-
-### POST /api/checkout/subscription (future — Phase 2)
-Creates a Stripe Checkout Session for the Forma subscription.
-- Uses the Forma platform Stripe account (not a connected account)
-- Products: Launch £39/mo, Studio £59/mo, Pro £89/mo, Partner £129/mo
-- Includes 14-day free trial
-- Returns checkout URL
-
----
-
-## Email Templates (Resend)
-
-From: hello@useforma.co.uk
-
-### Waitlist confirmation
-- Subject: "You're on the list"
-- Body: brief confirmation, what to expect, link to the site
-
-### Onboarding confirmation
-- Subject: "We're building your studio site"
-- Body: summary of what they submitted, timeline (48hr preview, 5-day launch), what happens next
-
-### Admin notification (to you)
-- Subject: "New studio signup: [studio name]"
-- Body: all submitted data, theme mood, plan tier, Stripe status, link to Supabase record
-
----
-
-## Environment Variables
+## Environment variables
 
 ```
-NEXT_PUBLIC_SUPABASE_URL=<supabase-url>
-NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon-key>
-SUPABASE_SERVICE_ROLE_KEY=<service-key>
-STRIPE_SECRET_KEY=<forma-platform-stripe-secret>
-STRIPE_WEBHOOK_SECRET=<webhook-secret>
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=<forma-platform-publishable-key>
-RESEND_API_KEY=<resend-key>
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+RESEND_API_KEY=
 NEXT_PUBLIC_SITE_URL=https://useforma.co.uk
-ADMIN_EMAIL=<your-email-for-notifications>
 ```
 
----
+## Conventions
 
-## SEO Strategy
+- App Router file structure: `app/(marketing)/`, `app/onboarding/`, `app/api/`
+- Static generation (SSG) for marketing pages where possible
+- Server Components by default — minimal client-side JS
+- Tailwind CSS with the Forma brand tokens as CSS custom properties
+- Components in `components/` with subdirectories: `components/marketing/`, `components/onboarding/`, `components/ui/`
+- API routes in `app/api/` for Stripe checkout, webhooks, and billing portal
+- `lib/` for shared utilities: `lib/supabase.ts`, `lib/stripe.ts`, `lib/resend.ts`, `lib/provisioning.ts` (studio creation logic used by the webhook)
+- Respect the brand: Instrument Serif for headings, Satoshi for body, warm earthy palette throughout
 
-### Meta tags (per page)
-- `/` — title: "Forma — Your studio, online", desc: "Beautiful websites with booking, payments, and class management built in. Purpose-built for Pilates, yoga, and fitness studios."
-- `/onboarding` — title: "Get started with Forma", desc: "Set up your studio site in 5 minutes."
-- `/privacy` — title: "Privacy Policy — Forma"
-- `/terms` — title: "Terms of Service — Forma"
+## When working on this project
 
-### Open Graph
-- Title, description, type: "website"
-- OG image: design a branded share card (1200x630) with "forma" wordmark + tagline
-
-### Structured Data
-- Organization schema for Forma
-- SoftwareApplication schema for the product
-
-### Target Keywords (for future blog content)
-- "pilates studio website UK"
-- "yoga booking system"
-- "fitness studio website builder"
-- "boutique fitness booking software"
-- "pilates class booking online"
-- "studio management software UK"
-
----
-
-## Components (reusable)
-
-Already built in the existing project:
-- `Navbar` — fixed, scroll-aware, outline wordmark
-- `Reveal` — IntersectionObserver scroll animation wrapper
-- `Hero` — full-viewport with floating cards
-- `TrustStrip` — tech stack bar
-- `Problem` — pain points grid
-- `Features` — dark section with schedule preview
-- `Testimonial` — centered quote
-- `HowItWorks` — 4-step flow
-- `Pricing` — 4-tier grid
-- `FinalCTA` — closing section with glow
-- `Footer` — links + copyright
-
-To build:
-- `OnboardingShell` — progress bar, step indicator, step navigation
-- `StudioDetailsForm` — step 1 fields
-- `ClassBuilder` — step 2 dynamic class/pack cards
-- `ThemePicker` — step 3 mood grid with selection state
-- `StripeConnectCard` — step 4 explanation + connect/skip
-- `SubmissionSummary` — step 5 review cards
-- `SuccessScreen` — post-signup timeline + CTA
-- `WaitlistModal` — email capture popup (for early access buttons)
-
----
-
-## Build Order
-
-1. Landing page is already built — verify it works, polish any rough edges
-2. Add POST /api/waitlist route + wire "Get early access" buttons to it
-3. Build WaitlistModal component (email input + submit)
-4. Build Resend email template for waitlist confirmation
-5. Create onboarding_submissions and email_signups tables in Supabase
-6. Build /onboarding page shell (progress bar, step navigation, transitions)
-7. Build Step 1: StudioDetailsForm
-8. Build Step 2: ClassBuilder (dynamic add/remove)
-9. Build Step 3: ThemePicker (6 moods with selection)
-10. Build Step 4: StripeConnectCard (explanation + connect/skip)
-11. Build Step 5: SubmissionSummary (review all data)
-12. Build POST /api/onboarding/submit route
-13. Build /onboarding/success page
-14. Build admin notification email (Resend)
-15. Build /privacy and /terms pages
-16. SEO: meta tags, OG image, structured data
-17. Testing: full onboarding flow end-to-end, email delivery, mobile
-18. Deploy to Vercel, configure useforma.co.uk DNS
-
----
-
-## Important Notes
-
-- **This is a separate Vercel project** from burn-public and forma-admin. Its own repo, its own domain, its own deployment.
-- **Same Supabase project** as the other apps. The onboarding_submissions and email_signups tables live alongside the studio data.
-- **Stripe here is for Forma billing**, not studio payments. The subscription checkout uses the Forma platform Stripe account directly. Studio Connect onboarding generates a link but the actual account creation is handled by Stripe's hosted flow.
-- **The onboarding wizard is the product's front door.** It must feel polished, fast, and zero-friction. No unnecessary fields. Smart defaults. The whole thing should take a studio owner under 10 minutes.
-- **"Get early access" buttons** should work immediately via the waitlist API, even before the full onboarding flow is live. This lets you start collecting leads from day one.
-- **The landing page already exists** as a working Next.js project. This brief covers extending it with the onboarding flow, API routes, and supporting pages.
-- **Mobile-first.** Many studio owners will first discover Forma on their phones (from an Instagram link, a WhatsApp recommendation, etc.). Every page must work perfectly on mobile.
-- **No cookie banner needed** if using Vercel Analytics or Plausible (both cookie-free). If you add any third-party tracking later, add a consent banner.
+- This is a marketing site — design quality and copywriting matter as much as code quality
+- Every page should feel premium and warm, not generic SaaS template
+- The onboarding wizard should feel effortless — progressive disclosure, no walls of form fields
+- The wizard must save progress to `onboarding_submissions` as the owner advances, so partial completions are never lost
+- Don't add studio-specific runtime logic here. If you're querying a studio's classes or bookings, you're in the wrong repo.
+- The provisioning webhook is critical infrastructure — it must be idempotent, handle edge cases (existing auth accounts, duplicate submissions), and log failures clearly
+- SEO is a priority: semantic HTML, proper heading hierarchy, meta descriptions on every page, sitemap, robots.txt
+- Performance is a priority: optimise images, minimise JS bundle, leverage static generation
+- The pricing page should clearly communicate "no setup fees, no contracts, no commission" — this is a key differentiator
+- Pricing page CTAs should link to the onboarding wizard with the selected tier pre-filled, not directly to Stripe
+- Brand consistency: use the token system. Don't hardcode hex values — use the CSS custom properties so the brand can evolve without find-and-replace
+- The success page after Stripe Checkout needs to set clear expectations — the owner just paid, they need to know what happens next and when they'll get access

@@ -46,7 +46,7 @@ export default function StudioDetailsForm({ data, onChange, errors }: Props) {
           type="text"
           value={data.location}
           onChange={(e) => onChange({ location: e.target.value })}
-          placeholder="e.g. Sheffield"
+          placeholder="e.g. Newcastle"
           className={inputClass}
         />
         {errors.location && (
@@ -92,35 +92,6 @@ export default function StudioDetailsForm({ data, onChange, errors }: Props) {
         )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        <div>
-          <label className={labelClass}>Your name</label>
-          <input
-            type="text"
-            value={data.ownerName}
-            onChange={(e) => onChange({ ownerName: e.target.value })}
-            placeholder="Your full name"
-            className={inputClass}
-          />
-          {errors.ownerName && (
-            <p className="text-[0.75rem] text-amber mt-1">{errors.ownerName}</p>
-          )}
-        </div>
-        <div>
-          <label className={labelClass}>Email</label>
-          <input
-            type="email"
-            value={data.ownerEmail}
-            onChange={(e) => onChange({ ownerEmail: e.target.value })}
-            placeholder="you@yourstudio.com"
-            className={inputClass}
-          />
-          {errors.ownerEmail && (
-            <p className="text-[0.75rem] text-amber mt-1">{errors.ownerEmail}</p>
-          )}
-        </div>
-      </div>
-
       <div>
         <label className={labelClass}>
           Custom domain{" "}
@@ -134,7 +105,8 @@ export default function StudioDetailsForm({ data, onChange, errors }: Props) {
           className={inputClass}
         />
         <p className="text-[0.72rem] text-fog mt-1.5">
-          Already have a domain? We&apos;ll connect it. If not, we&apos;ll set up a free subdomain.
+          Already have a domain? We&apos;ll connect it. If not, we&apos;ll set
+          up a free subdomain.
         </p>
       </div>
     </div>

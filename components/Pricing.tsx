@@ -140,7 +140,7 @@ export default function Pricing() {
                   ))}
                 </ul>
                 <Link
-                  href="/onboarding"
+                  href={`/onboarding?tier=${t.name.toLowerCase()}`}
                   className={`block w-full py-3 rounded-[10px] text-center text-[0.85rem] font-semibold transition-all hover:scale-[1.02] ${
                     t.popular
                       ? "bg-terracotta text-parchment hover:bg-burnt"
