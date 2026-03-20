@@ -10,9 +10,9 @@ export default function Testimonial() {
               &ldquo;
             </span>
             <p className="font-serif text-[clamp(1.3rem,2.5vw,1.85rem)] leading-[1.4] italic text-espresso mb-7 pt-4">
-              I was paying for Mindbody, Squarespace, and Mailchimp — three
-              tools that didn&apos;t talk to each other. Forma replaced all of
-              them and my site actually looks like mine now.
+              I was doing everything through TeamUp — bookings, payments,
+              my website. It worked, but it never felt like mine. Forma gave
+              me something that actually looks and feels like my studio.
             </p>
           </div>
           <div className="flex items-center justify-center gap-3.5">
@@ -22,7 +22,7 @@ export default function Testimonial() {
             <div className="text-left">
               <p className="font-bold text-[0.88rem] text-espresso">Lucy</p>
               <p className="text-[0.78rem] text-driftwood">
-                Burn Mat Studio, Sheffield
+                Burn Mat Studio, Stockton
               </p>
             </div>
           </div>
