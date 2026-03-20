@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 const timeline = [
   {
@@ -21,7 +22,82 @@ const timeline = [
   },
 ];
 
+function DnsInstructions({ domain }: { domain: string }) {
+  const adminDomain = `admin.${domain}`;
+
+  const records = [
+    {
+      type: "CNAME",
+      host: "@",
+      value: "cname.vercel-dns.com",
+      note: `Points ${domain} to your studio site`,
+    },
+    {
+      type: "CNAME",
+      host: "admin",
+      value: "cname.vercel-dns.com",
+      note: `Points ${adminDomain} to your dashboard`,
+    },
+  ];
+
+  return (
+    <div
+      className="text-left mt-10 bg-white border border-sand rounded-[12px] p-5"
+      style={{
+        animation: "fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards",
+        opacity: 0,
+      }}
+    >
+      <p className="font-mono text-[0.68rem] tracking-[0.1em] uppercase text-terracotta mb-1.5">
+        One more thing
+      </p>
+      <h2 className="font-serif text-[1.15rem] text-espresso mb-2">
+        Connect your domain
+      </h2>
+      <p className="text-[0.82rem] text-driftwood leading-[1.6] mb-4">
+        Add these DNS records with your domain provider to connect{" "}
+        <strong className="text-espresso">{domain}</strong>. SSL is automatic
+        once DNS propagates.
+      </p>
+
+      <div className="space-y-2.5">
+        {records.map((r, i) => (
+          <div
+            key={i}
+            className="bg-parchment border border-sand/60 rounded-[8px] p-3"
+          >
+            <div className="flex items-center gap-2 mb-1.5">
+              <span className="font-mono text-[0.68rem] tracking-[0.06em] bg-terracotta/10 text-terracotta px-1.5 py-0.5 rounded">
+                {r.type}
+              </span>
+              <span className="text-[0.72rem] text-fog">{r.note}</span>
+            </div>
+            <div className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-[0.78rem]">
+              <span className="text-fog font-mono">Host</span>
+              <span className="text-espresso font-mono font-medium">
+                {r.host}
+              </span>
+              <span className="text-fog font-mono">Value</span>
+              <span className="text-espresso font-mono font-medium">
+                {r.value}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <p className="text-[0.72rem] text-fog mt-3 leading-[1.55]">
+        Not sure how to do this? Just reply to your welcome email and
+        we&apos;ll walk you through it.
+      </p>
+    </div>
+  );
+}
+
 export default function SuccessScreen() {
+  const searchParams = useSearchParams();
+  const domain = searchParams.get("domain");
+
   return (
     <div className="min-h-screen bg-parchment flex items-center justify-center px-6">
       <div className="max-w-[480px] w-full text-center py-20">
@@ -89,6 +165,9 @@ export default function SuccessScreen() {
             </div>
           ))}
         </div>
+
+        {/* DNS instructions (only shown when studio has a custom domain) */}
+        {domain && <DnsInstructions domain={domain} />}
 
         <div className="mt-10 space-y-3">
           <Link

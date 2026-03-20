@@ -286,11 +286,18 @@ export default function OnboardingShell() {
         });
       }
 
-      router.push("/onboarding/success");
+      // Pass domain to success page for DNS instructions
+      const params = new URLSearchParams();
+      if (data.domain) params.set("domain", data.domain);
+      const qs = params.toString();
+      router.push(`/onboarding/success${qs ? `?${qs}` : ""}`);
     } catch (err) {
       console.error("Submit error:", err);
       // Still redirect — the webhook will handle provisioning
-      router.push("/onboarding/success");
+      const params = new URLSearchParams();
+      if (data.domain) params.set("domain", data.domain);
+      const qs = params.toString();
+      router.push(`/onboarding/success${qs ? `?${qs}` : ""}`);
     }
   };
 

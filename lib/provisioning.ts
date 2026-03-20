@@ -19,12 +19,15 @@ interface ProvisioningData {
  * 1. Fetch the onboarding submission
  * 2. Check idempotency (studio already exists for this customer?)
  * 3. Generate a unique slug from the studio name
- * 4. Create the studios row
- * 5. Create or find a Supabase Auth account for the owner
- * 6. Create the profiles row (if new)
- * 7. Create the studio_memberships row (owner as admin)
- * 8. Update onboarding_submissions status to 'provisioned'
- * 9. Send welcome email
+ * 4. Build branding JSON from theme mood
+ * 5. Derive domains (domain + admin_domain)
+ * 6. Create the studios row
+ * 7. Create or find a Supabase Auth account for the owner
+ * 8. Create the profiles row (if new)
+ * 9. Create the studio_memberships row (owner as admin)
+ * 10. Update onboarding_submissions status to 'provisioned'
+ * 11. Add Supabase auth redirect URLs for the studio domains
+ * 12. Send welcome email
  */
 export async function provisionStudio(data: ProvisioningData) {
   const supabase = createServerClient();
@@ -63,15 +66,20 @@ export async function provisionStudio(data: ProvisioningData) {
     brandNotes: submission.brand_notes || null,
   };
 
-  // 5. Create the studios row
+  // 5. Derive domains
+  const customDomain = submission.domain || null;
+  const adminDomain = customDomain ? `admin.${customDomain}` : null;
+
+  // 6. Create the studios row
   const { data: studio, error: studioError } = await supabase
     .from("studios")
     .insert({
       name: submission.studio_name,
       slug,
-      domain: submission.domain || null,
+      domain: customDomain,
+      admin_domain: adminDomain,
       email_from: `hello@${slug}.useforma.co.uk`,
-      email_domain: submission.domain || `${slug}.useforma.co.uk`,
+      email_domain: customDomain || `${slug}.useforma.co.uk`,
       branding,
       stripe_customer_id: data.stripeCustomerId,
       stripe_subscription_id: data.stripeSubscriptionId,
@@ -87,7 +95,7 @@ export async function provisionStudio(data: ProvisioningData) {
     throw new Error(`Failed to create studio: ${studioError.message}`);
   }
 
-  // 6. Create or find Supabase Auth account for the owner
+  // 7. Create or find Supabase Auth account for the owner
   const ownerEmail = submission.owner_email;
   const ownerName = submission.owner_name;
 
@@ -140,7 +148,7 @@ export async function provisionStudio(data: ProvisioningData) {
     console.log(`Created new auth user for ${ownerEmail}: ${userId}`);
   }
 
-  // 7. Create profiles row (upsert to handle existing)
+  // 8. Create profiles row (upsert to handle existing)
   const { error: profileError } = await supabase
     .from("profiles")
     .upsert(
@@ -158,7 +166,7 @@ export async function provisionStudio(data: ProvisioningData) {
     // Non-fatal — continue provisioning
   }
 
-  // 8. Create studio_memberships row (owner as admin)
+  // 9. Create studio_memberships row (owner as admin)
   const { error: membershipError } = await supabase
     .from("studio_memberships")
     .upsert(
@@ -175,7 +183,7 @@ export async function provisionStudio(data: ProvisioningData) {
     // Non-fatal — continue provisioning
   }
 
-  // 9. Update onboarding_submissions status
+  // 10. Update onboarding_submissions status
   await supabase
     .from("onboarding_submissions")
     .update({
@@ -185,7 +193,12 @@ export async function provisionStudio(data: ProvisioningData) {
     })
     .eq("id", data.onboardingSubmissionId);
 
-  // 10. Send welcome email
+  // 11. Add Supabase auth redirect URLs for the new studio domains
+  if (customDomain) {
+    await addAuthRedirectUrls(customDomain, adminDomain!);
+  }
+
+  // 12. Send welcome email
   await sendWelcomeEmail({
     ownerName: ownerName || "there",
     ownerEmail,
@@ -256,6 +269,83 @@ function generateSecurePassword(): string {
     password += chars[array[i] % chars.length];
   }
   return password;
+}
+
+/**
+ * Add studio domains to Supabase Auth redirect URL allowlist.
+ * This ensures magic link / OAuth callbacks work on the studio's custom domains.
+ */
+async function addAuthRedirectUrls(domain: string, adminDomain: string) {
+  const supabaseProjectRef = process.env.NEXT_PUBLIC_SUPABASE_URL?.match(
+    /https:\/\/([^.]+)\.supabase\.co/
+  )?.[1];
+
+  const accessToken = process.env.SUPABASE_ACCESS_TOKEN;
+
+  if (!supabaseProjectRef || !accessToken) {
+    console.warn(
+      "Missing SUPABASE_ACCESS_TOKEN or project ref — skipping auth redirect URL update. " +
+        `Add these manually: https://${domain}/**, https://${adminDomain}/**`
+    );
+    return;
+  }
+
+  try {
+    // Fetch current auth config to get existing redirect URLs
+    const configRes = await fetch(
+      `https://api.supabase.com/v1/projects/${supabaseProjectRef}/config/auth`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!configRes.ok) {
+      console.warn("Failed to fetch auth config:", configRes.status);
+      return;
+    }
+
+    const config = await configRes.json();
+    const existingUrls: string[] = config.EXTERNAL_REDIRECT_URLS
+      ? config.EXTERNAL_REDIRECT_URLS.split(",")
+      : [];
+
+    const newUrls = [
+      `https://${domain}/**`,
+      `https://${adminDomain}/**`,
+    ];
+
+    // Only add URLs that aren't already in the list
+    const urlsToAdd = newUrls.filter((url) => !existingUrls.includes(url));
+    if (urlsToAdd.length === 0) return;
+
+    const updatedUrls = [...existingUrls, ...urlsToAdd].join(",");
+
+    const updateRes = await fetch(
+      `https://api.supabase.com/v1/projects/${supabaseProjectRef}/config/auth`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          EXTERNAL_REDIRECT_URLS: updatedUrls,
+        }),
+      }
+    );
+
+    if (!updateRes.ok) {
+      console.warn("Failed to update auth redirect URLs:", updateRes.status);
+    } else {
+      console.log(`Added auth redirect URLs for ${domain} and ${adminDomain}`);
+    }
+  } catch (err) {
+    console.error("Error updating auth redirect URLs:", err);
+    // Non-fatal — log for manual follow-up
+  }
 }
 
 /**
