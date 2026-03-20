@@ -31,14 +31,22 @@ export async function GET(request: NextRequest) {
   const supabase = createServerClient();
 
   // Look up the auth user by email to get their user ID
-  const { data: usersRes } = await supabase.auth.admin.listUsers();
+  const { data: usersRes, error: listError } =
+    await supabase.auth.admin.listUsers();
+
+  console.log("[auth/callback] listUsers error:", listError);
+  console.log("[auth/callback] total users:", usersRes?.users?.length);
+
   const user = usersRes?.users?.find(
     (u) => u.email?.toLowerCase() === email.toLowerCase()
   );
 
   if (!user) {
+    console.log("[auth/callback] user not found for email:", email);
     return NextResponse.redirect(`${SITE_URL}/?error=user_not_found`);
   }
+
+  console.log("[auth/callback] found user:", user.id, user.email);
 
   // Find the user's studio membership(s), most recent first
   const { data: memberships, error: membershipError } = await supabase
@@ -47,35 +55,69 @@ export async function GET(request: NextRequest) {
     .eq("profile_id", user.id)
     .order("created_at", { ascending: false });
 
-  if (membershipError || !memberships || memberships.length === 0) {
-    return NextResponse.redirect(`${SITE_URL}/?error=no_studio`);
-  }
+  console.log("[auth/callback] memberships:", JSON.stringify(memberships));
+  console.log("[auth/callback] membershipError:", membershipError);
 
   // Extract domain from the joined studios relation
   type StudioJoin = { domain: string | null } | null;
-  const getDomain = (m: (typeof memberships)[number]): string | null =>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const getDomain = (m: any): string | null =>
     (m.studios as unknown as StudioJoin)?.domain ?? null;
 
-  // Pick the studio domain — if redirect_to contains a recognisable domain, prefer that
   let domain: string | null = null;
 
-  if (redirectTo && memberships.length > 1) {
-    const match = memberships.find((m) => {
-      const d = getDomain(m);
-      return d && redirectTo.includes(d);
-    });
-    if (match) {
-      domain = getDomain(match);
+  if (!membershipError && memberships && memberships.length > 0) {
+    // If redirect_to contains a recognisable domain, prefer that studio
+    if (redirectTo && memberships.length > 1) {
+      const match = memberships.find((m) => {
+        const d = getDomain(m);
+        return d && redirectTo.includes(d);
+      });
+      if (match) {
+        domain = getDomain(match);
+      }
+    }
+
+    // Fall back to most recently created membership's studio
+    if (!domain) {
+      domain = getDomain(memberships[0]);
     }
   }
 
-  // Fall back to most recently created membership's studio
+  // Fallback: if no memberships, check user_metadata.studio_id
   if (!domain) {
-    domain = getDomain(memberships[0]);
+    const studioId = user.user_metadata?.studio_id as string | undefined;
+    console.log("[auth/callback] no memberships, checking user_metadata.studio_id:", studioId);
+
+    if (studioId) {
+      const { data: studio } = await supabase
+        .from("studios")
+        .select("domain")
+        .eq("id", studioId)
+        .single();
+      domain = studio?.domain ?? null;
+    }
+  }
+
+  // Last resort: if redirect_to looks like a studio domain, try to match it
+  if (!domain && redirectTo) {
+    try {
+      const redirectHost = new URL(redirectTo).hostname;
+      const { data: studio } = await supabase
+        .from("studios")
+        .select("domain")
+        .eq("domain", redirectHost)
+        .single();
+      domain = studio?.domain ?? null;
+      console.log("[auth/callback] matched redirect_to to studio domain:", domain);
+    } catch {
+      // redirect_to wasn't a valid URL, ignore
+    }
   }
 
   if (!domain) {
-    return NextResponse.redirect(`${SITE_URL}/?error=no_studio_domain`);
+    console.log("[auth/callback] no studio domain found for user:", user.id);
+    return NextResponse.redirect(`${SITE_URL}/?error=no_studio`);
   }
 
   // Derive the next path from the auth type
