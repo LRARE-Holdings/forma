@@ -17,6 +17,7 @@ const tiers = [
     ],
     cta: "Get started",
     popular: false,
+    hasAssist: false,
   },
   {
     label: "Growth",
@@ -34,6 +35,7 @@ const tiers = [
     ],
     cta: "Get started",
     popular: true,
+    hasAssist: false,
   },
   {
     label: "Scale",
@@ -51,6 +53,7 @@ const tiers = [
     ],
     cta: "Get started",
     popular: false,
+    hasAssist: true,
   },
   {
     label: "White-label",
@@ -68,6 +71,7 @@ const tiers = [
     ],
     cta: "Get in touch",
     popular: false,
+    hasAssist: true,
   },
 ];
 
@@ -138,6 +142,26 @@ export default function Pricing() {
                       {f}
                     </li>
                   ))}
+                  {t.hasAssist && (
+                    <li className="mt-3 rounded-[10px] bg-gradient-to-br from-terracotta/[0.07] to-terracotta/[0.03] border border-terracotta/15 px-3.5 py-3">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="flex items-center justify-center w-[18px] h-[18px] rounded-full bg-terracotta/10">
+                          <svg width="10" height="10" viewBox="0 0 16 16" fill="none" className="text-terracotta">
+                            <path d="M8 1l1.796 4.858L15 7.5l-4.05 3.214L12.292 16 8 12.9 3.708 16l1.342-5.286L1 7.5l5.204-1.642L8 1z" fill="currentColor"/>
+                          </svg>
+                        </span>
+                        <span className="text-[0.78rem] font-bold text-espresso tracking-tight">
+                          Forma Assist
+                        </span>
+                        <span className="text-[0.55rem] font-bold uppercase tracking-[0.08em] text-terracotta bg-terracotta/10 px-1.5 py-0.5 rounded-full leading-none">
+                          AI
+                        </span>
+                      </div>
+                      <p className="text-[0.72rem] leading-[1.5] text-driftwood">
+                        AI-powered tools that help your staff get things done quicker, with less hassle.
+                      </p>
+                    </li>
+                  )}
                 </ul>
                 <Link
                   href={`/onboarding?tier=${t.name.toLowerCase()}`}
