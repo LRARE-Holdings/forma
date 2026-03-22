@@ -3,6 +3,7 @@ import Link from "next/link";
 const links = [
   { label: "Features", href: "#features" },
   { label: "Pricing", href: "#pricing" },
+  { label: "Case study", href: "/case-studies/burn-mat-studio" },
   { label: "Privacy", href: "/privacy" },
   { label: "Terms", href: "/terms" },
   { label: "Contact", href: "mailto:hello@useforma.co.uk" },

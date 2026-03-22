@@ -47,6 +47,12 @@ export default function Navbar() {
           How it works
         </Link>
         <Link
+          href="/case-studies/burn-mat-studio"
+          className="hidden md:block text-[0.82rem] font-medium text-driftwood hover:text-espresso transition-colors"
+        >
+          Case study
+        </Link>
+        <Link
           href="/onboarding"
           className="px-4 py-2 bg-terracotta text-parchment text-[0.8rem] font-bold rounded-lg hover:bg-burnt transition-all hover:scale-[1.04]"
         >
