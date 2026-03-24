@@ -42,10 +42,10 @@ Forma's approach: productised builds that look custom. Every studio gets a uniqu
 
 | Tier | Price | Notes |
 |---|---|---|
-| Launch | £39/mo | — |
-| Studio | £59/mo | Most popular |
-| Pro | £89/mo | — |
-| Partner | £129/mo | White-label |
+| Launch | £69/mo | — |
+| Studio | £89/mo | Most popular |
+| Pro | £119/mo | — |
+| Partner | £159/mo | White-label |
 
 - No setup fees, no contracts, no revenue commission
 - Stripe Connect Standard accounts for per-studio payments (studios own their Stripe account)
@@ -113,10 +113,10 @@ The wizard saves progress to `onboarding_submissions` as the owner advances thro
 
 | Product | Price | Stripe metadata |
 |---|---|---|
-| Forma Launch | £39/mo | plan_tier: launch |
-| Forma Studio | £59/mo | plan_tier: studio |
-| Forma Pro | £89/mo | plan_tier: pro |
-| Forma Partner | £129/mo | plan_tier: partner |
+| Forma Launch | £69/mo | plan_tier: launch |
+| Forma Studio | £89/mo | plan_tier: studio |
+| Forma Pro | £119/mo | plan_tier: pro |
+| Forma Partner | £159/mo | plan_tier: partner |
 
 All subscriptions are monthly with no commitment — cancel anytime.
 

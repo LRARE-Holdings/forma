@@ -10,10 +10,10 @@ interface Props {
 }
 
 const tiers = [
-  { id: "launch", label: "Foundation", name: "Launch", price: "39" },
-  { id: "studio", label: "Growth", name: "Studio", price: "59" },
-  { id: "pro", label: "Scale", name: "Pro", price: "89" },
-  { id: "partner", label: "White-label", name: "Partner", price: "129" },
+  { id: "launch", label: "Foundation", name: "Launch", price: "69" },
+  { id: "studio", label: "Growth", name: "Studio", price: "89" },
+  { id: "pro", label: "Scale", name: "Pro", price: "119" },
+  { id: "partner", label: "White-label", name: "Partner", price: "159" },
 ];
 
 const moodNames: Record<string, string> = {

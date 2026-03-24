@@ -5,7 +5,7 @@ const tiers = [
   {
     label: "Foundation",
     name: "Launch",
-    price: "39",
+    price: "69",
     desc: "Everything you need to get your studio online and taking bookings.",
     features: [
       "Studio website + custom domain",
@@ -22,7 +22,7 @@ const tiers = [
   {
     label: "Growth",
     name: "Studio",
-    price: "59",
+    price: "89",
     desc: "For established studios ready to grow with packs, memberships, and automation.",
     features: [
       "Everything in Launch",
@@ -40,7 +40,7 @@ const tiers = [
   {
     label: "Scale",
     name: "Pro",
-    price: "89",
+    price: "119",
     desc: "Multi-location support, advanced reporting, and full brand customisation.",
     features: [
       "Everything in Studio",
@@ -58,7 +58,7 @@ const tiers = [
   {
     label: "White-label",
     name: "Partner",
-    price: "129",
+    price: "159",
     desc: "For agencies and consultants building studio sites for their own clients.",
     features: [
       "Everything in Pro",

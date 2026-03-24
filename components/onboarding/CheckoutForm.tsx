@@ -14,10 +14,10 @@ const stripePromise = loadStripe(
 );
 
 const tierInfo: Record<string, { name: string; price: string }> = {
-  launch: { name: "Launch", price: "39" },
-  studio: { name: "Studio", price: "59" },
-  pro: { name: "Pro", price: "89" },
-  partner: { name: "Partner", price: "129" },
+  launch: { name: "Launch", price: "69" },
+  studio: { name: "Studio", price: "89" },
+  pro: { name: "Pro", price: "119" },
+  partner: { name: "Partner", price: "159" },
 };
 
 function CheckoutFormInner({
