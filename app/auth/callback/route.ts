@@ -30,29 +30,26 @@ export async function GET(request: NextRequest) {
 
   const supabase = createServerClient();
 
-  // Look up the auth user by email to get their user ID
-  const { data: usersRes, error: listError } =
-    await supabase.auth.admin.listUsers();
+  // Look up the user's profile by email to get their user ID
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("email", email.toLowerCase())
+    .single();
 
-  console.log("[auth/callback] listUsers error:", listError);
-  console.log("[auth/callback] total users:", usersRes?.users?.length);
+  console.log("[auth/callback] profileError:", profileError);
+  console.log("[auth/callback] profile:", profile?.id);
 
-  const user = usersRes?.users?.find(
-    (u) => u.email?.toLowerCase() === email.toLowerCase()
-  );
-
-  if (!user) {
+  if (!profile) {
     console.log("[auth/callback] user not found for email:", email);
     return NextResponse.redirect(`${SITE_URL}/?error=user_not_found`);
   }
-
-  console.log("[auth/callback] found user:", user.id, user.email);
 
   // Find the user's studio membership(s), most recent first
   const { data: memberships, error: membershipError } = await supabase
     .from("studio_memberships")
     .select("studio_id, created_at, studios(domain)")
-    .eq("profile_id", user.id)
+    .eq("profile_id", profile.id)
     .order("created_at", { ascending: false });
 
   console.log("[auth/callback] memberships:", JSON.stringify(memberships));
@@ -84,22 +81,7 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  // Fallback: if no memberships, check user_metadata.studio_id
-  if (!domain) {
-    const studioId = user.user_metadata?.studio_id as string | undefined;
-    console.log("[auth/callback] no memberships, checking user_metadata.studio_id:", studioId);
-
-    if (studioId) {
-      const { data: studio } = await supabase
-        .from("studios")
-        .select("domain")
-        .eq("id", studioId)
-        .single();
-      domain = studio?.domain ?? null;
-    }
-  }
-
-  // Last resort: if redirect_to looks like a studio domain, try to match it
+  // Fallback: if redirect_to looks like a studio domain, try to match it
   if (!domain && redirectTo) {
     try {
       const redirectHost = new URL(redirectTo).hostname;
@@ -116,7 +98,7 @@ export async function GET(request: NextRequest) {
   }
 
   if (!domain) {
-    console.log("[auth/callback] no studio domain found for user:", user.id);
+    console.log("[auth/callback] no studio domain found for user:", profile.id);
     return NextResponse.redirect(`${SITE_URL}/?error=no_studio`);
   }
 

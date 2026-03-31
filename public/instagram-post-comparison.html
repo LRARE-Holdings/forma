@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080">
+<title>Forma — Comparison Post</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1440px;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    background: #FFFCF9;
+    color: #2C1810;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    width: 1080px;
+    height: 1440px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .accent-bar { height: 6px; background: #C2714F; }
+
+  /* Header */
+  .header {
+    padding: 44px 80px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    font-size: 34px;
+    font-weight: 900;
+    color: transparent;
+    -webkit-text-stroke: 1.6px #2C1810;
+    letter-spacing: -0.03em;
+  }
+
+  .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #C2714F;
+  }
+
+  /* Headline */
+  .headline-area {
+    padding: 36px 80px 48px;
+  }
+
+  .headline {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 74px;
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: #2C1810;
+  }
+
+  .headline em { font-style: italic; color: #C2714F; }
+
+  /* Column headers */
+  .col-heads {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 0 80px 20px;
+    margin-left: 0;
+  }
+
+  .col-head {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #8B7265;
+    text-align: center;
+  }
+
+  .col-head.forma { color: #C2714F; }
+
+  /* Rows */
+  .rows {
+    flex: 1;
+    padding: 0 80px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .row {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+    border-top: 1px solid #E8DDD1;
+    position: relative;
+  }
+
+  .row:last-child {
+    border-bottom: 1px solid #E8DDD1;
+  }
+
+  /* Row label — sits above the grid */
+  .row::before {
+    content: attr(data-label);
+    position: absolute;
+    top: 16px;
+    left: 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #B09E93;
+  }
+
+  .cell {
+    text-align: center;
+    padding-top: 12px;
+  }
+
+  .cell .big {
+    font-size: 32px;
+    font-weight: 400;
+    color: #8B7265;
+    line-height: 1;
+  }
+
+  .cell .big .through {
+    text-decoration: line-through;
+    text-decoration-color: rgba(194,113,79,0.5);
+    text-decoration-thickness: 2px;
+  }
+
+  .cell .sm {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: #B09E93;
+    margin-top: 6px;
+    letter-spacing: 0.02em;
+  }
+
+  /* Forma cell — stands out */
+  .cell.f .big {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 44px;
+    font-weight: 600;
+    color: #C2714F;
+  }
+
+  .cell.f .sm {
+    color: #8B7265;
+  }
+
+  /* Pill */
+  .pill {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 10px 28px;
+    border-radius: 28px;
+  }
+
+  .pill.no {
+    border: 1.5px solid #E8DDD1;
+    color: #D4C4B0;
+  }
+
+  .pill.mid {
+    border: 1.5px solid #D4C4B0;
+    color: #8B7265;
+  }
+
+  .pill.yes {
+    background: #C2714F;
+    color: #FFFCF9;
+  }
+
+  /* Footer */
+  .footer {
+    padding: 32px 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .footer-url {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 15px;
+    font-weight: 500;
+    color: #C2714F;
+    letter-spacing: 0.04em;
+  }
+
+  .footer-disc {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: #B09E93;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="accent-bar"></div>
+
+  <div class="header">
+    <div class="logo">forma</div>
+    <div class="tag">Honest comparison</div>
+  </div>
+
+  <div class="headline-area">
+    <h1 class="headline">The <em>real</em> cost of<br>studio software</h1>
+  </div>
+
+  <div class="col-heads">
+    <div class="col-head">Mindbody</div>
+    <div class="col-head">bsport</div>
+    <div class="col-head forma">Forma</div>
+  </div>
+
+  <div class="rows">
+
+    <div class="row" data-label="Monthly price">
+      <div class="cell">
+        <div class="big"><span class="through">~£200+</span></div>
+        <div class="sm">per month</div>
+      </div>
+      <div class="cell">
+        <div class="big"><span class="through">~£130+</span></div>
+        <div class="sm">quote only</div>
+      </div>
+      <div class="cell f">
+        <div class="big">£69</div>
+        <div class="sm">per month, fixed</div>
+      </div>
+    </div>
+
+    <div class="row" data-label="Contracts">
+      <div class="cell"><div class="big">12–24 mo</div><div class="sm">minimum lock-in</div></div>
+      <div class="cell"><div class="big" style="color:#B09E93">Undisclosed</div></div>
+      <div class="cell f"><div class="big">None</div><div class="sm">cancel anytime</div></div>
+    </div>
+
+    <div class="row" data-label="Booking commission">
+      <div class="cell"><div class="big">Up to 20%</div><div class="sm">on new clients</div></div>
+      <div class="cell"><div class="big" style="color:#B09E93">Undisclosed</div></div>
+      <div class="cell f"><div class="big">0%</div><div class="sm">we never take a cut</div></div>
+    </div>
+
+    <div class="row" data-label="Built for UK studios">
+      <div class="cell"><span class="pill no">US</span></div>
+      <div class="cell"><span class="pill mid">EU</span></div>
+      <div class="cell"><span class="pill yes">UK</span></div>
+    </div>
+
+    <div class="row" data-label="Go-live">
+      <div class="cell"><div class="big">~8 weeks</div></div>
+      <div class="cell"><div class="big" style="color:#B09E93">Weeks</div></div>
+      <div class="cell f"><div class="big">Days</div></div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <div class="footer-url">useforma.co.uk</div>
+    <div class="footer-disc">Competitor pricing from public sources (2025)</div>
+  </div>
+</div>
+</body>
+</html>
