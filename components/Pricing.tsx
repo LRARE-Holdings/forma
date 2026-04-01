@@ -5,7 +5,6 @@ const tiers = [
   {
     label: "Foundation",
     name: "Launch",
-    price: "69",
     desc: "Everything you need to get your studio online and taking bookings.",
     features: [
       "Studio website + custom domain",
@@ -15,14 +14,12 @@ const tiers = [
       "Email confirmations",
       "SSL + hosting included",
     ],
-    cta: "Get started",
     popular: false,
     hasAssist: false,
   },
   {
     label: "Growth",
     name: "Studio",
-    price: "89",
     desc: "For established studios ready to grow with packs, memberships, and automation.",
     features: [
       "Everything in Launch",
@@ -33,14 +30,12 @@ const tiers = [
       "Waitlists & capacity limits",
       "Analytics dashboard",
     ],
-    cta: "Get started",
     popular: true,
     hasAssist: false,
   },
   {
     label: "Scale",
     name: "Pro",
-    price: "119",
     desc: "Multi-location support, advanced reporting, and full brand customisation.",
     features: [
       "Everything in Studio",
@@ -51,14 +46,12 @@ const tiers = [
       "Marketing integrations",
       "API access",
     ],
-    cta: "Get started",
     popular: false,
     hasAssist: true,
   },
   {
     label: "White-label",
     name: "Partner",
-    price: "159",
     desc: "For agencies and consultants building studio sites for their own clients.",
     features: [
       "Everything in Pro",
@@ -69,7 +62,6 @@ const tiers = [
       "Revenue share options",
       "Dedicated account manager",
     ],
-    cta: "Get in touch",
     popular: false,
     hasAssist: true,
   },
@@ -82,20 +74,20 @@ export default function Pricing() {
         <div className="text-center mb-14">
           <Reveal>
             <p className="font-mono text-[0.7rem] tracking-[0.14em] uppercase text-terracotta mb-5 flex items-center justify-center gap-2.5">
-              Simple pricing
+              Plans
             </p>
           </Reveal>
           <Reveal delay={80}>
             <h2 className="font-serif text-[clamp(2rem,4vw,3rem)] font-normal leading-[1.12] mb-4">
-              Honest prices for
+              Plans built for
               <br />
               real studios
             </h2>
           </Reveal>
           <Reveal delay={160}>
             <p className="text-[1.05rem] leading-[1.65] text-driftwood max-w-[480px] mx-auto">
-              No setup fees. No contracts. No marketplace commissions. Cancel
-              anytime.
+              No setup fees. No contracts. No marketplace commissions. Pricing
+              tailored to your studio.
             </p>
           </Reveal>
         </div>
@@ -120,12 +112,6 @@ export default function Pricing() {
                 </p>
                 <p className="text-[1.15rem] font-bold text-espresso mb-3.5">
                   {t.name}
-                </p>
-                <p className="font-serif text-[2.8rem] leading-none text-espresso mb-0.5">
-                  £{t.price}{" "}
-                  <span className="font-sans text-[0.85rem] font-normal text-driftwood">
-                    /month
-                  </span>
                 </p>
                 <p className="text-[0.82rem] text-driftwood leading-[1.5] mb-6">
                   {t.desc}
@@ -171,7 +157,7 @@ export default function Pricing() {
                       : "bg-transparent text-espresso border-[1.5px] border-sand hover:border-clay"
                   }`}
                 >
-                  {t.cta}
+                  Get a quote
                 </Link>
               </div>
             </Reveal>
@@ -179,8 +165,8 @@ export default function Pricing() {
         </div>
 
         <p className="text-center mt-8 text-[0.82rem] text-fog">
-          Only Stripe&apos;s standard processing fees apply. We never take a cut
-          of your revenue.
+          No setup fees. No long-term contracts. Pricing tailored to your
+          studio.
         </p>
       </div>
     </section>

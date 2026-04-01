@@ -3,8 +3,8 @@ import { Suspense } from "react";
 import OnboardingShell from "@/components/onboarding/OnboardingShell";
 
 export const metadata: Metadata = {
-  title: "Get started with Forma",
-  description: "Set up your studio site in 5 minutes.",
+  title: "Get a quote — Forma",
+  description: "Tell us about your studio and we'll send you a personalised quote.",
 };
 
 export default function OnboardingPage() {

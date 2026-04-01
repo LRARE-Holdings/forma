@@ -3,17 +3,17 @@ import type { OnboardingData } from "./OnboardingShell";
 interface Props {
   data: OnboardingData;
   onChange: (partial: Partial<OnboardingData>) => void;
-  onLaunch: () => void;
+  onSubmitQuote: () => void;
   onGoToStep: (step: number) => void;
   loading: boolean;
   error?: string;
 }
 
 const tiers = [
-  { id: "launch", label: "Foundation", name: "Launch", price: "69" },
-  { id: "studio", label: "Growth", name: "Studio", price: "89" },
-  { id: "pro", label: "Scale", name: "Pro", price: "119" },
-  { id: "partner", label: "White-label", name: "Partner", price: "159" },
+  { id: "launch", label: "Foundation", name: "Launch" },
+  { id: "studio", label: "Growth", name: "Studio" },
+  { id: "pro", label: "Scale", name: "Pro" },
+  { id: "partner", label: "White-label", name: "Partner" },
 ];
 
 const moodNames: Record<string, string> = {
@@ -33,7 +33,7 @@ const labelClass = "text-[0.82rem] font-semibold text-espresso mb-1.5 block";
 export default function SubmissionSummary({
   data,
   onChange,
-  onLaunch,
+  onSubmitQuote,
   onGoToStep,
   loading,
   error,
@@ -159,11 +159,14 @@ export default function SubmissionSummary({
         </div>
       </div>
 
-      {/* Plan selector */}
+      {/* Plan preference */}
       <div className="mb-8">
-        <h3 className="text-[0.9rem] font-semibold text-espresso mb-3">
-          Choose your plan
+        <h3 className="text-[0.9rem] font-semibold text-espresso mb-1">
+          Preferred plan
         </h3>
+        <p className="text-[0.75rem] text-fog mb-3">
+          We&apos;ll discuss pricing on our call
+        </p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {tiers.map((tier) => (
             <button
@@ -181,18 +184,9 @@ export default function SubmissionSummary({
               <p className="text-[0.85rem] font-bold text-espresso">
                 {tier.name}
               </p>
-              <p className="font-serif text-[1.3rem] text-espresso">
-                £{tier.price}
-                <span className="font-sans text-[0.7rem] font-normal text-driftwood">
-                  /mo
-                </span>
-              </p>
             </button>
           ))}
         </div>
-        <p className="text-[0.75rem] text-fog mt-2">
-          First charge in 14 days (free trial). Cancel anytime.
-        </p>
       </div>
 
       {/* Owner details */}
@@ -245,23 +239,36 @@ export default function SubmissionSummary({
             className={inputClass}
           />
         </div>
+        <div>
+          <label className={labelClass}>
+            Anything else we should know?{" "}
+            <span className="font-normal text-fog">(optional)</span>
+          </label>
+          <textarea
+            value={data.notes}
+            onChange={(e) => onChange({ notes: e.target.value })}
+            placeholder="Tell us about your goals, timeline, or any questions..."
+            rows={3}
+            className={inputClass}
+          />
+        </div>
       </div>
 
       {error && error !== "ownerName" && error !== "ownerEmail" && (
         <p className="text-[0.82rem] text-amber mb-4 text-center">{error}</p>
       )}
 
-      {/* Launch button */}
+      {/* Submit button */}
       <button
-        onClick={onLaunch}
+        onClick={onSubmitQuote}
         disabled={loading}
         className="w-full py-4 bg-terracotta text-parchment rounded-[10px] text-[0.95rem] font-semibold hover:bg-burnt hover:scale-[1.01] transition-all disabled:opacity-60 disabled:hover:scale-100"
       >
-        {loading ? "Setting up..." : "Start my studio →"}
+        {loading ? "Submitting..." : "Request a quote →"}
       </button>
 
       <p className="text-[0.72rem] text-fog text-center mt-3">
-        You&apos;ll enter payment details on the next screen. 14-day free trial.
+        We&apos;ll review your details and get back to you within 48 hours.
       </p>
     </div>
   );

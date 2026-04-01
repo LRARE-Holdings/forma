@@ -35,12 +35,9 @@ export default function TermsPage() {
             Forma provides website building, class booking, payment processing, and management tools for fitness and wellness studios. We build and host your studio website based on information you provide during onboarding.
           </p>
 
-          <h2 className="text-[1.1rem] font-semibold text-espresso mt-8">3. Subscriptions and billing</h2>
+          <h2 className="text-[1.1rem] font-semibold text-espresso mt-8">3. Pricing and engagement</h2>
           <p>
-            Forma is a paid subscription service. All plans include a 14-day free trial. After the trial period, your chosen plan will be billed monthly via Stripe. You can cancel at any time — no contracts, no exit fees.
-          </p>
-          <p>
-            Payment processing fees (Stripe&apos;s standard rates) apply to transactions made through your studio site. Forma does not take a commission on your revenue.
+            Forma offers custom pricing tailored to each studio&apos;s needs. After submitting your details through our onboarding form, we&apos;ll discuss your requirements and provide a personalised quote. Billing details and payment terms are agreed upon individually before any work begins.
           </p>
 
           <h2 className="text-[1.1rem] font-semibold text-espresso mt-8">4. Your content</h2>
@@ -60,7 +57,7 @@ export default function TermsPage() {
 
           <h2 className="text-[1.1rem] font-semibold text-espresso mt-8">7. Cancellation</h2>
           <p>
-            You may cancel your subscription at any time. Upon cancellation, your site will remain active until the end of your current billing period. After that, your site will be taken offline. You can request an export of your data at any time.
+            You may cancel your service at any time in accordance with the terms agreed in your engagement. Upon cancellation, your site will be taken offline at the end of the agreed period. You can request an export of your data at any time.
           </p>
 
           <h2 className="text-[1.1rem] font-semibold text-espresso mt-8">8. Limitation of liability</h2>

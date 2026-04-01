@@ -36,7 +36,7 @@ export default function PrivacyPage() {
             <li>Your name and email address</li>
             <li>Studio name, location, and type</li>
             <li>Class and pricing information you provide</li>
-            <li>Payment information (processed securely by Stripe)</li>
+            <li>Phone number (if provided)</li>
             <li>Usage data and analytics (cookie-free, via privacy-friendly tools)</li>
           </ul>
 
@@ -44,14 +44,14 @@ export default function PrivacyPage() {
           <p>We use your information to:</p>
           <ul className="list-disc pl-5 space-y-1">
             <li>Build and manage your studio website</li>
-            <li>Process payments and subscriptions</li>
+            <li>Respond to enquiries and provide quotes</li>
             <li>Send transactional emails (confirmations, updates)</li>
             <li>Improve our services</li>
           </ul>
 
           <h2 className="text-[1.1rem] font-semibold text-espresso mt-8">Third-party services</h2>
           <p>
-            We use Stripe for payment processing, Supabase for data storage, Resend for email delivery, and Vercel for hosting. Each provider has their own privacy policy and processes data in accordance with GDPR.
+            We use Supabase for data storage, Resend for email delivery, and Vercel for hosting. Each provider has their own privacy policy and processes data in accordance with GDPR.
           </p>
 
           <h2 className="text-[1.1rem] font-semibold text-espresso mt-8">Data retention</h2>

@@ -8,7 +8,6 @@ import ClassBuilder from "./ClassBuilder";
 import TeamBuilder from "./TeamBuilder";
 import ThemePicker from "./ThemePicker";
 import SubmissionSummary from "./SubmissionSummary";
-import CheckoutForm from "./CheckoutForm";
 
 export interface ClassItem {
   name: string;
@@ -41,6 +40,7 @@ export interface OnboardingData {
   ownerName: string;
   ownerEmail: string;
   ownerPhone: string;
+  notes: string;
 }
 
 const TOTAL_STEPS = 5;
@@ -50,20 +50,14 @@ const stepLabels = [
   "Class setup",
   "Your team",
   "Choose a mood",
-  "Plan & pay",
+  "Review & submit",
 ];
 
 export default function OnboardingShell() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [step, setStep] = useState(1);
-  const [showCheckout, setShowCheckout] = useState(false);
-  const [checkoutSecret, setCheckoutSecret] = useState("");
-  const [stripeIds, setStripeIds] = useState({
-    customerId: "",
-    subscriptionId: "",
-  });
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submissionId, setSubmissionId] = useState<string | null>(null);
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -86,6 +80,7 @@ export default function OnboardingShell() {
     ownerName: "",
     ownerEmail: "",
     ownerPhone: "",
+    notes: "",
   });
 
   // Set preselected tier on mount if provided
@@ -142,6 +137,7 @@ export default function OnboardingShell() {
         ownerName: currentData.ownerName || null,
         ownerEmail: currentData.ownerEmail || null,
         ownerPhone: currentData.ownerPhone || null,
+        notes: currentData.notes || null,
         currentStep: currentStep,
         status: "in_progress",
       };
@@ -207,14 +203,10 @@ export default function OnboardingShell() {
 
   const handleBack = () => {
     setErrors({});
-    if (showCheckout) {
-      setShowCheckout(false);
-      return;
-    }
     if (step > 1) setStep(step - 1);
   };
 
-  const handleLaunch = async () => {
+  const handleSubmitQuote = async () => {
     // Validate owner details on step 5
     if (!data.ownerName.trim()) {
       setErrors({ checkout: "ownerName" });
@@ -228,81 +220,44 @@ export default function OnboardingShell() {
       return;
     }
 
-    setCheckoutLoading(true);
+    setSubmitting(true);
     setErrors({});
 
-    // Save final progress before creating subscription
+    // Save final progress
     await saveProgress(data, 5);
 
     try {
-      const res = await fetch("/api/checkout/create-subscription", {
+      const res = await fetch("/api/onboarding/request-quote", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email: data.ownerEmail,
-          planTier: data.planTier,
+          submissionId,
           ownerName: data.ownerName,
-          submissionId: submissionId,
-          studioName: data.studioName,
+          ownerEmail: data.ownerEmail,
+          ownerPhone: data.ownerPhone,
+          planTier: data.planTier,
+          notes: data.notes,
         }),
       });
 
       if (!res.ok) {
         const err = await res.json();
-        throw new Error(err.error || "Failed to start checkout");
+        throw new Error(err.error || "Failed to submit");
       }
 
-      const {
-        clientSecret,
-        subscriptionId: subId,
-        customerId,
-      } = await res.json();
-      setCheckoutSecret(clientSecret);
-      setStripeIds({ customerId, subscriptionId: subId });
-      setShowCheckout(true);
-    } catch (err) {
-      console.error("Checkout error:", err);
-      setErrors({
-        checkout:
-          err instanceof Error ? err.message : "Failed to start checkout",
-      });
-    } finally {
-      setCheckoutLoading(false);
-    }
-  };
-
-  const handleCheckoutSuccess = async () => {
-    try {
-      // Update the submission with Stripe IDs and final status
-      if (submissionId) {
-        await fetch("/api/onboarding/submit", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            submissionId,
-            stripeCustomerId: stripeIds.customerId,
-            stripeSubscriptionId: stripeIds.subscriptionId,
-          }),
-        });
-      }
-
-      // Pass domain to success page for DNS instructions
-      const params = new URLSearchParams();
-      if (data.domain) params.set("domain", data.domain);
-      const qs = params.toString();
-      router.push(`/onboarding/success${qs ? `?${qs}` : ""}`);
+      router.push("/onboarding/success");
     } catch (err) {
       console.error("Submit error:", err);
-      // Still redirect — the webhook will handle provisioning
-      const params = new URLSearchParams();
-      if (data.domain) params.set("domain", data.domain);
-      const qs = params.toString();
-      router.push(`/onboarding/success${qs ? `?${qs}` : ""}`);
+      setErrors({
+        checkout:
+          err instanceof Error ? err.message : "Failed to submit your request",
+      });
+    } finally {
+      setSubmitting(false);
     }
   };
 
   const goToStep = (s: number) => {
-    setShowCheckout(false);
     setStep(s);
   };
 
@@ -319,7 +274,7 @@ export default function OnboardingShell() {
             forma
           </Link>
           <p className="font-mono text-[0.7rem] tracking-[0.08em] text-fog">
-            {showCheckout ? "Payment" : `Step ${step} of ${TOTAL_STEPS}`}
+            Step {step} of {TOTAL_STEPS}
           </p>
         </div>
         {/* Progress bar */}
@@ -327,9 +282,7 @@ export default function OnboardingShell() {
           <div
             className="h-full bg-terracotta transition-all duration-500 ease-out"
             style={{
-              width: showCheckout
-                ? "100%"
-                : `${(step / TOTAL_STEPS) * 100}%`,
+              width: `${(step / TOTAL_STEPS) * 100}%`,
             }}
           />
         </div>
@@ -338,56 +291,45 @@ export default function OnboardingShell() {
       {/* Content */}
       <div className="max-w-[720px] mx-auto px-6 pt-28 pb-12">
         {/* Step title */}
-        {!showCheckout && (
-          <div className="mb-8">
-            <p className="font-mono text-[0.68rem] tracking-[0.12em] uppercase text-terracotta mb-2">
-              Step {step}
-            </p>
-            <h1 className="font-serif text-[clamp(1.8rem,4vw,2.4rem)] font-normal text-espresso">
-              {stepLabels[step - 1]}
-            </h1>
-          </div>
-        )}
+        <div className="mb-8">
+          <p className="font-mono text-[0.68rem] tracking-[0.12em] uppercase text-terracotta mb-2">
+            Step {step}
+          </p>
+          <h1 className="font-serif text-[clamp(1.8rem,4vw,2.4rem)] font-normal text-espresso">
+            {stepLabels[step - 1]}
+          </h1>
+        </div>
 
         {/* Step content */}
-        {!showCheckout && step === 1 && (
+        {step === 1 && (
           <StudioDetailsForm
             data={data}
             onChange={updateData}
             errors={errors}
           />
         )}
-        {!showCheckout && step === 2 && (
+        {step === 2 && (
           <ClassBuilder data={data} onChange={updateData} errors={errors} />
         )}
-        {!showCheckout && step === 3 && (
+        {step === 3 && (
           <TeamBuilder data={data} onChange={updateData} errors={errors} />
         )}
-        {!showCheckout && step === 4 && (
+        {step === 4 && (
           <ThemePicker data={data} onChange={updateData} errors={errors} />
         )}
-        {!showCheckout && step === 5 && (
+        {step === 5 && (
           <SubmissionSummary
             data={data}
             onChange={updateData}
-            onLaunch={handleLaunch}
+            onSubmitQuote={handleSubmitQuote}
             onGoToStep={goToStep}
-            loading={checkoutLoading}
+            loading={submitting}
             error={errors.checkout}
           />
         )}
 
-        {showCheckout && checkoutSecret && (
-          <CheckoutForm
-            clientSecret={checkoutSecret}
-            planTier={data.planTier}
-            onSuccess={handleCheckoutSuccess}
-            onBack={handleBack}
-          />
-        )}
-
-        {/* Navigation buttons (not shown on step 5 or checkout — they have their own) */}
-        {!showCheckout && step < 5 && (
+        {/* Navigation buttons (not shown on step 5 — it has its own) */}
+        {step < 5 && (
           <div className="flex gap-3 mt-10">
             {step > 1 && (
               <button

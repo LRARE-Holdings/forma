@@ -77,7 +77,7 @@ export default function Hero() {
                   href="/onboarding"
                   className="inline-flex items-center gap-2 px-7 py-3.5 bg-terracotta text-parchment rounded-[10px] text-[0.92rem] font-semibold hover:bg-burnt hover:scale-[1.03] transition-all group"
                 >
-                  Get started{" "}
+                  Get a quote{" "}
                   <span className="inline-block transition-transform group-hover:translate-x-[3px]">
                     →
                   </span>

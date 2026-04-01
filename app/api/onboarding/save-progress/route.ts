@@ -27,6 +27,7 @@ export async function POST(request: Request) {
     brand_colour: body.brandColour || null,
     brand_notes: body.brandNotes || null,
     plan_tier: body.planTier || "studio",
+    notes: body.notes || null,
     status: body.status || "in_progress",
   };
 

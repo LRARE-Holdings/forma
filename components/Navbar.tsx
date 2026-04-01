@@ -56,7 +56,7 @@ export default function Navbar() {
           href="/onboarding"
           className="px-4 py-2 bg-terracotta text-parchment text-[0.8rem] font-bold rounded-lg hover:bg-burnt transition-all hover:scale-[1.04]"
         >
-          Get started
+          Get a quote
         </Link>
       </div>
     </nav>
