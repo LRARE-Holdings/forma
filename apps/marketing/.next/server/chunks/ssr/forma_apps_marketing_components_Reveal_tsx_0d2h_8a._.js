@@ -1,0 +1,3 @@
+module.exports=[2710,a=>{"use strict";var b=a.i(67435),c=a.i(73038);a.s(["default",0,function({children:a,delay:d=0,className:e=""}){let f=(0,c.useRef)(null),[g,h]=(0,c.useState)(!1);return(0,c.useEffect)(()=>{let a=f.current;if(!a)return;let b=new IntersectionObserver(([a])=>{a.isIntersecting&&h(!0)},{threshold:.08,rootMargin:"0px 0px -30px 0px"});return b.observe(a),()=>b.disconnect()},[]),(0,b.jsx)("div",{ref:f,className:`transition-all duration-700 ${e}`,style:{transitionTimingFunction:"cubic-bezier(0.16, 1, 0.3, 1)",transitionDelay:`${d}ms`,opacity:+!!g,transform:g?"translateY(0)":"translateY(28px)"},children:a})}])}];
+
+//# sourceMappingURL=forma_apps_marketing_components_Reveal_tsx_0d2h_8a._.js.map

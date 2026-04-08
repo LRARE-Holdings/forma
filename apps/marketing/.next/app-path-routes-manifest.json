@@ -1,0 +1,18 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/api/onboarding/request-quote/route": "/api/onboarding/request-quote",
+  "/api/onboarding/save-progress/route": "/api/onboarding/save-progress",
+  "/api/refer/signup/route": "/api/refer/signup",
+  "/api/waitlist/route": "/api/waitlist",
+  "/auth/callback/route": "/auth/callback",
+  "/case-studies/burn-mat-studio/page": "/case-studies/burn-mat-studio",
+  "/icon.svg/route": "/icon.svg",
+  "/onboarding/page": "/onboarding",
+  "/onboarding/success/page": "/onboarding/success",
+  "/page": "/",
+  "/privacy/page": "/privacy",
+  "/r/[code]/route": "/r/[code]",
+  "/refer/page": "/refer",
+  "/terms/page": "/terms"
+}

@@ -1,0 +1,3 @@
+module.exports=[142,a=>{"use strict";var b=a.i(87358);a.s(["default",0,function({children:a}){return(0,b.jsxs)("html",{lang:"en",children:[(0,b.jsx)("head",{children:(0,b.jsx)("link",{rel:"stylesheet",href:"https://fonts.googleapis.com/css2?family=Instrument+Serif&family=IBM+Plex+Mono:wght@400;500&display=swap"})}),(0,b.jsx)("body",{children:a})]})},"metadata",0,{title:"Forma · Admin",description:"Forma internal admin",robots:{index:!1,follow:!1}}])},31112,a=>{a.n(a.i(142))}];
+
+//# sourceMappingURL=forma_apps_portal_app_layout_tsx_07jws37._.js.map

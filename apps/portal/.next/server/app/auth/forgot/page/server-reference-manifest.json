@@ -1,0 +1,17 @@
+{
+  "node": {
+    "40e5fc1368b98f8bf26433e8d2e2e1ef79ff7e0b0f": {
+      "workers": {
+        "app/auth/forgot/page": {
+          "moduleId": 94286,
+          "async": false,
+          "exportedName": "forgotAction",
+          "filename": "forma/apps/portal/app/auth/forgot/actions.ts"
+        }
+      },
+      "exportedName": "forgotAction",
+      "filename": "forma/apps/portal/app/auth/forgot/actions.ts"
+    }
+  },
+  "edge": {}
+}

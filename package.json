@@ -1,28 +1,15 @@
 {
-  "name": "forma",
+  "name": "forma-monorepo",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "dev": "pnpm --filter @forma/marketing dev",
+    "dev:marketing": "pnpm --filter @forma/marketing dev",
+    "dev:portal": "pnpm --filter @forma/portal dev",
+    "build": "pnpm -r build",
+    "build:marketing": "pnpm --filter @forma/marketing build",
+    "build:portal": "pnpm --filter @forma/portal build",
+    "lint": "pnpm -r lint"
   },
-  "dependencies": {
-    "@supabase/supabase-js": "^2.99.3",
-    "next": "16.2.0",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
-    "resend": "^6.9.4"
-  },
-  "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.2.0",
-    "tailwindcss": "^4",
-    "typescript": "^5"
-  }
+  "packageManager": "pnpm@9.12.0"
 }

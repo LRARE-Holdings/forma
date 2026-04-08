@@ -1,0 +1,113 @@
+[
+  {
+    "route": "/onboarding",
+    "firstLoadUncompressedJsBytes": 547351,
+    "firstLoadChunkPaths": [
+      ".next/static/chunks/0wlv_5g59ein6.js",
+      ".next/static/chunks/0yvc1v-lloj9e.js",
+      ".next/static/chunks/0m.ma2gltlr25.js",
+      ".next/static/chunks/0tdj9olv9gf95.js",
+      ".next/static/chunks/0u_rz~tx61~c2.js",
+      ".next/static/chunks/0hz.vbnq.cijj.js",
+      ".next/static/chunks/13ee7r4o53mq~.js",
+      ".next/static/chunks/turbopack-0sk6~di-w.hms.js"
+    ]
+  },
+  {
+    "route": "/",
+    "firstLoadUncompressedJsBytes": 525673,
+    "firstLoadChunkPaths": [
+      ".next/static/chunks/0wlv_5g59ein6.js",
+      ".next/static/chunks/0yvc1v-lloj9e.js",
+      ".next/static/chunks/0j0nhj3bj2-zm.js",
+      ".next/static/chunks/0tdj9olv9gf95.js",
+      ".next/static/chunks/0u_rz~tx61~c2.js",
+      ".next/static/chunks/0hz.vbnq.cijj.js",
+      ".next/static/chunks/13ee7r4o53mq~.js",
+      ".next/static/chunks/turbopack-0sk6~di-w.hms.js"
+    ]
+  },
+  {
+    "route": "/case-studies/burn-mat-studio",
+    "firstLoadUncompressedJsBytes": 520333,
+    "firstLoadChunkPaths": [
+      ".next/static/chunks/0wlv_5g59ein6.js",
+      ".next/static/chunks/0yvc1v-lloj9e.js",
+      ".next/static/chunks/0ep7dru-ma52x.js",
+      ".next/static/chunks/0tdj9olv9gf95.js",
+      ".next/static/chunks/0u_rz~tx61~c2.js",
+      ".next/static/chunks/0hz.vbnq.cijj.js",
+      ".next/static/chunks/13ee7r4o53mq~.js",
+      ".next/static/chunks/turbopack-0sk6~di-w.hms.js"
+    ]
+  },
+  {
+    "route": "/refer",
+    "firstLoadUncompressedJsBytes": 519733,
+    "firstLoadChunkPaths": [
+      ".next/static/chunks/0wlv_5g59ein6.js",
+      ".next/static/chunks/0yvc1v-lloj9e.js",
+      ".next/static/chunks/0qlience15mco.js",
+      ".next/static/chunks/0tdj9olv9gf95.js",
+      ".next/static/chunks/0u_rz~tx61~c2.js",
+      ".next/static/chunks/0hz.vbnq.cijj.js",
+      ".next/static/chunks/13ee7r4o53mq~.js",
+      ".next/static/chunks/turbopack-0sk6~di-w.hms.js"
+    ]
+  },
+  {
+    "route": "/onboarding/success",
+    "firstLoadUncompressedJsBytes": 519718,
+    "firstLoadChunkPaths": [
+      ".next/static/chunks/0wlv_5g59ein6.js",
+      ".next/static/chunks/0yvc1v-lloj9e.js",
+      ".next/static/chunks/16nxt7e.zhzy9.js",
+      ".next/static/chunks/0tdj9olv9gf95.js",
+      ".next/static/chunks/0u_rz~tx61~c2.js",
+      ".next/static/chunks/0hz.vbnq.cijj.js",
+      ".next/static/chunks/13ee7r4o53mq~.js",
+      ".next/static/chunks/turbopack-0sk6~di-w.hms.js"
+    ]
+  },
+  {
+    "route": "/privacy",
+    "firstLoadUncompressedJsBytes": 519718,
+    "firstLoadChunkPaths": [
+      ".next/static/chunks/0wlv_5g59ein6.js",
+      ".next/static/chunks/0yvc1v-lloj9e.js",
+      ".next/static/chunks/16nxt7e.zhzy9.js",
+      ".next/static/chunks/0tdj9olv9gf95.js",
+      ".next/static/chunks/0u_rz~tx61~c2.js",
+      ".next/static/chunks/0hz.vbnq.cijj.js",
+      ".next/static/chunks/13ee7r4o53mq~.js",
+      ".next/static/chunks/turbopack-0sk6~di-w.hms.js"
+    ]
+  },
+  {
+    "route": "/terms",
+    "firstLoadUncompressedJsBytes": 519718,
+    "firstLoadChunkPaths": [
+      ".next/static/chunks/0wlv_5g59ein6.js",
+      ".next/static/chunks/0yvc1v-lloj9e.js",
+      ".next/static/chunks/16nxt7e.zhzy9.js",
+      ".next/static/chunks/0tdj9olv9gf95.js",
+      ".next/static/chunks/0u_rz~tx61~c2.js",
+      ".next/static/chunks/0hz.vbnq.cijj.js",
+      ".next/static/chunks/13ee7r4o53mq~.js",
+      ".next/static/chunks/turbopack-0sk6~di-w.hms.js"
+    ]
+  },
+  {
+    "route": "/_not-found",
+    "firstLoadUncompressedJsBytes": 513889,
+    "firstLoadChunkPaths": [
+      ".next/static/chunks/0wlv_5g59ein6.js",
+      ".next/static/chunks/0yvc1v-lloj9e.js",
+      ".next/static/chunks/0tdj9olv9gf95.js",
+      ".next/static/chunks/0u_rz~tx61~c2.js",
+      ".next/static/chunks/0hz.vbnq.cijj.js",
+      ".next/static/chunks/13ee7r4o53mq~.js",
+      ".next/static/chunks/turbopack-0sk6~di-w.hms.js"
+    ]
+  }
+]

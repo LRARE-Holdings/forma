@@ -1,0 +1,20 @@
+{
+  "/(admin)/activity/page": "app/(admin)/activity/page.js",
+  "/(admin)/enquiries/[id]/compose/page": "app/(admin)/enquiries/[id]/compose/page.js",
+  "/(admin)/enquiries/[id]/page": "app/(admin)/enquiries/[id]/page.js",
+  "/(admin)/page": "app/(admin)/page.js",
+  "/(admin)/pipeline/page": "app/(admin)/pipeline/page.js",
+  "/(admin)/referrals/page": "app/(admin)/referrals/page.js",
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/enquiries/[id]/email/route": "app/api/enquiries/[id]/email/route.js",
+  "/api/enquiries/[id]/notes/route": "app/api/enquiries/[id]/notes/route.js",
+  "/api/enquiries/[id]/update/route": "app/api/enquiries/[id]/update/route.js",
+  "/api/referrals/[id]/mark-paid/route": "app/api/referrals/[id]/mark-paid/route.js",
+  "/auth/callback/route": "app/auth/callback/route.js",
+  "/auth/forgot/page": "app/auth/forgot/page.js",
+  "/auth/reset/page": "app/auth/reset/page.js",
+  "/auth/sign-in/page": "app/auth/sign-in/page.js",
+  "/auth/sign-out/route": "app/auth/sign-out/route.js",
+  "/auth/sign-up/page": "app/auth/sign-up/page.js"
+}

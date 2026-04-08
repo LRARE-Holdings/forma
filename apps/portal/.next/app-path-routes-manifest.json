@@ -1,0 +1,20 @@
+{
+  "/(admin)/activity/page": "/activity",
+  "/(admin)/enquiries/[id]/compose/page": "/enquiries/[id]/compose",
+  "/(admin)/enquiries/[id]/page": "/enquiries/[id]",
+  "/(admin)/page": "/",
+  "/(admin)/pipeline/page": "/pipeline",
+  "/(admin)/referrals/page": "/referrals",
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/api/enquiries/[id]/email/route": "/api/enquiries/[id]/email",
+  "/api/enquiries/[id]/notes/route": "/api/enquiries/[id]/notes",
+  "/api/enquiries/[id]/update/route": "/api/enquiries/[id]/update",
+  "/api/referrals/[id]/mark-paid/route": "/api/referrals/[id]/mark-paid",
+  "/auth/callback/route": "/auth/callback",
+  "/auth/forgot/page": "/auth/forgot",
+  "/auth/reset/page": "/auth/reset",
+  "/auth/sign-in/page": "/auth/sign-in",
+  "/auth/sign-out/route": "/auth/sign-out",
+  "/auth/sign-up/page": "/auth/sign-up"
+}

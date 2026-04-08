@@ -1,0 +1,19 @@
+module.exports=[93695,(a,b,c)=>{b.exports=a.x("next/dist/shared/lib/no-fallback-error.external.js",()=>require("next/dist/shared/lib/no-fallback-error.external.js"))},70195,a=>{"use strict";var b=a.i(15436);a.s(["createServerClient",0,function(){let a=process.env.NEXT_PUBLIC_SUPABASE_URL,c=process.env.SUPABASE_SERVICE_ROLE_KEY;return(0,b.createClient)(a,c)}])},95037,a=>{"use strict";a.s(["default",()=>b]);let b=(0,a.i(24772).registerClientReference)(function(){throw Error("Attempted to call the default export of [project]/forma/apps/portal/components/admin/ComposeEmailForm.tsx <module evaluation> from the server, but it's on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.")},"[project]/forma/apps/portal/components/admin/ComposeEmailForm.tsx <module evaluation>","default")},76418,a=>{"use strict";a.s(["default",()=>b]);let b=(0,a.i(24772).registerClientReference)(function(){throw Error("Attempted to call the default export of [project]/forma/apps/portal/components/admin/ComposeEmailForm.tsx from the server, but it's on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.")},"[project]/forma/apps/portal/components/admin/ComposeEmailForm.tsx","default")},19030,a=>{"use strict";a.i(95037);var b=a.i(76418);a.n(b)},53096,a=>{"use strict";var b=a.i(87358),c=a.i(16602);a.i(88380);var d=a.i(17095),e=a.i(70195),f=a.i(19030);let g=[{id:"quote_followup",label:"Quote follow-up",subject:"Following up on {{studio_name}}",body:`Hi {{owner_first_name}},
+
+Just following up on the quote request you sent through for {{studio_name}}. I'd love to find a time to walk you through what we'd build for you and answer any questions.
+
+Are you free for a 20-minute call this week or next? Here's my calendar: [link]
+
+Best,
+[your name]
+Forma`},{id:"discovery_call",label:"Discovery call invite",subject:"Quick call about {{studio_name}}?",body:`Hi {{owner_first_name}},
+
+Thanks for getting in touch about {{studio_name}}. Before I put together a proper quote, I'd love a quick 15-minute call to understand what you're looking for and how Forma can help.
+
+What time works best for you? Happy to fit around your schedule.
+
+Best,
+[your name]
+Forma`}];async function h({params:a}){let{id:i}=await a,j=(0,e.createServerClient)(),{data:k}=await j.from("onboarding_submissions").select("id, studio_name, owner_name, owner_email").eq("id",i).maybeSingle();if(k||(0,d.notFound)(),!k.owner_email)return(0,b.jsxs)("div",{className:"max-w-[640px]",children:[(0,b.jsx)("p",{className:"text-[0.84rem] text-amber",children:"This enquiry has no owner email — can't compose a message."}),(0,b.jsx)(c.default,{href:`/enquiries/${i}`,className:"text-terracotta text-[0.82rem]",children:"← Back"})]});let l=(k.owner_name||"").split(" ")[0]||"there",m={studio_name:k.studio_name,owner_first_name:l,owner_full_name:k.owner_name||""};return(0,b.jsxs)("div",{className:"max-w-[760px]",children:[(0,b.jsx)(c.default,{href:`/enquiries/${i}`,className:"text-[0.78rem] text-driftwood hover:text-espresso",children:"← Back to enquiry"}),(0,b.jsxs)("h1",{className:"text-[2rem] text-espresso mt-3 mb-1",style:{fontFamily:"'Instrument Serif', Georgia, serif"},children:["Email ",k.owner_name||k.owner_email]}),(0,b.jsxs)("p",{className:"text-[0.84rem] text-driftwood mb-6",children:["Sent from ",(0,b.jsx)("span",{className:"font-mono",children:"hello@useforma.co.uk"})," to"," ",(0,b.jsx)("span",{className:"font-mono",children:k.owner_email}),". Logged on the enquiry timeline."]}),(0,b.jsx)(f.default,{submissionId:i,templates:g,tokens:m})]})}a.s(["default",0,h,"dynamic",0,"force-dynamic"],53096)},20049,a=>{a.n(a.i(53096))}];
+
+//# sourceMappingURL=%5Broot-of-the-server%5D__0dlyj~c._.js.map

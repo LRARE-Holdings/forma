@@ -1,4 +1,20 @@
-# CLAUDE.md — forma-landing
+# CLAUDE.md — forma monorepo
+
+## Repo layout
+
+This is a pnpm workspaces monorepo containing two apps and one shared package:
+
+- `apps/marketing/` — the public marketing site at **useforma.co.uk**. Contains the homepage, pricing, onboarding wizard, `/refer`, and `/r/[code]`. Server-rendered with service-role Supabase access.
+- `apps/portal/` — the internal admin CRM at **portal.useforma.co.uk**. Pipeline, enquiry detail, referrals dashboard, activity feed, compose-email-from-CRM. Auth via Supabase email/password gated by `ADMIN_EMAILS` env var allowlist.
+- `packages/db/` — the shared Supabase service-role client (`createServerClient`) and referral helpers (`attributeReferral`, `markReferralPayable`, `markReferralPaid`). Both apps import from `@forma/db`.
+
+Run `pnpm dev:marketing` or `pnpm dev:portal`. Build everything with `pnpm build`. The marketing app deploys from `apps/marketing` (Vercel project: `forma`); portal deploys from `apps/portal` (Vercel project: `forma-portal`).
+
+### Critical: do not corrupt the marketing /auth/callback
+
+`apps/marketing/app/auth/callback/route.ts` is the multi-tenant studio auth router shared with the burn-public and forma-admin apps. It looks up `studio_memberships` and forwards Supabase auth tokens to the matching studio domain. **Never modify this file's logic** without coordination — it's load-bearing for studio password resets across the platform.
+
+Admin auth in the portal uses a completely separate `apps/portal/app/auth/callback/route.ts` at `portal.useforma.co.uk/auth/callback`. They share a path name only because of the Supabase auth convention; they live on different domains and have no shared code.
 
 ## What this project is
 

@@ -1,0 +1,17 @@
+{
+  "node": {
+    "409e404eb9fb26e1c9fb6447235df7f6be7791ffb3": {
+      "workers": {
+        "app/auth/reset/page": {
+          "moduleId": 10848,
+          "async": false,
+          "exportedName": "resetAction",
+          "filename": "forma/apps/portal/app/auth/reset/actions.ts"
+        }
+      },
+      "exportedName": "resetAction",
+      "filename": "forma/apps/portal/app/auth/reset/actions.ts"
+    }
+  },
+  "edge": {}
+}

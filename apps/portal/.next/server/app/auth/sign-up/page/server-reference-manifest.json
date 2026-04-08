@@ -1,0 +1,17 @@
+{
+  "node": {
+    "40fc5de88b5f0010e889fb9022cd4549729e94c488": {
+      "workers": {
+        "app/auth/sign-up/page": {
+          "moduleId": 90104,
+          "async": false,
+          "exportedName": "signUpAction",
+          "filename": "forma/apps/portal/app/auth/sign-up/actions.ts"
+        }
+      },
+      "exportedName": "signUpAction",
+      "filename": "forma/apps/portal/app/auth/sign-up/actions.ts"
+    }
+  },
+  "edge": {}
+}

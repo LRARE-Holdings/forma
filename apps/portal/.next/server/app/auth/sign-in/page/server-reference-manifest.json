@@ -1,0 +1,17 @@
+{
+  "node": {
+    "40e589e0195e8dc0487d03e392f7dbed64c0ecd073": {
+      "workers": {
+        "app/auth/sign-in/page": {
+          "moduleId": 10322,
+          "async": false,
+          "exportedName": "signInAction",
+          "filename": "forma/apps/portal/app/auth/sign-in/actions.ts"
+        }
+      },
+      "exportedName": "signInAction",
+      "filename": "forma/apps/portal/app/auth/sign-in/actions.ts"
+    }
+  },
+  "edge": {}
+}
