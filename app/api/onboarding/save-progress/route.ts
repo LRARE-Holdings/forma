@@ -28,6 +28,7 @@ export async function POST(request: Request) {
     brand_notes: body.brandNotes || null,
     plan_tier: body.planTier || "studio",
     notes: body.notes || null,
+    referral_code: body.referralCode ? body.referralCode.trim() : null,
     status: body.status || "in_progress",
   };
 

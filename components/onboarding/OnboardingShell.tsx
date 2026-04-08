@@ -41,6 +41,7 @@ export interface OnboardingData {
   ownerEmail: string;
   ownerPhone: string;
   notes: string;
+  referralCode: string;
 }
 
 const TOTAL_STEPS = 5;
@@ -64,6 +65,7 @@ export default function OnboardingShell() {
 
   // Read pre-selected tier from query param (e.g. /onboarding?tier=pro)
   const preselectedTier = searchParams.get("tier");
+  const refQueryParam = searchParams.get("ref");
 
   const [data, setData] = useState<OnboardingData>({
     studioName: "",
@@ -81,6 +83,7 @@ export default function OnboardingShell() {
     ownerEmail: "",
     ownerPhone: "",
     notes: "",
+    referralCode: "",
   });
 
   // Set preselected tier on mount if provided
@@ -92,6 +95,21 @@ export default function OnboardingShell() {
       setData((prev) => ({ ...prev, planTier: preselectedTier }));
     }
   }, [preselectedTier]);
+
+  // Capture referral code from ?ref=<code> or forma_ref cookie. Query param wins.
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    let code = refQueryParam || "";
+    if (!code) {
+      const match = document.cookie.match(/(?:^|;\s*)forma_ref=([^;]+)/);
+      if (match) code = decodeURIComponent(match[1]);
+    }
+    if (code) {
+      setData((prev) =>
+        prev.referralCode ? prev : { ...prev, referralCode: code }
+      );
+    }
+  }, [refQueryParam]);
 
   const updateData = (partial: Partial<OnboardingData>) => {
     setData((prev) => ({ ...prev, ...partial }));
@@ -138,6 +156,7 @@ export default function OnboardingShell() {
         ownerEmail: currentData.ownerEmail || null,
         ownerPhone: currentData.ownerPhone || null,
         notes: currentData.notes || null,
+        referralCode: currentData.referralCode || null,
         currentStep: currentStep,
         status: "in_progress",
       };
@@ -237,6 +256,7 @@ export default function OnboardingShell() {
           ownerPhone: data.ownerPhone,
           planTier: data.planTier,
           notes: data.notes,
+          referralCode: data.referralCode || null,
         }),
       });
 

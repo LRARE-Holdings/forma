@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase";
 import { getResend } from "@/lib/resend";
+import { attributeReferral } from "@/lib/referrals";
 
 /**
  * POST /api/onboarding/request-quote
@@ -10,8 +11,15 @@ import { getResend } from "@/lib/resend";
  */
 export async function POST(request: Request) {
   const body = await request.json();
-  const { submissionId, ownerName, ownerEmail, ownerPhone, planTier, notes } =
-    body;
+  const {
+    submissionId,
+    ownerName,
+    ownerEmail,
+    ownerPhone,
+    planTier,
+    notes,
+    referralCode,
+  } = body;
 
   if (!submissionId || !ownerName || !ownerEmail) {
     return NextResponse.json(
@@ -31,6 +39,7 @@ export async function POST(request: Request) {
       owner_phone: ownerPhone || null,
       plan_tier: planTier || "studio",
       notes: notes || null,
+      referral_code: referralCode ? referralCode.trim() : null,
       status: "quote_requested",
     })
     .eq("id", submissionId);
@@ -40,6 +49,14 @@ export async function POST(request: Request) {
     return NextResponse.json(
       { error: "Failed to save submission" },
       { status: 500 }
+    );
+  }
+
+  // Attribute referral if a code was provided. Failures here must not block
+  // quote submission — attributeReferral logs internally and returns null.
+  if (referralCode) {
+    await attributeReferral(submissionId, referralCode).catch((err) =>
+      console.error("attributeReferral threw:", err)
     );
   }
 

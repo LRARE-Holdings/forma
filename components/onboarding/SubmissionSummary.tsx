@@ -252,6 +252,30 @@ export default function SubmissionSummary({
             className={inputClass}
           />
         </div>
+        <div>
+          <label className={labelClass}>
+            Referral code{" "}
+            <span className="font-normal text-fog">(optional)</span>
+          </label>
+          <input
+            type="text"
+            value={data.referralCode}
+            onChange={(e) => onChange({ referralCode: e.target.value })}
+            placeholder="Were you referred by someone? Enter their code"
+            className={inputClass}
+            autoCapitalize="off"
+            autoCorrect="off"
+            spellCheck={false}
+          />
+          {data.referralCode && (
+            <p className="text-[0.72rem] text-driftwood mt-1.5">
+              Referral applied · we&apos;ll credit{" "}
+              <span className="font-mono text-terracotta">
+                {data.referralCode}
+              </span>
+            </p>
+          )}
+        </div>
       </div>
 
       {error && error !== "ownerName" && error !== "ownerEmail" && (
