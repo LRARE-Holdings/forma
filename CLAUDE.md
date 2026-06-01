@@ -46,6 +46,8 @@ This is not studio-specific. This is where prospective studio owners discover Fo
 
 ## Forma business context
 
+> **⚠️ Commercial model — read this first.** Forma is **not** a four-tier monthly SaaS. It sells **bespoke one-off builds** (quoted case-by-case; roughly £1k for simpler builds, ~£2k for more advanced) — pay once and the studio owns the site outright, no contract, no lock-in. There is an **optional site-management subscription at a flat £65/mo** (maintenance/upkeep/fixes, cancel any time). **Never publish any of these figures on the public marketing site** — it's quote-driven; every CTA funnels to "Get a quote". The old Launch/Studio/Pro/Partner tier grid and parts of the Stripe section below describe a retired model and may not match current code — treat them as historical until refreshed.
+
 ### Positioning
 
 Forma targets the ~8,000 independent fitness and wellness studios in the UK that are underserved by existing tools. Studios like Burn Mat Studio fall between generic website builders (too rigid), enterprise platforms like Mindbody/Glofox (overpriced, clunky), and custom freelance builds (can't scale).
@@ -54,18 +56,15 @@ Forma's approach: productised builds that look custom. Every studio gets a uniqu
 
 **Tagline:** "Book. Pay. Breathe."
 
-### Pricing tiers
+### Commercial model
 
-| Tier | Price | Notes |
-|---|---|---|
-| Launch | £69/mo | — |
-| Studio | £89/mo | Most popular |
-| Pro | £119/mo | — |
-| Partner | £159/mo | White-label |
+- **One-off build cost, quoted case-by-case.** Simpler builds ~£1k, more advanced ~£2k. Paid once.
+- After the build is paid: **nothing else owed.** No contract, no lock-in, no dark patterns — the studio owns the site.
+- **Optional site-management subscription:** flat **£65/mo**, maintenance/upkeep/fixes, cancel any time.
+- No setup fees, no revenue commission. Stripe Connect Standard for per-studio payments (studios own their Stripe account).
+- **These numbers are internal.** Public pages describe the *shape* of the deal (pay once, yours to keep, optional flat-monthly management) and funnel to "Get a quote" — never list figures.
 
-- No setup fees, no contracts, no revenue commission
-- Stripe Connect Standard accounts for per-studio payments (studios own their Stripe account)
-- Blended ARPU target: ~£67/mo
+> The retired four-tier table (Launch £69 / Studio £89 / Pro £119 / Partner £159) and "blended ARPU ~£67/mo" are kept out of this file on purpose. If you find that grid referenced elsewhere, it's stale.
 
 ### Market
 

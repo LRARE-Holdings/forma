@@ -1,11 +1,11 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import TrustStrip from "@/components/TrustStrip";
-import Problem from "@/components/Problem";
-import Features from "@/components/Features";
+import WorkGallery from "@/components/WorkGallery";
+import Manifesto from "@/components/Manifesto";
+import Capabilities from "@/components/Capabilities";
 import Testimonial from "@/components/Testimonial";
-import HowItWorks from "@/components/HowItWorks";
-import Pricing from "@/components/Pricing";
+import Process from "@/components/Process";
+import TheDeal from "@/components/TheDeal";
 import FinalCTA from "@/components/FinalCTA";
 import Footer from "@/components/Footer";
 
@@ -14,14 +14,12 @@ export default function Home() {
     <>
       <Navbar />
       <Hero />
-      <TrustStrip />
-      <Problem />
-      <Features />
+      <WorkGallery />
+      <Manifesto />
+      <Capabilities />
       <Testimonial />
-      <hr className="border-t border-espresso/6 max-w-280 mx-auto" />
-      <HowItWorks />
-      <hr className="border-t border-espresso/6 max-w-280 mx-auto" />
-      <Pricing />
+      <Process />
+      <TheDeal />
       <FinalCTA />
       <Footer />
     </>

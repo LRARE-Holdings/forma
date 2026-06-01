@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Forma — Your studio, online",
+  title: "Forma — Your studio, made online",
   description:
-    "Beautiful websites with booking, payments, and class management built in. Purpose-built for Pilates, yoga, and fitness studios.",
+    "We design and build custom websites, booking, and payments for independent Pilates, yoga, and fitness studios. Built once, yours to keep.",
   openGraph: {
-    title: "Forma — Your studio, online",
+    title: "Forma — Your studio, made online",
     description:
-      "Beautiful websites with booking, payments, and class management built in.",
+      "Custom websites and booking suites for independent UK studios. Built once, yours to keep.",
     type: "website",
   },
 };

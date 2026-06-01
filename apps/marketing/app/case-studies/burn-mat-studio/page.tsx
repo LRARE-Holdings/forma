@@ -562,10 +562,10 @@ export default function BurnMatStudioCaseStudy() {
               Features
             </Link>
             <Link
-              href="/#pricing"
+              href="/#deal"
               className="text-[0.78rem] text-fog hover:text-driftwood transition-colors"
             >
-              Pricing
+              How we work
             </Link>
             <Link
               href="/privacy"
