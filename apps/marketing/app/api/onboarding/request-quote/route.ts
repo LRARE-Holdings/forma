@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createServerClient, attributeReferral } from "@forma/db";
+import { createServerClient } from "@forma/db";
 import { getResend } from "@/lib/resend";
 
 /**
@@ -48,14 +48,6 @@ export async function POST(request: Request) {
     return NextResponse.json(
       { error: "Failed to save submission" },
       { status: 500 }
-    );
-  }
-
-  // Attribute referral if a code was provided. Failures here must not block
-  // quote submission — attributeReferral logs internally and returns null.
-  if (referralCode) {
-    await attributeReferral(submissionId, referralCode).catch((err) =>
-      console.error("attributeReferral threw:", err)
     );
   }
 
