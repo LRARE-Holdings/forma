@@ -8,6 +8,7 @@ import ClassBuilder from "./ClassBuilder";
 import TeamBuilder from "./TeamBuilder";
 import ThemePicker from "./ThemePicker";
 import SubmissionSummary from "./SubmissionSummary";
+import { isTierId } from "@/lib/pricing";
 
 export interface ClassItem {
   name: string;
@@ -63,7 +64,7 @@ export default function OnboardingShell() {
   const [submissionId, setSubmissionId] = useState<string | null>(null);
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Read pre-selected tier from query param (e.g. /onboarding?tier=pro)
+  // Read pre-selected tier from query param (e.g. /onboarding?tier=studio)
   const preselectedTier = searchParams.get("tier");
   const refQueryParam = searchParams.get("ref");
 
@@ -90,7 +91,7 @@ export default function OnboardingShell() {
   useEffect(() => {
     if (
       preselectedTier &&
-      ["launch", "studio", "pro", "partner"].includes(preselectedTier)
+      isTierId(preselectedTier)
     ) {
       setData((prev) => ({ ...prev, planTier: preselectedTier }));
     }

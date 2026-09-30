@@ -12,20 +12,20 @@ export default function FinalCTA() {
           className="font-serif font-normal leading-[0.94] tracking-[-0.03em] text-parchment"
           style={{ fontSize: "clamp(3rem, 8vw, 7rem)" }}
         >
-          Let&apos;s build
+          Start
           <br />
           <em className="italic text-terracotta">your studio.</em>
         </h2>
         <p className="text-[1.05rem] leading-[1.6] text-fog max-w-[440px] mx-auto mt-10 mb-12">
-          Tell us about your classes and we&apos;ll build you something that&apos;s
-          yours to keep. No contract, no lock-in, no commission.
+          Pick a plan and you&apos;re online today — website, booking, and
+          payments in one. No contract, no commission, cancel anytime.
         </p>
         <div className="flex gap-3 flex-wrap justify-center">
           <Link
-            href="/onboarding"
+            href="/pricing"
             className="inline-flex items-center gap-2.5 px-9 py-4 bg-terracotta text-parchment text-[0.78rem] font-mono uppercase tracking-[0.12em] hover:bg-burnt transition-colors group"
           >
-            Get a quote
+            Get started
             <span className="transition-transform group-hover:translate-x-1">→</span>
           </Link>
           <Link

@@ -1,4 +1,5 @@
 import type { OnboardingData } from "./OnboardingShell";
+import { PRICING_TIERS } from "@/lib/pricing";
 
 interface Props {
   data: OnboardingData;
@@ -8,13 +9,6 @@ interface Props {
   loading: boolean;
   error?: string;
 }
-
-const tiers = [
-  { id: "launch", label: "Foundation", name: "Launch" },
-  { id: "studio", label: "Growth", name: "Studio" },
-  { id: "pro", label: "Scale", name: "Pro" },
-  { id: "partner", label: "White-label", name: "Partner" },
-];
 
 const moodNames: Record<string, string> = {
   stillness: "Stillness",
@@ -159,16 +153,16 @@ export default function SubmissionSummary({
         </div>
       </div>
 
-      {/* Plan preference */}
+      {/* Plan selection */}
       <div className="mb-8">
         <h3 className="text-[0.9rem] font-semibold text-espresso mb-1">
-          Preferred plan
+          Your plan
         </h3>
         <p className="text-[0.75rem] text-fog mb-3">
-          We&apos;ll discuss pricing on our call
+          Pick the plan that fits — switch anytime, cancel anytime.
         </p>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          {tiers.map((tier) => (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          {PRICING_TIERS.map((tier) => (
             <button
               key={tier.id}
               onClick={() => onChange({ planTier: tier.id })}
@@ -179,10 +173,17 @@ export default function SubmissionSummary({
               }`}
             >
               <p className="font-mono text-[0.6rem] uppercase tracking-[0.1em] text-fog mb-0.5">
-                {tier.label}
+                {tier.featured
+                  ? "Most popular"
+                  : tier.whiteLabel
+                    ? "White-label"
+                    : "Pay monthly"}
               </p>
               <p className="text-[0.85rem] font-bold text-espresso">
                 {tier.name}
+              </p>
+              <p className="font-mono text-[0.72rem] text-terracotta mt-0.5">
+                £{tier.priceMonthly}/mo
               </p>
             </button>
           ))}

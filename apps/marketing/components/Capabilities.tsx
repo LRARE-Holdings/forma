@@ -3,7 +3,7 @@ import { Section, Label } from "./ui/Section";
 const items = [
   {
     title: "A website that looks like you",
-    desc: "Designed from scratch around your brand, your space, and the way you talk to your members. Not a theme — a site that could only be yours.",
+    desc: "Branded around your studio — your colours, your space, the way you talk to your members. Not a generic template; a site that could only be yours.",
   },
   {
     title: "Booking built in",
@@ -31,7 +31,7 @@ export default function Capabilities() {
           >
             One studio,
             <br />
-            <em className="italic text-terracotta">one build.</em>
+            <em className="italic text-terracotta">one platform.</em>
           </h2>
         </div>
 

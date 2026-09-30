@@ -7,14 +7,13 @@ const cols = [
     links: [
       { label: "Work", href: "/#work" },
       { label: "What we make", href: "/#make" },
-      { label: "How we work", href: "/#deal" },
+      { label: "Pricing", href: "/pricing" },
       { label: "Case study", href: "/case-studies/burn-mat-studio" },
     ],
   },
   {
     label: "Company",
     links: [
-      { label: "Partners", href: "/partners" },
       { label: "Privacy", href: "/privacy" },
       { label: "Terms", href: "/terms" },
       { label: "Contact", href: "mailto:hello@useforma.co.uk" },
@@ -30,8 +29,9 @@ export default function Footer() {
           <div>
             <Logo className="mb-5 text-[1.25rem]" />
             <p className="text-[0.82rem] leading-[1.65] text-driftwood max-w-[280px]">
-              Custom websites and booking suites for independent Pilates, yoga,
-              and fitness studios across the UK. Built once, yours to keep.
+              Everything an independent Pilates, yoga, or fitness studio needs to
+              run online — website, booking, and payments. Flat monthly, cancel
+              anytime.
             </p>
             <p className="text-[0.72rem] text-fog mt-4">
               hello@useforma.co.uk

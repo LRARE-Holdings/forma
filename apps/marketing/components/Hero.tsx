@@ -28,9 +28,9 @@ export default function Hero() {
             className="lg:col-span-6 lg:col-start-1 text-[1.15rem] md:text-[1.3rem] leading-[1.55] text-bark max-w-[560px]"
             style={{ animation: "fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.3s both" }}
           >
-            We design and build the website, booking, and payments for
-            independent Pilates, yoga, and fitness studios — as one custom
-            piece, shaped around how you actually run your classes.
+            Everything your studio runs on — a branded website, class booking,
+            memberships, and payments — in one platform. Flat monthly, unlimited
+            members, live the same day.
           </p>
 
           <div
@@ -39,10 +39,10 @@ export default function Hero() {
           >
             <div className="flex gap-3 flex-wrap">
               <Link
-                href="/onboarding"
+                href="/pricing"
                 className="inline-flex items-center gap-2.5 px-8 py-4 bg-espresso text-parchment text-[0.78rem] font-mono uppercase tracking-[0.12em] hover:bg-bark transition-colors group"
               >
-                Get a quote
+                Get started
                 <span className="transition-transform group-hover:translate-x-1">→</span>
               </Link>
               <Link
@@ -53,9 +53,9 @@ export default function Hero() {
               </Link>
             </div>
             <p className="font-mono text-[0.66rem] tracking-[0.12em] uppercase text-fog leading-[1.8]">
-              Pay once. No contract.
+              Flat monthly. Unlimited members.
               <br />
-              No lock-in. Yours to keep.
+              No per-member fees. Cancel anytime.
             </p>
           </div>
         </div>

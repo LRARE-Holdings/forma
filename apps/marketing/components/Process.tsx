@@ -3,23 +3,23 @@ import { Section, Label } from "./ui/Section";
 const steps = [
   {
     n: "01",
-    title: "Tell us about your studio",
-    desc: "Your classes, your members, the feeling you want people to have when they land. A short conversation, not a 40-field form.",
+    title: "Pick your plan",
+    desc: "Choose Solo, Studio or Partner and check out in a couple of minutes. No sales call, no quote, no waiting on someone to get back to you.",
   },
   {
     n: "02",
-    title: "We design and build it",
-    desc: "We draw your site, wire up booking and payments, and shape it around how you teach. You see it come together and steer as we go.",
+    title: "Set up your studio",
+    desc: "Add your classes, timetable, and branding in a guided setup. Bring your members across or start fresh — it's built to be quick.",
   },
   {
     n: "03",
-    title: "It goes live, and it's yours",
-    desc: "We hand over a finished studio site. Pay once for the build and that's it — no contract, no lock-in, nothing else owed.",
+    title: "Go live the same day",
+    desc: "Your branded site, booking, and payments are online today. Share the link and take your first booking before the kettle's boiled.",
   },
   {
     n: "04",
-    title: "We look after it — if you want",
-    desc: "Keep us on a flat monthly plan and we handle updates and fixes whenever something needs to change. Cancel any time, or run it yourself.",
+    title: "Grow without the penalty",
+    desc: "Add members, classes, and locations as you scale — your price stays flat. Cancel and export your data anytime, no hard feelings.",
   },
 ];
 
@@ -34,7 +34,7 @@ export default function Process() {
           className="font-serif font-normal leading-[0.98] tracking-[-0.03em] text-parchment max-w-[720px]"
           style={{ fontSize: "clamp(2.4rem, 5vw, 4rem)" }}
         >
-          Live in a week.
+          Live today.
           <br />
           <em className="italic text-terracotta">Not a project.</em>
         </h2>

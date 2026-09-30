@@ -7,8 +7,7 @@ import { Logo } from "./ui/Logo";
 const navLinks = [
   { label: "Work", href: "#work" },
   { label: "What we make", href: "#make" },
-  { label: "How we work", href: "#deal" },
-  { label: "Partners", href: "/partners" },
+  { label: "Pricing", href: "/pricing" },
 ];
 
 export default function Navbar() {
@@ -53,10 +52,10 @@ export default function Navbar() {
 
         <div className="flex items-center gap-4">
           <Link
-            href="/onboarding"
+            href="/pricing"
             className="hidden md:inline-flex items-center px-5 py-2.5 border border-espresso/25 text-espresso text-[0.72rem] font-medium tracking-[0.1em] uppercase font-mono hover:bg-espresso hover:text-parchment hover:border-espresso transition-all"
           >
-            Get a quote
+            Get started
           </Link>
           <button
             aria-label="Toggle menu"
@@ -107,11 +106,11 @@ export default function Navbar() {
           ))}
         </div>
         <Link
-          href="/onboarding"
+          href="/pricing"
           onClick={() => setOpen(false)}
           className="block w-full py-4 bg-espresso text-parchment text-[0.82rem] font-mono uppercase tracking-[0.14em] text-center mt-8"
         >
-          Get a quote
+          Get started
         </Link>
       </div>
     </>
