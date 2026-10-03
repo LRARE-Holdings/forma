@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "check:contrast": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/check-contrast.ts",
-    "build:logo": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/build-logo.mjs"
+    "build:logo": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/build-logo.mjs",
+    "stripe:setup": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/stripe-setup.mjs"
   },
   "dependencies": {
     "@forma/db": "workspace:*",
@@ -19,7 +20,8 @@
     "next": "16.2.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "resend": "^6.9.4"
+    "resend": "^6.9.4",
+    "stripe": "^23.0.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

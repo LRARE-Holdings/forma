@@ -126,6 +126,13 @@ The wizard saves progress to `onboarding_submissions` as the owner advances thro
 
 Monthly, no commitment — cancel anytime. Annual plans carry the free trial.
 
+### Current state (2026-10-03) — read before the spec below
+
+- Checkout and webhook are built (`app/api/checkout/subscribe`, `app/api/webhooks/stripe`). Prices are looked up by key `forma_<tier>_monthly` / `forma_<tier>_annual`; `pnpm stripe:setup` creates the monthly ones. Annual prices don't exist yet.
+- **The webhook does NOT auto-provision.** It marks `onboarding_submissions` as paid, emails the owner and `ADMIN_EMAIL`, and a person sets the studio up by hand. Studios/profiles/memberships/auth are shared with the live Burn Mat operation and there's no multi-tenant dashboard to log in to yet. Don't add provisioning without the owner's go-ahead.
+- `onboarding_submissions` does not exist in Forma DB yet. Its migration is `supabase/migrations/20261003000000_onboarding_submissions.sql` (new table only). Until it's applied, the wizard can't save or check out.
+- The spec below is the target, not what's live.
+
 ### API routes
 
 **POST `/api/checkout/subscribe`** — Creates a Stripe Checkout Session in subscription mode. Receives: onboarding_submission_id, plan_tier. Looks up the submission data. Creates the Checkout Session with metadata: { onboarding_submission_id, plan_tier, owner_email, studio_name }. Returns the checkout URL.

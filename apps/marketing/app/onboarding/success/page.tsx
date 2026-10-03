@@ -4,7 +4,8 @@ import { brand } from "@/config/brand";
 
 export const metadata: Metadata = {
   title: `Thanks · ${brand.name}`,
-  description: "We've received your enquiry.",
+  description: "Payment received. We're setting up your studio.",
+  robots: { index: false, follow: false },
 };
 
 export default function SuccessPage() {
