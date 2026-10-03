@@ -33,29 +33,6 @@
   --container-content: var(--content-max);
 }
 
-/* LEGACY palette (pre-Direction B). Still referenced by the pages that
-   haven't been rebuilt yet; delete once header, footer, hero and pricing
-   are redone and the remaining sections are moved onto the tokens above. */
-@theme {
-  --color-parchment: #FFFCF9;
-  --color-linen: #F5EDE4;
-  --color-sand: #E8DDD1;
-  --color-clay: #D4C4B0;
-  --color-terracotta: #C2714F;
-  --color-burnt: #A85A3A;
-  --color-blush: #F5D5C3;
-  --color-espresso: #2C1810;
-  --color-bark: #5C3D2E;
-  --color-driftwood: #8B7265;
-  --color-fog: #B09E93;
-  --color-charcoal: #1A1210;
-  --color-cocoa: #2A1F1A;
-  --color-bisque: #E8CEB8;
-  --color-sandstone: #9C8474;
-  --color-sage: #2E7D5B;
-  --color-amber: #D97706;
-}
-
 /* The /brand page renders the scale by key, so keep every step generated. */
 @source inline("type-{display-xl,display-l,h1,h2,h3,body-l,body,small,label}");
 
@@ -152,66 +129,5 @@
   ::selection {
     background-color: var(--volt);
     color: var(--ink);
-  }
-}
-
-/* Range slider used by the pricing comparator. */
-input[type="range"].forma-range {
-  -webkit-appearance: none;
-  appearance: none;
-  height: 3px;
-  background: var(--color-sand);
-  border-radius: 999px;
-  outline: none;
-  cursor: pointer;
-}
-input[type="range"].forma-range::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: var(--color-terracotta);
-  border: 2px solid var(--color-parchment);
-  box-shadow: 0 1px 4px rgba(44, 24, 16, 0.25);
-  cursor: pointer;
-}
-input[type="range"].forma-range::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: var(--color-terracotta);
-  border: 2px solid var(--color-parchment);
-  cursor: pointer;
-}
-
-@keyframes modalIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95) translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes checkIn {
-  from {
-    transform: scale(0);
-  }
-  to {
-    transform: scale(1);
   }
 }

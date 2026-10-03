@@ -99,30 +99,3 @@ export function isTierId(id: unknown): id is TierId {
 export function getTier(id: string): PricingTier | undefined {
   return PRICING_TIERS.find((t) => t.id === id);
 }
-
-/**
- * Competitor entry pricing, normalised to GBP from public 2026 pricing, used
- * only to illustrate the structural difference (they scale with members; Forma
- * is flat). Exact bills vary by negotiation and add-ons.
- */
-export interface Competitor {
-  name: string;
-  /** Approx monthly entry price in GBP. */
-  entry: number;
-  note: string;
-}
-
-export const COMPETITORS: Competitor[] = [
-  { name: "TeamUp", entry: 83, note: "scales with active members" },
-  { name: "Momence", entry: 78, note: "entry, then add-ons & 2.5% fees" },
-  { name: "bSport", entry: 95, note: "opaque, add-on heavy" },
-];
-
-/**
- * Rough model of a per-member competitor bill: ~£15 per extra 50 active
- * members above a 50-member base. Forma stays flat at every size.
- */
-export function competitorAtMembers(base: number, members: number): number {
-  const extra = Math.max(0, Math.floor((members - 50) / 50)) * 15;
-  return base + extra;
-}

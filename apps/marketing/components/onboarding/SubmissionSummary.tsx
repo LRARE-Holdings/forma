@@ -7,7 +7,9 @@ import { FieldError, Optional, hintClass, inputClass, labelClass } from "./field
 interface Props {
   data: OnboardingData;
   onChange: (partial: Partial<OnboardingData>) => void;
-  onSubmitQuote: () => void;
+  onCheckout: () => void;
+  /** The owner came back from Stripe without paying. */
+  cancelled?: boolean;
   onGoToStep: (step: number) => void;
   loading: boolean;
   error?: string;
@@ -51,12 +53,17 @@ function SummaryCard({
   );
 }
 
-export default function SubmissionSummary({ data, onChange, onSubmitQuote, onGoToStep, loading, error }: Props) {
+export default function SubmissionSummary({ data, onChange, onCheckout, cancelled, onGoToStep, loading, error }: Props) {
   const nameError = error === "ownerName";
   const emailError = error === "ownerEmail";
 
   return (
     <div className="flex flex-col gap-10">
+      {cancelled && (
+        <p className="rounded-lg border border-border-strong bg-surface p-5 text-text-secondary" role="status">
+          Checkout cancelled. You haven&apos;t been charged, and everything you entered is still here.
+        </p>
+      )}
       <div className="flex flex-col gap-3">
         <SummaryCard title="Studio" step={1} onGoToStep={onGoToStep}>
           <p>{data.studioName}</p>
@@ -250,11 +257,11 @@ export default function SubmissionSummary({ data, onChange, onSubmitQuote, onGoT
             {error}
           </p>
         )}
-        <Button size="lg" onClick={onSubmitQuote} disabled={loading} className="w-full">
-          {loading ? "Submitting…" : "Request a quote →"}
+        <Button size="lg" onClick={onCheckout} disabled={loading} className="w-full">
+          {loading ? "Opening checkout…" : `Continue to payment →`}
         </Button>
         <p className="text-center type-small text-text-muted">
-          We&apos;ll review your details and get back to you within 48 hours.
+          You&apos;ll pay securely with Stripe. No setup fees, no contract, cancel anytime.
         </p>
       </div>
     </div>

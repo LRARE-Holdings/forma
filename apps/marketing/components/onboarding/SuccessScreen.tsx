@@ -3,18 +3,20 @@ import { Check } from "lucide-react";
 import { Logo } from "@/components/brand/Logo";
 import { ButtonLink } from "@/components/ui/Button";
 import { brand } from "@/config/brand";
+import ClearDraft from "./ClearDraft";
 
-// Describes the current quote-request flow. Replace when Stripe checkout lands.
+// What happens after a successful Stripe checkout. Setup is manual for now,
+// so no timescales are promised.
 const timeline = [
-  { time: "Now", desc: "We review your studio details" },
-  { time: "Within 48 hours", desc: "We'll reach out to discuss your needs and pricing" },
-  { time: "After you approve", desc: "We start building your site" },
-  { time: "Within 5 days", desc: "Your studio goes live" },
+  { time: "Now", desc: "Your plan is active and we've emailed you a confirmation" },
+  { time: "Next", desc: "We set up your studio site, booking and payments from the details you gave us" },
+  { time: "When it's ready", desc: "We email you your login so you can check everything and go live" },
 ];
 
 export default function SuccessScreen() {
   return (
     <div className="min-h-dvh bg-ink text-text">
+      <ClearDraft />
       <header className="border-b border-border">
         <div className="mx-auto flex h-16 max-w-[760px] items-center px-(--gutter) md:h-20">
           <Link
@@ -34,10 +36,10 @@ export default function SuccessScreen() {
 
         <div className="flex flex-col gap-4">
           <h1 className="type-display-l">
-            Thanks. <span className="text-volt">We&apos;ve got it.</span>
+            You&apos;re in. <span className="text-volt">Welcome aboard.</span>
           </h1>
           <p className="type-body-l text-text-secondary">
-            We&apos;ve received your details and will be in touch within 48 hours.
+            Payment received. We&apos;re setting up your studio now. No setup fees, no contract, and you can cancel anytime.
           </p>
         </div>
 

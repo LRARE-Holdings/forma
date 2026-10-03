@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import StudioDetailsForm from "./StudioDetailsForm";
 import ClassBuilder from "./ClassBuilder";
 import TeamBuilder from "./TeamBuilder";
@@ -49,17 +49,17 @@ export interface OnboardingData {
 }
 
 const TOTAL_STEPS = 5;
+const DRAFT_KEY = "onboarding-draft";
 
 const stepLabels = [
   "Studio basics",
   "Class setup",
   "Your team",
   "Choose a mood",
-  "Review & submit",
+  "Review & pay",
 ];
 
 export default function OnboardingShell() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
@@ -70,6 +70,8 @@ export default function OnboardingShell() {
   // Read pre-selected tier from query param (e.g. /onboarding?tier=studio)
   const preselectedTier = searchParams.get("tier");
   const refQueryParam = searchParams.get("ref");
+  // Set when the owner backs out of Stripe Checkout.
+  const cancelled = searchParams.get("cancelled") === "1";
 
   const [data, setData] = useState<OnboardingData>({
     studioName: "",
@@ -115,6 +117,36 @@ export default function OnboardingShell() {
     }
   }, [refQueryParam]);
 
+  // Keep the draft for this tab so leaving for Stripe and coming back (or a
+  // refresh) doesn't lose what the owner typed. Storage can be unavailable
+  // (private mode, blocked), in which case the wizard just starts fresh.
+  const restoredRef = useRef(false);
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem(DRAFT_KEY);
+      if (raw) {
+        const draft = JSON.parse(raw) as { data: OnboardingData; step: number; submissionId: string | null };
+        setData((prev) => ({ ...prev, ...draft.data, ...(isTierId(preselectedTier) ? { planTier: preselectedTier } : {}) }));
+        setSubmissionId(draft.submissionId);
+        setStep(cancelled ? TOTAL_STEPS : draft.step);
+      }
+    } catch {
+      // ignore
+    }
+    restoredRef.current = true;
+    // Restore once on mount only.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!restoredRef.current) return;
+    try {
+      sessionStorage.setItem(DRAFT_KEY, JSON.stringify({ data, step, submissionId }));
+    } catch {
+      // ignore
+    }
+  }, [data, step, submissionId]);
+
   const updateData = (partial: Partial<OnboardingData>) => {
     setData((prev) => ({ ...prev, ...partial }));
   };
@@ -124,7 +156,7 @@ export default function OnboardingShell() {
    * Creates a new row on first save, then updates it on subsequent saves.
    */
   const saveProgress = useCallback(
-    async (currentData: OnboardingData, currentStep: number) => {
+    async (currentData: OnboardingData, currentStep: number): Promise<string | null> => {
       const classesFormatted = currentData.classes
         .filter((c) => c.name.trim())
         .map((c) => ({
@@ -177,11 +209,13 @@ export default function OnboardingShell() {
           if (result.submissionId && !submissionId) {
             setSubmissionId(result.submissionId);
           }
+          return result.submissionId ?? submissionId;
         }
       } catch (err) {
         console.error("Failed to save progress:", err);
         // Non-fatal — don't block the wizard
       }
+      return submissionId;
     },
     [submissionId]
   );
@@ -229,16 +263,13 @@ export default function OnboardingShell() {
     if (step > 1) setStep(step - 1);
   };
 
-  const handleSubmitQuote = async () => {
+  const handleCheckout = async () => {
     // Validate owner details on step 5
     if (!data.ownerName.trim()) {
       setErrors({ checkout: "ownerName" });
       return;
     }
-    if (
-      !data.ownerEmail.trim() ||
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.ownerEmail)
-    ) {
+    if (!data.ownerEmail.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.ownerEmail)) {
       setErrors({ checkout: "ownerEmail" });
       return;
     }
@@ -246,15 +277,16 @@ export default function OnboardingShell() {
     setSubmitting(true);
     setErrors({});
 
-    // Save final progress
-    await saveProgress(data, 5);
+    // Save final progress, and use the id it returns rather than state that
+    // may not have updated yet.
+    const id = await saveProgress(data, 5);
 
     try {
-      const res = await fetch("/api/onboarding/request-quote", {
+      const res = await fetch("/api/checkout/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          submissionId,
+          submissionId: id,
           ownerName: data.ownerName,
           ownerEmail: data.ownerEmail,
           ownerPhone: data.ownerPhone,
@@ -264,19 +296,17 @@ export default function OnboardingShell() {
         }),
       });
 
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || "Failed to submit");
+      const result = await res.json().catch(() => ({}));
+      if (!res.ok || !result.url) {
+        throw new Error(result.error || "We couldn't start checkout. Please try again.");
       }
 
-      router.push("/onboarding/success");
+      window.location.assign(result.url);
     } catch (err) {
-      console.error("Submit error:", err);
+      console.error("Checkout error:", err);
       setErrors({
-        checkout:
-          err instanceof Error ? err.message : "Failed to submit your request",
+        checkout: err instanceof Error ? err.message : "We couldn't start checkout. Please try again.",
       });
-    } finally {
       setSubmitting(false);
     }
   };
@@ -331,7 +361,8 @@ export default function OnboardingShell() {
           <SubmissionSummary
             data={data}
             onChange={updateData}
-            onSubmitQuote={handleSubmitQuote}
+            onCheckout={handleCheckout}
+            cancelled={cancelled}
             onGoToStep={goToStep}
             loading={submitting}
             error={errors.checkout}
