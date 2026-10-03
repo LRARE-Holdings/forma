@@ -76,7 +76,7 @@ export default function TermsPage() {
           </p>
         </div>
 
-        <div className="border-t border-sand mt-12 pt-6">
+        <div className="mt-12 border-t border-ink/10 pt-6">
           <Link href="/" className="type-small text-ink-soft underline underline-offset-4 outline-offset-2 focus-visible:outline-2 focus-visible:outline-ink">
             ← Back to Forma
           </Link>

@@ -8,7 +8,7 @@ import { ButtonLink } from "@/components/ui/Button";
 import { brand } from "@/config/brand";
 import { NAV_LINKS, PRIMARY_CTA } from "@/config/site";
 
-/** Logo left, links, one volt CTA. Sits on ink. */
+/** Logo left, links, an outline CTA (the page owns the one volt CTA). Sits on ink. */
 export default function SiteHeader() {
   const [open, setOpen] = useState(false);
 
@@ -44,7 +44,10 @@ export default function SiteHeader() {
               {l.label}
             </Link>
           ))}
-          <ButtonLink href={PRIMARY_CTA.href}>{PRIMARY_CTA.label} →</ButtonLink>
+          {/* Outline, so the page's own volt CTA is the only one on screen. */}
+          <ButtonLink href={PRIMARY_CTA.href} variant="secondary">
+            {PRIMARY_CTA.label} →
+          </ButtonLink>
         </nav>
 
         <button

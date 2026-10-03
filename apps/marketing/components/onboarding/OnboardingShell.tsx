@@ -9,6 +9,9 @@ import TeamBuilder from "./TeamBuilder";
 import ThemePicker from "./ThemePicker";
 import SubmissionSummary from "./SubmissionSummary";
 import { isTierId } from "@/lib/pricing";
+import { Logo } from "@/components/brand/Logo";
+import { Button } from "@/components/ui/Button";
+import { brand } from "@/config/brand";
 
 export interface ClassItem {
   name: string;
@@ -283,61 +286,47 @@ export default function OnboardingShell() {
   };
 
   return (
-    <div className="min-h-screen bg-parchment">
+    <div className="min-h-dvh bg-ink text-text">
       {/* Top bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-parchment/92 backdrop-blur-xl border-b border-espresso/6">
-        <div className="max-w-[720px] mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="sticky top-0 z-50 border-b border-border bg-ink">
+        <div className="mx-auto flex h-16 max-w-[760px] items-center justify-between px-(--gutter) md:h-20">
           <Link
             href="/"
-            className="text-[1.15rem] font-black tracking-[-0.04em] text-transparent"
-            style={{ WebkitTextStroke: "1.1px #5C3D2E" }}
+            aria-label={`${brand.name} home`}
+            className="rounded-sm outline-offset-4 focus-visible:outline-2 focus-visible:outline-volt"
           >
-            forma
+            <Logo height={24} decorative />
           </Link>
-          <p className="font-mono text-[0.7rem] tracking-[0.08em] text-fog">
+          <p className="type-small tabular-nums text-text-muted">
             Step {step} of {TOTAL_STEPS}
           </p>
         </div>
-        {/* Progress bar */}
-        <div className="h-[3px] bg-sand">
+        <div
+          className="h-1 bg-border"
+          role="progressbar"
+          aria-label="Setup progress"
+          aria-valuemin={1}
+          aria-valuemax={TOTAL_STEPS}
+          aria-valuenow={step}
+        >
           <div
-            className="h-full bg-terracotta transition-all duration-500 ease-out"
-            style={{
-              width: `${(step / TOTAL_STEPS) * 100}%`,
-            }}
+            className="h-full bg-volt transition-[width] duration-(--dur) ease-brand"
+            style={{ width: `${(step / TOTAL_STEPS) * 100}%` }}
           />
         </div>
       </div>
 
       {/* Content */}
-      <div className="max-w-[720px] mx-auto px-6 pt-28 pb-12">
-        {/* Step title */}
-        <div className="mb-8">
-          <p className="font-mono text-[0.68rem] tracking-[0.12em] uppercase text-terracotta mb-2">
-            Step {step}
-          </p>
-          <h1 className="font-serif text-[clamp(1.8rem,4vw,2.4rem)] font-normal text-espresso">
-            {stepLabels[step - 1]}
-          </h1>
+      <main className="mx-auto max-w-[760px] px-(--gutter) pt-12 pb-16 md:pt-16">
+        <div className="mb-10 flex flex-col gap-3">
+          <p className="type-label text-volt">Step {step}</p>
+          <h1 className="type-h1">{stepLabels[step - 1]}</h1>
         </div>
 
-        {/* Step content */}
-        {step === 1 && (
-          <StudioDetailsForm
-            data={data}
-            onChange={updateData}
-            errors={errors}
-          />
-        )}
-        {step === 2 && (
-          <ClassBuilder data={data} onChange={updateData} errors={errors} />
-        )}
-        {step === 3 && (
-          <TeamBuilder data={data} onChange={updateData} errors={errors} />
-        )}
-        {step === 4 && (
-          <ThemePicker data={data} onChange={updateData} errors={errors} />
-        )}
+        {step === 1 && <StudioDetailsForm data={data} onChange={updateData} errors={errors} />}
+        {step === 2 && <ClassBuilder data={data} onChange={updateData} errors={errors} />}
+        {step === 3 && <TeamBuilder data={data} onChange={updateData} errors={errors} />}
+        {step === 4 && <ThemePicker data={data} onChange={updateData} errors={errors} />}
         {step === 5 && (
           <SubmissionSummary
             data={data}
@@ -351,24 +340,18 @@ export default function OnboardingShell() {
 
         {/* Navigation buttons (not shown on step 5 — it has its own) */}
         {step < 5 && (
-          <div className="flex gap-3 mt-10">
+          <div className="mt-12 flex gap-3 border-t border-border pt-8">
             {step > 1 && (
-              <button
-                onClick={handleBack}
-                className="px-6 py-3 bg-transparent text-espresso border-[1.5px] border-sand rounded-[10px] text-[0.88rem] font-medium hover:border-clay transition-all"
-              >
+              <Button variant="secondary" onClick={handleBack}>
                 Back
-              </button>
+              </Button>
             )}
-            <button
-              onClick={handleNext}
-              className="px-8 py-3 bg-terracotta text-parchment rounded-[10px] text-[0.88rem] font-semibold hover:bg-burnt hover:scale-[1.02] transition-all ml-auto"
-            >
+            <Button onClick={handleNext} className="ml-auto">
               Continue
-            </button>
+            </Button>
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 }

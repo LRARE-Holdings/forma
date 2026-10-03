@@ -1,66 +1,89 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import Reveal from "@/components/Reveal";
+import {
+  CalendarClock,
+  CreditCard,
+  LayoutDashboard,
+  ListChecks,
+  MonitorPlay,
+  UserRound,
+  type LucideIcon,
+} from "lucide-react";
+import SiteHeader from "@/components/site/SiteHeader";
+import SiteFooter from "@/components/site/SiteFooter";
+import { Block, FinalCta } from "@/components/marketing/HomeSections";
+import { StatTile } from "@/components/ui/Product";
+import { brand } from "@/config/brand";
+
+const description = `How ${brand.name} built a complete website, booking system and membership platform for a boutique Pilates and yoga studio in Stockton-on-Tees.`;
 
 export const metadata: Metadata = {
-  title: "Burn Mat Studio — Case Study | Forma",
-  description:
-    "How Forma built a complete website, booking system, and membership platform for a boutique Pilates and yoga studio in Stockton-on-Tees.",
-  openGraph: {
-    title: "Burn Mat Studio — Case Study | Forma",
-    description:
-      "How Forma built a complete website, booking system, and membership platform for a boutique Pilates and yoga studio in Stockton-on-Tees.",
-    type: "article",
-  },
+  title: `Burn Mat Studio case study · ${brand.name}`,
+  description,
+  openGraph: { title: `Burn Mat Studio case study · ${brand.name}`, description, type: "article" },
 };
 
-const stats = [
+const STATS = [
   { value: "6", label: "Class types" },
   { value: "3", label: "Instructors" },
   { value: "10", label: "Max class size" },
   { value: "3", label: "Payment paths" },
 ];
 
-const features = [
+const FEATURES: { icon: LucideIcon; title: string; description: string }[] = [
   {
-    icon: "◎",
+    icon: MonitorPlay,
     title: "Cinematic marketing site",
     description:
       "Single-page design with animated canvas gradients, staggered entrance animations, class showcase, instructor profiles, live timetable, and transparent pricing — all pulling from the database, never hardcoded.",
   },
   {
-    icon: "▤",
+    icon: CalendarClock,
     title: "Real-time booking engine",
     description:
       "Live spot counts for every class (capped at 10), 30-minute booking cutoff, and double-booking prevention enforced at the database level. When a class fills, the waitlist takes over automatically.",
   },
   {
-    icon: "£",
+    icon: CreditCard,
     title: "Three unified payment paths",
     description:
-      "Unlimited memberships, 5 or 10-class credit packs with expiry tracking, or single drop-in sessions via Stripe Checkout. One booking modal intelligently detects the best option for each member.",
+      "Unlimited memberships, 5 or 10-class credit packs with expiry tracking, or single drop-in sessions via Stripe Checkout. One booking modal detects the best option for each member.",
   },
   {
-    icon: "✦",
+    icon: ListChecks,
     title: "Automated waitlist system",
     description:
       "When a class fills up, members join the waitlist. When a spot opens, the next person gets an email notification with a 30-minute window to claim it. No manual chasing.",
   },
   {
-    icon: "◈",
+    icon: UserRound,
     title: "Member dashboard",
     description:
       "Upcoming and past bookings, pack credit management with animated progress bars and expiry warnings, profile settings, and engagement stats — classes attended, weekly streak, credits remaining.",
   },
   {
-    icon: "⚙",
+    icon: LayoutDashboard,
     title: "Studio admin panel",
     description:
       "Full CRUD for classes and schedules, member management, booking oversight, team management, and a filtered staff view showing attendee lists for each instructor's assigned classes.",
   },
 ];
 
-const polishItems = [
+const PAY_PATHS = [
+  {
+    title: "Membership",
+    desc: "Unlimited monthly access. Members book any class instantly — no credits to count, no limits. Recurring billing handled by Stripe.",
+  },
+  {
+    title: "Class packs",
+    desc: "Buy 5 or 10 credits upfront. Each booking deducts one credit. Animated progress bars track usage, with expiry warnings as the deadline approaches.",
+  },
+  {
+    title: "Drop-in",
+    desc: "Single-class purchase via Stripe Checkout. No account required to browse, but booking creates a member profile for future visits.",
+  },
+];
+
+const POLISH = [
   "Shimmer skeleton loaders for perceived performance",
   "Toast notification system replacing browser alerts",
   "Tactile button press states across all interactions",
@@ -74,7 +97,20 @@ const polishItems = [
   "Member stats dashboard with streak tracking",
 ];
 
-const techStack = [
+// Burn Mat's own identity, shown as part of the case study. These are the
+// studio's colours and fonts, not ours, so they are literal on purpose.
+const STUDIO_PALETTE = [
+  { name: "Wheat", hex: "#F5E6D3" },
+  { name: "Cocoa", hex: "#4A3728" },
+  { name: "Gold", hex: "#C8A97E" },
+  { name: "Cream", hex: "#FAF5EF" },
+  { name: "Sand", hex: "#D4C4B0" },
+  { name: "Charcoal", hex: "#2C2C2C" },
+  { name: "Ember", hex: "#D4845E" },
+  { name: "Blush", hex: "#E8C4B8" },
+];
+
+const TECH = [
   { name: "Next.js", role: "Full-stack framework" },
   { name: "Supabase", role: "Auth + database" },
   { name: "Stripe", role: "Payments" },
@@ -83,508 +119,218 @@ const techStack = [
   { name: "Vercel", role: "Hosting" },
 ];
 
+const DECISIONS = [
+  {
+    h: "Webhook-driven payments.",
+    b: "Bookings and credit purchases are only confirmed after Stripe fires a webhook — never optimistically. This prevents phantom bookings and ensures every confirmed spot is backed by a real payment.",
+  },
+  {
+    h: "Database-level integrity.",
+    b: "Double-booking prevention isn't handled in application code — it's enforced by database constraints. Even if two members click “Book” at the exact same millisecond, only one gets the spot.",
+  },
+  {
+    h: "Transactional email from the studio's domain.",
+    b: `Booking confirmations, pack receipts, cancellation notices, and welcome emails are all sent via Resend from the studio's own domain — not from a generic ${brand.name} address.`,
+  },
+];
+
+function Heading({ id, eyebrow, children }: { id: string; eyebrow: string; children: React.ReactNode }) {
+  return (
+    <div className="mb-12 flex flex-col gap-4">
+      <p className="type-label text-text-muted">{eyebrow}</p>
+      <h2 id={id} className="max-w-[20ch] type-h1">
+        {children}
+      </h2>
+    </div>
+  );
+}
+
 export default function BurnMatStudioCaseStudy() {
   return (
-    <main className="min-h-screen bg-parchment">
-      {/* Header bar */}
-      <nav className="h-16 px-6 md:px-12 flex items-center justify-between border-b border-espresso/6">
-        <Link
-          href="/"
-          className="text-[1.35rem] font-black tracking-[-0.04em] text-transparent"
-          style={{ WebkitTextStroke: "1.2px #5C3D2E" }}
-        >
-          forma
-        </Link>
-        <Link
-          href="/"
-          className="text-[0.82rem] font-medium text-driftwood hover:text-espresso transition-colors"
-        >
-          Back to Forma
-        </Link>
-      </nav>
-
-      {/* Hero */}
-      <section className="pt-20 pb-28 max-w-[1120px] mx-auto px-6 md:px-12">
-        <Reveal>
-          <p className="font-mono text-[0.7rem] tracking-[0.14em] uppercase text-terracotta mb-5 flex items-center gap-2.5">
-            <span className="w-6 h-[1.5px] bg-terracotta" />
-            Case study
-          </p>
-        </Reveal>
-        <Reveal delay={80}>
-          <h1 className="font-serif text-[clamp(2.4rem,5vw,3.8rem)] font-normal leading-[1.08] text-espresso mb-6">
-            Burn Mat Studio
-          </h1>
-        </Reveal>
-        <Reveal delay={160}>
-          <p className="text-[1.1rem] leading-[1.7] text-driftwood max-w-[640px] mb-4">
-            A boutique Pilates and yoga studio in Stockton-on-Tees needed a
-            professional digital presence that handled the full member journey
-            — discovery through to repeat booking — without enterprise overhead
-            or cost.
-          </p>
-        </Reveal>
-        <Reveal delay={200}>
-          <p className="text-[0.88rem] text-fog">
-            Forma&apos;s first tenant &middot; burnmatstudio.co.uk
-          </p>
-        </Reveal>
-
-        {/* Stats strip */}
-        <Reveal delay={280}>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-sand rounded-2xl overflow-hidden mt-14">
-            {stats.map((s) => (
-              <div key={s.label} className="bg-white p-6 text-center">
-                <p className="font-serif text-[2.2rem] text-terracotta leading-none mb-1">
-                  {s.value}
-                </p>
-                <p className="font-mono text-[0.68rem] tracking-[0.1em] uppercase text-fog">
-                  {s.label}
-                </p>
-              </div>
-            ))}
+    <>
+      <SiteHeader />
+      <main className="bg-ink text-text">
+        <section aria-labelledby="cs-title">
+          <div className="mx-auto flex w-full max-w-content flex-col gap-8 px-(--gutter) pt-10 pb-24 md:pt-16">
+            <p className="type-label text-text-muted">Case study · Reformer Pilates · Stockton-on-Tees</p>
+            <h1 id="cs-title" className="type-display-xl">
+              Burn Mat <span className="text-volt">Studio.</span>
+            </h1>
+            <p className="max-w-[60ch] type-body-l text-text-secondary">
+              A boutique Pilates and yoga studio in Stockton-on-Tees needed a professional digital presence that handled
+              the full member journey — discovery through to repeat booking — without enterprise overhead or cost.
+            </p>
+            <p className="type-small text-text-muted">{brand.name}&apos;s first tenant · burnmatstudio.co.uk</p>
+            <ul className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4">
+              {STATS.map((s) => (
+                <li key={s.label}>
+                  <StatTile label={s.label} value={s.value} />
+                </li>
+              ))}
+            </ul>
           </div>
-        </Reveal>
-      </section>
+        </section>
 
-      <hr className="border-t border-espresso/6 max-w-280 mx-auto" />
-
-      {/* The Problem */}
-      <section className="py-28 max-w-[1120px] mx-auto px-6 md:px-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
-          <div>
-            <Reveal>
-              <p className="font-mono text-[0.7rem] tracking-[0.14em] uppercase text-terracotta mb-5 flex items-center gap-2.5">
-                <span className="w-6 h-[1.5px] bg-terracotta" />
-                The challenge
-              </p>
-            </Reveal>
-            <Reveal delay={80}>
-              <h2 className="font-serif text-[clamp(2rem,4vw,3rem)] font-normal leading-[1.12] text-espresso mb-4">
-                Great classes,
-                <br />
-                generic <em className="italic text-terracotta">tools</em>
-              </h2>
-            </Reveal>
-          </div>
-          <Reveal delay={160}>
-            <div className="space-y-5 text-[1rem] leading-[1.7] text-driftwood">
+        <Block labelledBy="challenge-title">
+          <div className="grid md:grid-cols-2 md:gap-12">
+            <Heading id="challenge-title" eyebrow="The challenge">
+              Great classes, <span className="text-volt">generic tools.</span>
+            </Heading>
+            <div className="flex flex-col gap-5 type-body-l text-text-secondary">
               <p>
-                The studio was managing bookings, payments, and member
-                communication through generic tools that weren&apos;t built for
-                small boutique studios. The experience for members felt
-                functional but impersonal — a booking widget on a template site.
+                The studio was managing bookings, payments, and member communication through generic tools that
+                weren&apos;t built for small boutique studios. The experience for members felt functional but impersonal
+                — a booking widget on a template site.
               </p>
               <p>
-                Enterprise platforms like Mindbody and Glofox were overpriced and
-                overbuilt. Generic website builders couldn&apos;t handle
-                real-time booking. Freelance builds couldn&apos;t scale or be
-                maintained affordably. The studio needed something in between.
+                Enterprise platforms like Mindbody and Glofox were overpriced and overbuilt. Generic website builders
+                couldn&apos;t handle real-time booking. Freelance builds couldn&apos;t scale or be maintained affordably.
+                The studio needed something in between.
               </p>
             </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* What Forma Built — dark section */}
-      <section className="py-28 bg-charcoal relative overflow-hidden">
-        <div className="absolute -top-[120px] -right-[120px] w-[450px] h-[450px] bg-[radial-gradient(circle,rgba(194,113,79,0.06)_0%,transparent_60%)] pointer-events-none" />
-
-        <div className="max-w-[1120px] mx-auto px-6 md:px-12 relative z-10">
-          <Reveal>
-            <p className="font-mono text-[0.7rem] tracking-[0.14em] uppercase text-terracotta mb-5 flex items-center gap-2.5">
-              <span className="w-6 h-[1.5px] bg-terracotta" />
-              What we built
-            </p>
-          </Reveal>
-          <Reveal delay={80}>
-            <h2 className="font-serif text-[clamp(2rem,4vw,3rem)] font-normal leading-[1.12] text-bisque mb-4">
-              A complete platform,
-              <br />
-              not just a website.
-            </h2>
-          </Reveal>
-          <Reveal delay={160}>
-            <p className="text-[1.05rem] leading-[1.65] text-sandstone max-w-[540px] mb-14">
-              Forma delivered a full-stack application — public-facing marketing
-              site, real-time booking engine, payment processing, member
-              accounts, staff tools, and admin dashboard. All under one roof,
-              all on-brand.
-            </p>
-          </Reveal>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {features.map((f, i) => (
-              <Reveal key={f.title} delay={i * 80}>
-                <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8 hover:border-white/[0.12] hover:bg-white/[0.05] transition-all h-full">
-                  <div className="w-10 h-10 rounded-[10px] flex items-center justify-center text-[1.1rem] mb-5 bg-terracotta/10 text-terracotta border border-terracotta/[0.08]">
-                    {f.icon}
-                  </div>
-                  <h3 className="text-[1.05rem] font-bold text-bisque mb-1.5">
-                    {f.title}
-                  </h3>
-                  <p className="text-[0.85rem] leading-[1.6] text-sandstone">
-                    {f.description}
-                  </p>
-                </div>
-              </Reveal>
-            ))}
           </div>
-        </div>
-      </section>
+        </Block>
 
-      {/* Booking Flow Detail */}
-      <section className="py-28 max-w-[1120px] mx-auto px-6 md:px-12">
-        <Reveal>
-          <p className="font-mono text-[0.7rem] tracking-[0.14em] uppercase text-terracotta mb-5 flex items-center gap-2.5">
-            <span className="w-6 h-[1.5px] bg-terracotta" />
-            How booking works
+        <Block tone="surface" labelledBy="built-title">
+          <Heading id="built-title" eyebrow="What we built">
+            A complete platform, <span className="text-volt">not just a website.</span>
+          </Heading>
+          <p className="-mt-4 mb-12 max-w-[56ch] type-body-l text-text-secondary">
+            {brand.name} delivered a full-stack application — public-facing marketing site, real-time booking engine,
+            payment processing, member accounts, staff tools, and admin dashboard. All under one roof, all on-brand.
           </p>
-        </Reveal>
-        <Reveal delay={80}>
-          <h2 className="font-serif text-[clamp(2rem,4vw,3rem)] font-normal leading-[1.12] text-espresso mb-14">
-            Three ways to pay,
-            <br />
-            one seamless flow.
-          </h2>
-        </Reveal>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-sand rounded-2xl overflow-hidden">
-          {[
-            {
-              num: "01",
-              title: "Membership",
-              desc: "Unlimited monthly access. Members book any class instantly — no credits to count, no limits. Recurring billing handled by Stripe.",
-            },
-            {
-              num: "02",
-              title: "Class packs",
-              desc: "Buy 5 or 10 credits upfront. Each booking deducts one credit. Animated progress bars track usage, with expiry warnings as the deadline approaches.",
-            },
-            {
-              num: "03",
-              title: "Drop-in",
-              desc: "Single-class purchase via Stripe Checkout. No account required to browse, but booking creates a member profile for future visits.",
-            },
-          ].map((item, i) => (
-            <Reveal key={item.num} delay={i * 80}>
-              <div className="bg-white p-8 hover:bg-linen transition-colors h-full">
-                <p className="font-serif text-[2.5rem] text-sand leading-none mb-3">
-                  {item.num}
-                </p>
-                <h3 className="text-[0.95rem] font-bold mb-1.5 text-espresso">
-                  {item.title}
-                </h3>
-                <p className="text-[0.82rem] leading-[1.55] text-driftwood">
-                  {item.desc}
-                </p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-
-        <Reveal delay={320}>
-          <p className="text-[0.92rem] leading-[1.7] text-driftwood max-w-[600px] mt-10">
-            The booking modal auto-detects which option to present based on the
-            member&apos;s account state. Members with an active membership book
-            instantly. Pack holders see their remaining credits. Everyone else
-            sees the drop-in price. No confusion, no wasted clicks.
-          </p>
-        </Reveal>
-      </section>
-
-      <hr className="border-t border-espresso/6 max-w-280 mx-auto" />
-
-      {/* Design & Polish */}
-      <section className="py-28 bg-linen">
-        <div className="max-w-[1120px] mx-auto px-6 md:px-12">
-          <Reveal>
-            <p className="font-mono text-[0.7rem] tracking-[0.14em] uppercase text-terracotta mb-5 flex items-center gap-2.5">
-              <span className="w-6 h-[1.5px] bg-terracotta" />
-              Fit and finish
-            </p>
-          </Reveal>
-          <Reveal delay={80}>
-            <h2 className="font-serif text-[clamp(2rem,4vw,3rem)] font-normal leading-[1.12] text-espresso mb-4">
-              The details that make it
-              <br />
-              feel <em className="italic text-terracotta">real</em>.
-            </h2>
-          </Reveal>
-          <Reveal delay={160}>
-            <p className="text-[1.05rem] leading-[1.65] text-driftwood max-w-[540px] mb-14">
-              A final sprint of UX polish turned a functional platform into
-              something that feels crafted. Every interaction has weight and
-              intention.
-            </p>
-          </Reveal>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-            {polishItems.map((item, i) => (
-              <Reveal key={i} delay={i * 50}>
-                <div className="bg-white rounded-xl p-5 border border-sand/60 hover:border-clay transition-colors">
-                  <div className="flex items-start gap-3">
-                    <span className="w-1.5 h-1.5 rounded-full bg-terracotta mt-2 shrink-0" />
-                    <p className="text-[0.84rem] leading-[1.5] text-driftwood">
-                      {item}
-                    </p>
-                  </div>
-                </div>
-              </Reveal>
+          <ul className="grid gap-4 md:grid-cols-2">
+            {FEATURES.map(({ icon: Icon, title, description: d }) => (
+              <li key={title} className="flex flex-col gap-4 rounded-lg bg-ink p-6">
+                <Icon aria-hidden className="size-7 text-volt" strokeWidth={1.75} />
+                <h3 className="type-h3">{title}</h3>
+                <p className="text-text-secondary">{d}</p>
+              </li>
             ))}
-          </div>
-        </div>
-      </section>
+          </ul>
+        </Block>
 
-      {/* Brand System */}
-      <section className="py-28 max-w-[1120px] mx-auto px-6 md:px-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
-          <div>
-            <Reveal>
-              <p className="font-mono text-[0.7rem] tracking-[0.14em] uppercase text-terracotta mb-5 flex items-center gap-2.5">
-                <span className="w-6 h-[1.5px] bg-terracotta" />
-                Brand system
-              </p>
-            </Reveal>
-            <Reveal delay={80}>
-              <h2 className="font-serif text-[clamp(2rem,4vw,3rem)] font-normal leading-[1.12] text-espresso mb-4">
-                Boutique wellness,
-                <br />
-                not corporate gym.
-              </h2>
-            </Reveal>
-            <Reveal delay={160}>
-              <p className="text-[1rem] leading-[1.7] text-driftwood">
-                The entire visual identity was built from the studio&apos;s
-                existing logo — a warm, earthy palette that feels premium but
-                approachable. Every colour, typeface, and micro-interaction
-                reinforces the same aesthetic.
-              </p>
-            </Reveal>
-          </div>
+        <Block labelledBy="booking-title">
+          <Heading id="booking-title" eyebrow="How booking works">
+            Three ways to pay, <span className="text-volt">one booking flow.</span>
+          </Heading>
+          <ol className="grid gap-4 md:grid-cols-3">
+            {PAY_PATHS.map((p, i) => (
+              <li key={p.title} className="flex flex-col gap-3 rounded-lg border border-border p-6">
+                <span className="font-display text-[52px] font-extrabold leading-none tracking-[-0.04em] text-volt tabular-nums">
+                  {i + 1}
+                </span>
+                <h3 className="type-h3">{p.title}</h3>
+                <p className="text-text-secondary">{p.desc}</p>
+              </li>
+            ))}
+          </ol>
+          <p className="mt-10 max-w-[60ch] text-text-secondary">
+            The booking modal auto-detects which option to present based on the member&apos;s account state. Members with
+            an active membership book instantly. Pack holders see their remaining credits. Everyone else sees the drop-in
+            price. No confusion, no wasted clicks.
+          </p>
+        </Block>
 
-          <div className="space-y-6">
-            {/* Colour palette */}
-            <Reveal delay={200}>
-              <div className="bg-white rounded-2xl border border-sand/60 p-6">
-                <p className="font-mono text-[0.68rem] tracking-[0.1em] uppercase text-fog mb-4">
-                  Colour palette
-                </p>
-                <div className="grid grid-cols-4 gap-2">
-                  {[
-                    { name: "Wheat", hex: "#F5E6D3" },
-                    { name: "Cocoa", hex: "#4A3728" },
-                    { name: "Gold", hex: "#C8A97E" },
-                    { name: "Cream", hex: "#FAF5EF" },
-                    { name: "Sand", hex: "#D4C4B0" },
-                    { name: "Charcoal", hex: "#2C2C2C" },
-                    { name: "Ember", hex: "#D4845E" },
-                    { name: "Blush", hex: "#E8C4B8" },
-                  ].map((c) => (
-                    <div key={c.name} className="text-center">
-                      <div
-                        className="w-full aspect-square rounded-lg mb-1.5 border border-espresso/6"
-                        style={{ backgroundColor: c.hex }}
-                      />
-                      <p className="text-[0.68rem] font-medium text-espresso">
-                        {c.name}
-                      </p>
-                      <p className="font-mono text-[0.6rem] text-fog">
-                        {c.hex}
-                      </p>
-                    </div>
+        <Block tone="surface" labelledBy="polish-title">
+          <Heading id="polish-title" eyebrow="Fit and finish">
+            The details that make it <span className="text-volt">feel real.</span>
+          </Heading>
+          <p className="-mt-4 mb-12 max-w-[56ch] type-body-l text-text-secondary">
+            A final sprint of UX polish turned a functional platform into something that feels crafted. Every interaction
+            has weight and intention.
+          </p>
+          <ul className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
+            {POLISH.map((item) => (
+              <li key={item} className="flex gap-3 rounded-md bg-ink p-5 type-small text-text-secondary">
+                <span aria-hidden className="mt-2 size-1.5 shrink-0 rounded-pill bg-volt" />
+                {item}
+              </li>
+            ))}
+          </ul>
+        </Block>
+
+        <Block labelledBy="brand-title">
+          <div className="grid gap-12 md:grid-cols-2">
+            <div>
+              <Heading id="brand-title" eyebrow="The studio's brand">
+                Boutique wellness, <span className="text-volt">not corporate gym.</span>
+              </Heading>
+              <p className="-mt-4 type-body-l text-text-secondary">
+                The entire visual identity was built from the studio&apos;s existing logo — a warm, earthy palette that
+                feels premium but approachable. Every colour, typeface, and micro-interaction reinforces the same
+                aesthetic.
+              </p>
+            </div>
+            <div className="flex flex-col gap-4">
+              <div className="rounded-lg bg-surface p-6">
+                <p className="mb-4 type-label text-text-muted">Burn Mat colour palette</p>
+                <ul className="grid grid-cols-4 gap-3">
+                  {STUDIO_PALETTE.map((c) => (
+                    <li key={c.name} className="flex flex-col gap-1.5">
+                      <span className="aspect-square w-full rounded-sm ring-1 ring-border-strong" style={{ backgroundColor: c.hex }} />
+                      <span className="type-label">{c.name}</span>
+                      <span className="text-[12px] tabular-nums text-text-muted">{c.hex}</span>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
-            </Reveal>
-
-            {/* Typography */}
-            <Reveal delay={280}>
-              <div className="bg-white rounded-2xl border border-sand/60 p-6">
-                <p className="font-mono text-[0.68rem] tracking-[0.1em] uppercase text-fog mb-4">
-                  Typography
-                </p>
-                <div className="space-y-3">
-                  <div className="flex items-baseline justify-between border-b border-sand/40 pb-3">
-                    <span
-                      className="text-[1.4rem] text-espresso"
-                      style={{ fontFamily: "Cormorant Garamond, serif" }}
-                    >
+              <div className="rounded-lg bg-surface p-6">
+                <p className="mb-4 type-label text-text-muted">Burn Mat typography</p>
+                <dl className="flex flex-col">
+                  <div className="flex items-baseline justify-between gap-4 border-b border-border pb-3">
+                    <dt className="text-[22px]" style={{ fontFamily: "Cormorant Garamond, Georgia, serif" }}>
                       Cormorant Garamond
-                    </span>
-                    <span className="font-mono text-[0.65rem] text-fog">
-                      Display
-                    </span>
+                    </dt>
+                    <dd className="type-small text-text-muted">Display</dd>
                   </div>
-                  <div className="flex items-baseline justify-between">
-                    <span
-                      className="text-[1.1rem] text-espresso"
-                      style={{ fontFamily: "DM Sans, sans-serif" }}
-                    >
+                  <div className="flex items-baseline justify-between gap-4 pt-3">
+                    <dt className="text-[18px]" style={{ fontFamily: "DM Sans, Helvetica, Arial, sans-serif" }}>
                       DM Sans
-                    </span>
-                    <span className="font-mono text-[0.65rem] text-fog">
-                      Body
-                    </span>
+                    </dt>
+                    <dd className="type-small text-text-muted">Body</dd>
                   </div>
-                </div>
+                </dl>
               </div>
-            </Reveal>
+            </div>
           </div>
-        </div>
-      </section>
+        </Block>
 
-      <hr className="border-t border-espresso/6 max-w-280 mx-auto" />
+        <Block tone="surface" labelledBy="tech-title">
+          <Heading id="tech-title" eyebrow="Under the hood">
+            Modern infrastructure, <span className="text-volt">studio-grade reliability.</span>
+          </Heading>
+          <ul className="grid grid-cols-2 gap-4 md:grid-cols-3">
+            {TECH.map((t) => (
+              <li key={t.name} className="rounded-lg bg-ink p-6">
+                <p className="font-bold">{t.name}</p>
+                <p className="type-small text-text-muted">{t.role}</p>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-12 flex flex-col gap-4 rounded-lg border border-border-strong bg-ink p-6 md:p-10">
+            <h3 className="type-label text-volt">Key technical decisions</h3>
+            {DECISIONS.map((d) => (
+              <p key={d.h} className="text-text-secondary">
+                <span className="font-bold text-text">{d.h}</span> {d.b}
+              </p>
+            ))}
+          </div>
+        </Block>
 
-      {/* Tech Stack */}
-      <section className="py-28 max-w-[1120px] mx-auto px-6 md:px-12">
-        <Reveal>
-          <p className="font-mono text-[0.7rem] tracking-[0.14em] uppercase text-terracotta mb-5 flex items-center gap-2.5">
-            <span className="w-6 h-[1.5px] bg-terracotta" />
-            Under the hood
+        <Block labelledBy="result-title">
+          <Heading id="result-title" eyebrow="The result">
+            A platform that feels like <span className="text-volt">theirs.</span>
+          </Heading>
+          <p className="-mt-4 max-w-[56ch] type-body-l text-text-secondary">
+            Burn Mat Studio now runs on a fully integrated platform — website, booking, payments, member accounts, and
+            admin tools — all under one brand, with no enterprise price tag and no duct-taped integrations.
           </p>
-        </Reveal>
-        <Reveal delay={80}>
-          <h2 className="font-serif text-[clamp(2rem,4vw,3rem)] font-normal leading-[1.12] text-espresso mb-14">
-            Modern infrastructure,
-            <br />
-            studio-grade reliability.
-          </h2>
-        </Reveal>
+        </Block>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {techStack.map((t, i) => (
-            <Reveal key={t.name} delay={i * 60}>
-              <div className="bg-white rounded-xl border border-sand/60 p-6 hover:border-clay transition-colors">
-                <p className="text-[1rem] font-bold text-espresso mb-0.5">
-                  {t.name}
-                </p>
-                <p className="text-[0.78rem] text-driftwood">{t.role}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-
-        <Reveal delay={400}>
-          <div className="mt-14 bg-charcoal rounded-2xl p-8 md:p-10">
-            <p className="font-mono text-[0.68rem] tracking-[0.1em] uppercase text-terracotta mb-4">
-              Key technical decisions
-            </p>
-            <div className="space-y-4 text-[0.88rem] leading-[1.65] text-sandstone">
-              <p>
-                <span className="text-bisque font-semibold">
-                  Webhook-driven payments.
-                </span>{" "}
-                Bookings and credit purchases are only confirmed after Stripe
-                fires a webhook — never optimistically. This prevents phantom
-                bookings and ensures every confirmed spot is backed by a real
-                payment.
-              </p>
-              <p>
-                <span className="text-bisque font-semibold">
-                  Database-level integrity.
-                </span>{" "}
-                Double-booking prevention isn&apos;t handled in application
-                code — it&apos;s enforced by database constraints. Even if two
-                members click &ldquo;Book&rdquo; at the exact same millisecond,
-                only one gets the spot.
-              </p>
-              <p>
-                <span className="text-bisque font-semibold">
-                  Transactional email from the studio&apos;s domain.
-                </span>{" "}
-                Booking confirmations, pack receipts, cancellation notices, and
-                welcome emails are all sent via Resend from the studio&apos;s
-                own domain — not from a generic @forma address.
-              </p>
-            </div>
-          </div>
-        </Reveal>
-      </section>
-
-      {/* Result / CTA */}
-      <section className="py-28 bg-linen">
-        <div className="max-w-[700px] mx-auto px-6 md:px-12 text-center">
-          <Reveal>
-            <p className="font-mono text-[0.7rem] tracking-[0.14em] uppercase text-terracotta mb-5">
-              The result
-            </p>
-          </Reveal>
-          <Reveal delay={80}>
-            <h2 className="font-serif text-[clamp(2rem,4vw,3rem)] font-normal leading-[1.12] text-espresso mb-6">
-              A platform that feels like
-              <br />
-              <em className="italic text-terracotta">theirs</em>.
-            </h2>
-          </Reveal>
-          <Reveal delay={160}>
-            <p className="text-[1.05rem] leading-[1.7] text-driftwood mb-12 max-w-[560px] mx-auto">
-              Burn Mat Studio now runs on a fully integrated platform — website,
-              booking, payments, member accounts, and admin tools — all under
-              one brand, with no enterprise price tag and no duct-taped
-              integrations.
-            </p>
-          </Reveal>
-          <Reveal delay={240}>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link
-                href="/onboarding"
-                className="px-7 py-3.5 bg-terracotta text-parchment rounded-[10px] text-[0.92rem] font-semibold hover:bg-burnt hover:scale-[1.03] transition-all"
-              >
-                Start your studio
-              </Link>
-              <Link
-                href="/#pricing"
-                className="px-6 py-3.5 bg-transparent text-espresso border-[1.5px] border-sand rounded-[10px] text-[0.92rem] font-medium hover:border-clay transition-all"
-              >
-                See pricing
-              </Link>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-espresso/6 py-10">
-        <div className="max-w-[1120px] mx-auto px-6 md:px-12 flex flex-wrap justify-between items-center gap-4">
-          <Link
-            href="/"
-            className="font-black text-[1.05rem] tracking-[-0.04em] text-transparent"
-            style={{ WebkitTextStroke: "1px #5C3D2E" }}
-          >
-            forma
-          </Link>
-          <div className="flex gap-7">
-            <Link
-              href="/#features"
-              className="text-[0.78rem] text-fog hover:text-driftwood transition-colors"
-            >
-              Features
-            </Link>
-            <Link
-              href="/#deal"
-              className="text-[0.78rem] text-fog hover:text-driftwood transition-colors"
-            >
-              How we work
-            </Link>
-            <Link
-              href="/privacy"
-              className="text-[0.78rem] text-fog hover:text-driftwood transition-colors"
-            >
-              Privacy
-            </Link>
-            <Link
-              href="/terms"
-              className="text-[0.78rem] text-fog hover:text-driftwood transition-colors"
-            >
-              Terms
-            </Link>
-          </div>
-          <span className="text-[0.72rem] text-fog">
-            &copy; 2026 Forma. Built in Newcastle.
-          </span>
-        </div>
-      </footer>
-    </main>
+        <FinalCta secondary={{ label: "Compare plans", href: "/pricing" }} />
+      </main>
+      <SiteFooter />
+    </>
   );
 }

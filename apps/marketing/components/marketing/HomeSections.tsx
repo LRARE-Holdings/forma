@@ -227,7 +227,11 @@ export function HowItWorks() {
   );
 }
 
-export function FinalCta() {
+export function FinalCta({
+  secondary = { label: "See a live studio", href: "/case-studies/burn-mat-studio" },
+}: {
+  secondary?: { label: string; href: string };
+}) {
   return (
     <Block labelledBy="final-title">
       <div className="flex flex-col items-start gap-8">
@@ -241,8 +245,8 @@ export function FinalCta() {
           <ButtonLink href={PRIMARY_CTA.href} size="lg">
             {PRIMARY_CTA.label}
           </ButtonLink>
-          <ButtonLink href="/case-studies/burn-mat-studio" variant="secondary" size="lg">
-            See a live studio
+          <ButtonLink href={secondary.href} variant="secondary" size="lg">
+            {secondary.label}
           </ButtonLink>
         </div>
       </div>

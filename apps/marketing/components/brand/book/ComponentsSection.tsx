@@ -81,7 +81,7 @@ export default function ComponentsSection() {
         </div>
       </Sub>
 
-      <Sub title="Navigation" note="Logo left, links, one volt call to action. Collapses to a menu button below 768px.">
+      <Sub title="Navigation" note="Logo left, links, and an outline call to action, so the volt button on the page itself stays the only one on screen. Collapses to a menu button below 768px.">
         <div className="overflow-hidden rounded-lg border border-border-strong">
           <SiteHeader />
         </div>
