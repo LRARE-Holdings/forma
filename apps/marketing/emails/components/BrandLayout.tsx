@@ -88,18 +88,3 @@ export function EmailButton({ href, children }: { href: string; children: ReactN
     </Button>
   );
 }
-
-/** Sample email used by the brand book. Placeholder copy only. */
-export function SampleWelcomeEmail() {
-  return (
-    <BrandLayout preview="Your studio is being set up">
-      <EmailHeading>Your studio is being set up.</EmailHeading>
-      <EmailText>Hi [FIRST NAME],</EmailText>
-      <EmailText>
-        Thanks for choosing {brand.name}. We&apos;re setting up [STUDIO NAME] now. You&apos;ll get your login in a
-        separate email within [SETUP TIME].
-      </EmailText>
-      <EmailButton href={brand.url}>Open your dashboard</EmailButton>
-    </BrandLayout>
-  );
-}

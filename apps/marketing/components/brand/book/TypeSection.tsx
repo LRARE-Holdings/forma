@@ -85,15 +85,15 @@ export function TypeSection() {
             <p className="type-label text-volt">Pricing</p>
             <p className="type-h2">One price. No percentage.</p>
             <p className="type-body text-text-secondary">
-              Pick a plan by the size of your studio. The price stays the same every month, and you keep every pound
+              Pick the plan that fits your studio. The price stays the same every month, and you keep every pound
               your members pay.
             </p>
           </div>
           <div className="flex flex-col gap-3 rounded-lg bg-paper p-6 text-ink">
             <p className="type-label text-ink-soft">Long-form, light surface</p>
-            <p className="type-h2">Moving from Mindbody</p>
+            <p className="type-h2">Leaving is easy too</p>
             <p className="type-body text-ink-soft">
-              What moving across involves, step by step: [MIGRATION DETAILS]
+              There&apos;s no contract. Cancel whenever you like and take your members and your data with you.
             </p>
           </div>
         </div>

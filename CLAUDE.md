@@ -46,7 +46,7 @@ This is not studio-specific. This is where prospective studio owners discover Fo
 
 ## Forma business context
 
-> **⚠️ Commercial model & brand — read this first (updated 2026-09-30).** Forma follows the **Direction B brief** (`~/Downloads/FORMA_BRAND_BRIEF.md`, mockup `~/Downloads/direction-b.html`). Four flat monthly tiers, published openly and purchasable self-serve: **Launch £39**, **Studio £59**, **Pro £89** (featured), **Partner £129** (white-label). Tiered by **member count** — limits not decided, always render `[MEMBER LIMIT]`. **Free trial only for annual sign-ups** (length/annual price TBC → placeholders). No setup fees, no contracts, no commission. This supersedes the June 2026 Solo £25 / Studio £59 / Partner £99 model and the retired bespoke-build model.
+> **⚠️ Commercial model & brand — read this first (updated 2026-09-30).** Forma follows the **Direction B brief** (`~/Downloads/FORMA_BRAND_BRIEF.md`, mockup `~/Downloads/direction-b.html`). Four flat monthly tiers, published openly and purchasable self-serve: **Launch £39**, **Studio £59**, **Pro £89** (featured), **Partner £129** (white-label). Tiered by **member count**, but limits aren't decided, so the site shows no limits at all (never invent them). **Free trial for annual sign-ups** is planned but hidden until annual prices and trial length exist. No setup fees, no contracts, no commission. This supersedes the June 2026 Solo £25 / Studio £59 / Partner £99 model and the retired bespoke-build model.
 
 ### Positioning
 
@@ -60,14 +60,14 @@ Forma's approach: a self-serve, multi-tenant platform where each studio gets a h
 
 | Tier | Price | Notes |
 |---|---|---|
-| **Launch** | £39/mo | `[MEMBER LIMIT]` |
-| **Studio** | £59/mo | `[MEMBER LIMIT]` |
+| **Launch** | £39/mo | |
+| **Studio** | £59/mo | |
 | **Pro** ★ | £89/mo | Featured plan ("most studios") — inverted volt card |
 | **Partner** | £129/mo | White-label |
 
 - **Big idea:** *Your studio. Your members. Your money.* Flat fee, never a percentage.
 - **No setup fees, no contracts, no commission** — studios pay only Stripe's own fee (Stripe Connect Standard).
-- **Free trial for annual sign-ups only.** `[TRIAL LENGTH]`, `[ANNUAL PRICE]` until decided.
+- **Free trial for annual sign-ups only** — not on the site yet; add once annual prices exist in Stripe (lookup keys `forma_<tier>_annual`) and `ANNUAL_TRIAL_DAYS` is set.
 - Never invent member limits, stats, results or testimonials. The Burn Mat testimonial on the homepage is real; don't add others.
 
 ### Market
@@ -130,7 +130,8 @@ Monthly, no commitment — cancel anytime. Annual plans carry the free trial.
 
 - Checkout and webhook are built (`app/api/checkout/subscribe`, `app/api/webhooks/stripe`). Prices are looked up by key `forma_<tier>_monthly` / `forma_<tier>_annual`; `pnpm stripe:setup` creates the monthly ones. Annual prices don't exist yet.
 - **The webhook does NOT auto-provision.** It marks `onboarding_submissions` as paid, emails the owner and `ADMIN_EMAIL`, and a person sets the studio up by hand. Studios/profiles/memberships/auth are shared with the live Burn Mat operation and there's no multi-tenant dashboard to log in to yet. Don't add provisioning without the owner's go-ahead.
-- `onboarding_submissions` does not exist in Forma DB yet. Its migration is `supabase/migrations/20261003000000_onboarding_submissions.sql` (new table only). Until it's applied, the wizard can't save or check out.
+- `onboarding_submissions` was created on 2026-10-03 by `supabase/migrations/20261003000000_onboarding_submissions.sql` (new table only).
+- The Stripe webhook is registered at `https://www.useforma.co.uk/api/webhooks/stripe` (www: the apex redirects and Stripe doesn't follow redirects).
 - The spec below is the target, not what's live.
 
 ### API routes

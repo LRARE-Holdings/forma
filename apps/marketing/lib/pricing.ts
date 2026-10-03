@@ -1,10 +1,10 @@
 /**
  * Single source of truth for Forma's public pricing (Direction B brief).
  *
- * Four flat monthly tiers, tiered by member count. Prices are exact and must
- * not change. Member limits and the Pro feature list haven't been decided:
- * they render as bracketed placeholders, never invented numbers. Tier ids
- * map 1:1 to Stripe price metadata (plan_tier).
+ * Four flat monthly tiers. Prices are exact and must not change. Member
+ * limits per tier haven't been decided, so no tier has a `cap` yet; add one
+ * only with the real number. Never invent limits or features. Tier ids map
+ * 1:1 to Stripe price lookup keys (forma_<id>_monthly).
  */
 
 export type TierId = "launch" | "studio" | "pro" | "partner";
@@ -19,21 +19,13 @@ export interface PricingTier {
   /** Short tag shown after the name, e.g. "most studios". */
   tag?: string;
   blurb: string;
-  /** Capacity line. Placeholder until member limits are decided. */
-  cap: string;
+  /** Capacity line, e.g. "Up to 150 members". Omit until decided. */
+  cap?: string;
   /** The featured plan renders as the inverted volt card. */
   featured?: boolean;
   whiteLabel?: boolean;
   features: string[];
 }
-
-export const MEMBER_LIMIT_PLACEHOLDER = "[MEMBER LIMIT]";
-
-/** Free trial is offered on annual sign-ups only. Values not decided yet. */
-export const ANNUAL_TRIAL = {
-  length: "[TRIAL LENGTH]",
-  annualPrice: "[ANNUAL PRICE]",
-} as const;
 
 export const PRICING_TIERS: PricingTier[] = [
   {
@@ -41,7 +33,6 @@ export const PRICING_TIERS: PricingTier[] = [
     name: "Launch",
     priceMonthly: 39,
     blurb: "Solo instructors and one-room studios",
-    cap: `Up to ${MEMBER_LIMIT_PLACEHOLDER} members`,
     features: [
       "Studio website and booking",
       "Class and course scheduling",
@@ -55,7 +46,6 @@ export const PRICING_TIERS: PricingTier[] = [
     name: "Studio",
     priceMonthly: 59,
     blurb: "Growing independent studios",
-    cap: `Up to ${MEMBER_LIMIT_PLACEHOLDER} members`,
     features: [
       "Everything in Launch",
       "Memberships and class packs",
@@ -70,9 +60,8 @@ export const PRICING_TIERS: PricingTier[] = [
     priceMonthly: 89,
     tag: "most studios",
     blurb: "Established studios with a full timetable",
-    cap: `Up to ${MEMBER_LIMIT_PLACEHOLDER} members`,
     featured: true,
-    features: ["Everything in Studio", "[PRO FEATURES]", "Priority support"],
+    features: ["Everything in Studio", "Priority support"],
   },
   {
     id: "partner",
@@ -80,7 +69,6 @@ export const PRICING_TIERS: PricingTier[] = [
     priceMonthly: 129,
     tag: "white-label",
     blurb: "Multi-location and white-label",
-    cap: `Up to ${MEMBER_LIMIT_PLACEHOLDER} members`,
     whiteLabel: true,
     features: [
       "Everything in Pro",

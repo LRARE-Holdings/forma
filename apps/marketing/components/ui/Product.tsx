@@ -79,7 +79,7 @@ export function ScheduleRow({
   time: string;
   duration: string;
   name: string;
-  instructor: string;
+  instructor?: string;
   booked: number;
   capacity: number;
   action?: ReactNode;
@@ -94,7 +94,7 @@ export function ScheduleRow({
       </div>
       <div className="min-w-0">
         <p className="truncate font-bold">{name}</p>
-        <p className="truncate type-small text-text-secondary">{instructor}</p>
+        {instructor && <p className="truncate type-small text-text-secondary">{instructor}</p>}
       </div>
       <div className="hidden flex-col gap-1.5 sm:flex">
         <div className="h-1.5 overflow-hidden rounded-pill bg-border" aria-hidden>

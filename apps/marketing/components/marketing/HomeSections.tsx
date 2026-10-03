@@ -93,13 +93,13 @@ export function StudioShowcase() {
             <span className="type-small text-text-muted">This week</span>
           </div>
           <div className="px-5">
-            <ScheduleRow time="07:00" duration="50 min" name="Reformer Flow" instructor="[INSTRUCTOR]" booked={10} capacity={12} />
-            <ScheduleRow time="09:30" duration="45 min" name="Hot Pilates" instructor="[INSTRUCTOR]" booked={12} capacity={12} />
+            <ScheduleRow time="07:00" duration="50 min" name="Reformer Flow" booked={10} capacity={12} />
+            <ScheduleRow time="09:30" duration="45 min" name="Hot Pilates" booked={12} capacity={12} />
             <ScheduleRow
               time="18:00"
               duration="55 min"
               name="Slow & Strong"
-              instructor="[INSTRUCTOR]"
+             
               booked={5}
               capacity={12}
               action={<StatusChip tone="success">Booked</StatusChip>}

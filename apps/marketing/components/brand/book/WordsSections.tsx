@@ -42,7 +42,7 @@ const PAIRS = [
   ["Your members pay you. We never take a cut.", "Unlock seamless revenue for your business."],
   ["Add your timetable, then share one booking link.", "A revolutionary, game-changing scheduling experience."],
   ["Your studio", "The user's organisation"],
-  ["Mindbody: [SOURCED FACT]. Us: no commission, no contract.", "Unlike those other clunky legacy platforms…"],
+  ["£59 a month. No commission on a single booking.", "Unlike those other clunky legacy platforms…"],
 ];
 
 const BANNED = ["revolutionary", "game-changing", "seamless", "unlock", "empower", "supercharge", "next-level", "cutting-edge", "best-in-class", "synergy"];
@@ -61,7 +61,7 @@ export function VoiceSection() {
             <li>“You” and “your studio”, never “users” or “customers”.</li>
             <li>Specific beats vague: “zero commission” beats “transparent pricing”.</li>
             <li>Name competitors in comparisons, factually and without sneering.</li>
-            <li>No invented statistics, testimonials or results. Use [PLACEHOLDER] until we have the real thing.</li>
+            <li>No invented statistics, testimonials or results. If we don&apos;t have the real thing, leave it out.</li>
             <li>No emoji in the product or in marketing.</li>
           </ul>
         </Sub>
