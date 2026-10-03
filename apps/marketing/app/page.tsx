@@ -1,27 +1,33 @@
-import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
-import WorkGallery from "@/components/WorkGallery";
-import Manifesto from "@/components/Manifesto";
-import Capabilities from "@/components/Capabilities";
-import Testimonial from "@/components/Testimonial";
-import Process from "@/components/Process";
-import TheDeal from "@/components/TheDeal";
-import FinalCTA from "@/components/FinalCTA";
-import Footer from "@/components/Footer";
+import SiteHeader from "@/components/site/SiteHeader";
+import SiteFooter from "@/components/site/SiteFooter";
+import HomeHero from "@/components/marketing/HomeHero";
+import PricingRow from "@/components/marketing/PricingRow";
+import {
+  Manifesto,
+  Features,
+  StudioShowcase,
+  TheDeal,
+  HowItWorks,
+  FinalCta,
+} from "@/components/marketing/HomeSections";
 
 export default function Home() {
   return (
     <>
-      <Navbar />
-      <Hero />
-      <WorkGallery />
-      <Manifesto />
-      <Capabilities />
-      <Testimonial />
-      <Process />
-      <TheDeal />
-      <FinalCTA />
-      <Footer />
+      <SiteHeader />
+      <main className="bg-ink text-text">
+        <HomeHero />
+        <section aria-label="Plans" className="mx-auto w-full max-w-content px-(--gutter) pt-4 pb-24">
+          <PricingRow compact />
+        </section>
+        <Manifesto />
+        <Features />
+        <StudioShowcase />
+        <TheDeal />
+        <HowItWorks />
+        <FinalCta />
+      </main>
+      <SiteFooter />
     </>
   );
 }

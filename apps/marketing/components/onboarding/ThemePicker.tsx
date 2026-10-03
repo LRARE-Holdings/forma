@@ -1,4 +1,6 @@
+import { Check } from "lucide-react";
 import type { OnboardingData } from "./OnboardingShell";
+import { FieldError, Optional, inputClass, labelClass } from "./fields";
 
 interface Props {
   data: OnboardingData;
@@ -6,6 +8,8 @@ interface Props {
   errors: Record<string, string>;
 }
 
+// Starting looks for the customer's own studio site. These are their
+// options, not our brand, so the colours and fonts are literal on purpose.
 const moods = [
   {
     id: "stillness",
@@ -57,75 +61,81 @@ const moods = [
   },
 ];
 
-const inputClass =
-  "w-full px-4 py-3 bg-white border border-sand rounded-[10px] text-[0.92rem] text-espresso placeholder:text-fog focus:border-terracotta focus:ring-1 focus:ring-terracotta/20 focus:outline-none transition-colors";
-
 export default function ThemePicker({ data, onChange, errors }: Props) {
   return (
-    <div>
-      <p className="text-[0.88rem] text-driftwood mb-5 leading-[1.6]">
+    <div className="flex flex-col gap-8">
+      <p className="text-text-secondary">
         Choose a starting mood for your studio site. We&apos;ll customise the details during your build.
       </p>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8">
-        {moods.map((mood) => (
-          <button
-            key={mood.id}
-            onClick={() => onChange({ themeMood: mood.id })}
-            className={`text-left rounded-[14px] overflow-hidden border-2 transition-all hover:scale-[1.02] ${
-              data.themeMood === mood.id
-                ? "border-terracotta shadow-[0_4px_20px_rgba(194,113,79,0.15)]"
-                : "border-transparent hover:border-sand"
-            }`}
-          >
-            <div
-              className="h-[100px] sm:h-[120px] flex items-center justify-center px-4 relative"
-              style={{ background: mood.gradient }}
-            >
-              <span
-                className="text-[1.3rem] sm:text-[1.5rem] font-medium tracking-[-0.02em]"
-                style={{ color: mood.textColor, fontFamily: mood.font }}
+      <div>
+        <div
+          role="group"
+          aria-label="Site mood"
+          aria-describedby={errors.themeMood ? "ob-mood-error" : undefined}
+          className="grid grid-cols-2 gap-3 md:grid-cols-3"
+        >
+          {moods.map((mood) => {
+            const selected = data.themeMood === mood.id;
+            return (
+              <button
+                key={mood.id}
+                type="button"
+                aria-pressed={selected}
+                onClick={() => onChange({ themeMood: mood.id })}
+                className={`overflow-hidden rounded-lg border-2 text-left outline-offset-2 transition-colors duration-(--dur) ease-brand focus-visible:outline-2 focus-visible:outline-volt ${
+                  selected ? "border-volt" : "border-border hover:border-text-muted"
+                }`}
               >
-                Aa
-              </span>
-              {data.themeMood === mood.id && (
-                <span className="absolute top-2 right-2 w-5 h-5 bg-terracotta rounded-full flex items-center justify-center">
-                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="2 5 4 7 8 3" />
-                  </svg>
-                </span>
-              )}
-            </div>
-            <div className="bg-white px-3 py-2.5">
-              <p className="text-[0.82rem] font-semibold text-espresso">{mood.name}</p>
-              <p className="text-[0.7rem] text-fog">{mood.desc}</p>
-            </div>
-          </button>
-        ))}
+                <div
+                  className="relative flex h-[100px] items-center justify-center px-4 sm:h-[120px]"
+                  style={{ background: mood.gradient }}
+                >
+                  <span
+                    className="text-[22px] font-medium tracking-[-0.02em] sm:text-[26px]"
+                    style={{ color: mood.textColor, fontFamily: mood.font }}
+                  >
+                    Aa
+                  </span>
+                  {selected && (
+                    <span className="absolute top-2 right-2 grid size-6 place-items-center rounded-pill bg-volt text-ink">
+                      <Check aria-hidden className="size-4" strokeWidth={2.25} />
+                    </span>
+                  )}
+                </div>
+                <div className="bg-surface px-3 py-2.5">
+                  <p className="font-bold">{mood.name}</p>
+                  <p className="type-small text-text-muted">{mood.desc}</p>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+        {errors.themeMood && <FieldError id="ob-mood-error">{errors.themeMood}</FieldError>}
       </div>
 
-      {errors.themeMood && (
-        <p className="text-[0.75rem] text-amber mb-4">{errors.themeMood}</p>
-      )}
-
-      <div className="space-y-4">
+      <div className="flex flex-col gap-6">
         <div>
-          <label className="text-[0.82rem] font-semibold text-espresso mb-1.5 block">
-            Brand colour{" "}
-            <span className="font-normal text-fog">(optional)</span>
+          <label htmlFor="ob-brand-colour" className={labelClass}>
+            Brand colour
+            <Optional />
           </label>
-          <div className="flex gap-3 items-center">
+          <div className="flex items-center gap-3">
             <input
+              id="ob-brand-colour"
               type="text"
               value={data.brandColour}
               onChange={(e) => onChange({ brandColour: e.target.value })}
               placeholder="#C2714F"
               maxLength={7}
-              className={`${inputClass} max-w-[160px] font-mono`}
+              autoCapitalize="off"
+              spellCheck={false}
+              className={`${inputClass} max-w-[160px] tabular-nums`}
             />
             {data.brandColour && /^#[0-9A-Fa-f]{6}$/.test(data.brandColour) && (
-              <div
-                className="w-9 h-9 rounded-full border border-sand shrink-0"
+              <span
+                aria-hidden
+                className="size-10 shrink-0 rounded-sm ring-1 ring-border-strong"
                 style={{ backgroundColor: data.brandColour }}
               />
             )}
@@ -133,14 +143,15 @@ export default function ThemePicker({ data, onChange, errors }: Props) {
         </div>
 
         <div>
-          <label className="text-[0.82rem] font-semibold text-espresso mb-1.5 block">
-            Describe your vibe{" "}
-            <span className="font-normal text-fog">(optional)</span>
+          <label htmlFor="ob-brand-notes" className={labelClass}>
+            Describe your vibe
+            <Optional />
           </label>
           <textarea
+            id="ob-brand-notes"
             value={data.brandNotes}
             onChange={(e) => onChange({ brandNotes: e.target.value })}
-            placeholder="Tell us about your studio's aesthetic, brand personality, or any specific design requests..."
+            placeholder="Tell us about your studio's look, personality, or any specific design requests"
             rows={3}
             className={`${inputClass} resize-none`}
           />

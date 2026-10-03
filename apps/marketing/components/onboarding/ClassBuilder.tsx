@@ -1,13 +1,21 @@
+import { Plus } from "lucide-react";
 import type { OnboardingData, ClassItem, PackItem } from "./OnboardingShell";
+import {
+  FieldError,
+  Optional,
+  PoundPrefix,
+  RemoveButton,
+  addButtonClass,
+  cardClass,
+  inputClass,
+  subLabelClass,
+} from "./fields";
 
 interface Props {
   data: OnboardingData;
   onChange: (partial: Partial<OnboardingData>) => void;
   errors: Record<string, string>;
 }
-
-const inputClass =
-  "w-full px-4 py-3 bg-white border border-sand rounded-[10px] text-[0.92rem] text-espresso placeholder:text-fog focus:border-terracotta focus:ring-1 focus:ring-terracotta/20 focus:outline-none transition-colors";
 
 export default function ClassBuilder({ data, onChange, errors }: Props) {
   const updateClass = (index: number, field: keyof ClassItem, value: string) => {
@@ -40,31 +48,21 @@ export default function ClassBuilder({ data, onChange, errors }: Props) {
   };
 
   return (
-    <div>
+    <div className="flex flex-col gap-10">
       {/* Classes */}
-      <div className="space-y-3 mb-6">
+      <div className="flex flex-col gap-3">
         {data.classes.map((cls, i) => (
-          <div
-            key={i}
-            className="bg-white border border-sand rounded-[14px] p-5 relative"
-          >
+          <div key={i} className={cardClass}>
             {data.classes.length > 1 && (
-              <button
-                onClick={() => removeClass(i)}
-                className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center text-fog hover:text-amber rounded-full hover:bg-sand/40 transition-colors"
-                aria-label="Remove class"
-              >
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-                  <path d="M1 1l10 10M11 1L1 11" />
-                </svg>
-              </button>
+              <RemoveButton label={`Remove class ${cls.name || i + 1}`} onClick={() => removeClass(i)} />
             )}
-            <div className="grid grid-cols-1 sm:grid-cols-[1fr_120px_100px] gap-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_130px_110px] sm:pr-8">
               <div>
-                <label className="text-[0.72rem] font-medium text-fog mb-1 block">
+                <label htmlFor={`ob-class-${i}-name`} className={subLabelClass}>
                   Class name
                 </label>
                 <input
+                  id={`ob-class-${i}-name`}
                   type="text"
                   value={cls.name}
                   onChange={(e) => updateClass(i, "name", e.target.value)}
@@ -73,121 +71,107 @@ export default function ClassBuilder({ data, onChange, errors }: Props) {
                 />
               </div>
               <div>
-                <label className="text-[0.72rem] font-medium text-fog mb-1 block">
+                <label htmlFor={`ob-class-${i}-price`} className={subLabelClass}>
                   Price
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 font-mono text-[0.85rem] text-fog">
-                    £
-                  </span>
+                  <PoundPrefix />
                   <input
+                    id={`ob-class-${i}-price`}
                     type="number"
+                    inputMode="decimal"
                     step="0.01"
                     min="0"
                     value={cls.price}
                     onChange={(e) => updateClass(i, "price", e.target.value)}
                     placeholder="15.00"
-                    className={`${inputClass} font-mono pl-7`}
+                    className={`${inputClass} pl-8 tabular-nums`}
                   />
                 </div>
               </div>
               <div>
-                <label className="text-[0.72rem] font-medium text-fog mb-1 block">
+                <label htmlFor={`ob-class-${i}-capacity`} className={subLabelClass}>
                   Capacity
                 </label>
                 <input
+                  id={`ob-class-${i}-capacity`}
                   type="number"
+                  inputMode="numeric"
                   min="1"
                   value={cls.capacity}
                   onChange={(e) => updateClass(i, "capacity", e.target.value)}
                   placeholder="14"
-                  className={`${inputClass} font-mono`}
+                  className={`${inputClass} tabular-nums`}
                 />
               </div>
             </div>
           </div>
         ))}
 
-        <button
-          onClick={addClass}
-          className="w-full py-3 border-2 border-dashed border-sand rounded-[14px] text-driftwood font-medium text-[0.85rem] hover:border-terracotta hover:text-terracotta transition-colors"
-        >
-          + Add another class
+        <button type="button" onClick={addClass} className={addButtonClass}>
+          <Plus aria-hidden className="size-4" strokeWidth={1.75} />
+          Add another class
         </button>
 
-        {errors.classes && (
-          <p className="text-[0.75rem] text-amber">{errors.classes}</p>
-        )}
+        {errors.classes && <FieldError id="ob-classes-error">{errors.classes}</FieldError>}
       </div>
 
       {/* Packs */}
-      <div>
-        <h3 className="text-[0.9rem] font-semibold text-espresso mb-1">
-          Class packs{" "}
-          <span className="font-normal text-fog text-[0.82rem]">(optional)</span>
-        </h3>
-        <p className="text-[0.78rem] text-driftwood mb-3">
-          Offer discounted bundles, e.g. &quot;5 Class Pack&quot; or &quot;Monthly Unlimited&quot;.
-        </p>
+      <div className="flex flex-col gap-3">
+        <div>
+          <h2 className="type-h3">
+            Class packs
+            <Optional />
+          </h2>
+          <p className="mt-1 type-small text-text-secondary">
+            Offer bundles, e.g. &quot;5 Class Pack&quot; or &quot;Monthly Unlimited&quot;.
+          </p>
+        </div>
 
-        <div className="space-y-3">
-          {data.packs.map((pack, i) => (
-            <div
-              key={i}
-              className="bg-white border border-sand rounded-[14px] p-5 relative"
-            >
-              <button
-                onClick={() => removePack(i)}
-                className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center text-fog hover:text-amber rounded-full hover:bg-sand/40 transition-colors"
-                aria-label="Remove pack"
-              >
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-                  <path d="M1 1l10 10M11 1L1 11" />
-                </svg>
-              </button>
-              <div className="grid grid-cols-1 sm:grid-cols-[1fr_140px] gap-3">
-                <div>
-                  <label className="text-[0.72rem] font-medium text-fog mb-1 block">
-                    Pack name
-                  </label>
+        {data.packs.map((pack, i) => (
+          <div key={i} className={cardClass}>
+            <RemoveButton label={`Remove pack ${pack.name || i + 1}`} onClick={() => removePack(i)} />
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_150px] sm:pr-8">
+              <div>
+                <label htmlFor={`ob-pack-${i}-name`} className={subLabelClass}>
+                  Pack name
+                </label>
+                <input
+                  id={`ob-pack-${i}-name`}
+                  type="text"
+                  value={pack.name}
+                  onChange={(e) => updatePack(i, "name", e.target.value)}
+                  placeholder="e.g. 5 Class Pack"
+                  className={inputClass}
+                />
+              </div>
+              <div>
+                <label htmlFor={`ob-pack-${i}-price`} className={subLabelClass}>
+                  Price
+                </label>
+                <div className="relative">
+                  <PoundPrefix />
                   <input
-                    type="text"
-                    value={pack.name}
-                    onChange={(e) => updatePack(i, "name", e.target.value)}
-                    placeholder="e.g. 5 Class Pack"
-                    className={inputClass}
+                    id={`ob-pack-${i}-price`}
+                    type="number"
+                    inputMode="decimal"
+                    step="0.01"
+                    min="0"
+                    value={pack.price}
+                    onChange={(e) => updatePack(i, "price", e.target.value)}
+                    placeholder="60.00"
+                    className={`${inputClass} pl-8 tabular-nums`}
                   />
-                </div>
-                <div>
-                  <label className="text-[0.72rem] font-medium text-fog mb-1 block">
-                    Price
-                  </label>
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 font-mono text-[0.85rem] text-fog">
-                      £
-                    </span>
-                    <input
-                      type="number"
-                      step="0.01"
-                      min="0"
-                      value={pack.price}
-                      onChange={(e) => updatePack(i, "price", e.target.value)}
-                      placeholder="60.00"
-                      className={`${inputClass} font-mono pl-7`}
-                    />
-                  </div>
                 </div>
               </div>
             </div>
-          ))}
+          </div>
+        ))}
 
-          <button
-            onClick={addPack}
-            className="w-full py-3 border-2 border-dashed border-sand rounded-[14px] text-driftwood font-medium text-[0.85rem] hover:border-terracotta hover:text-terracotta transition-colors"
-          >
-            + Add a class pack
-          </button>
-        </div>
+        <button type="button" onClick={addPack} className={addButtonClass}>
+          <Plus aria-hidden className="size-4" strokeWidth={1.75} />
+          Add a class pack
+        </button>
       </div>
     </div>
   );

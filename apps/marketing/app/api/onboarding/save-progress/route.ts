@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createServerClient } from "@forma/db";
+import { isTierId } from "@/lib/pricing";
 
 /**
  * POST /api/onboarding/save-progress
@@ -26,18 +27,22 @@ export async function POST(request: Request) {
     theme_mood: body.themeMood || null,
     brand_colour: body.brandColour || null,
     brand_notes: body.brandNotes || null,
-    plan_tier: body.planTier || "studio",
+    plan_tier: isTierId(body.planTier) ? body.planTier : "studio",
     notes: body.notes || null,
     referral_code: body.referralCode ? body.referralCode.trim() : null,
-    status: body.status || "in_progress",
+    current_step: Number.isInteger(body.currentStep) ? body.currentStep : null,
   };
+  // Status is never taken from the browser: new rows start in_progress, and
+  // only the checkout route and Stripe webhook move it on.
 
   // If we have an existing submission ID, update it
   if (body.submissionId) {
+    // Edits are allowed until payment; a paid submission is never changed here.
     const { error } = await supabase
       .from("onboarding_submissions")
       .update(row)
-      .eq("id", body.submissionId);
+      .eq("id", body.submissionId)
+      .in("status", ["in_progress", "checkout_started"]);
 
     if (error) {
       console.error("Failed to update onboarding progress:", error);
@@ -56,7 +61,7 @@ export async function POST(request: Request) {
   // Otherwise, create a new submission
   const { data: submission, error } = await supabase
     .from("onboarding_submissions")
-    .insert(row)
+    .insert({ ...row, status: "in_progress" })
     .select("id")
     .single();
 

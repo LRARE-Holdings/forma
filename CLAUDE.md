@@ -24,7 +24,7 @@ This is not studio-specific. This is where prospective studio owners discover Fo
 
 ## Tech stack
 
-- **Framework:** Next.js 15, App Router, TypeScript
+- **Framework:** Next.js 16, App Router, TypeScript
 - **Database:** Supabase (writes to `onboarding_submissions`, `email_signups`, and provisions `studios`, `profiles`, `studio_memberships` via webhook)
 - **Payments:** Stripe Billing (subscription checkout for Forma tiers, Customer Portal for plan management)
 - **Hosting:** Vercel
@@ -46,25 +46,29 @@ This is not studio-specific. This is where prospective studio owners discover Fo
 
 ## Forma business context
 
-> **⚠️ Commercial model — read this first.** Forma is **not** a four-tier monthly SaaS. It sells **bespoke one-off builds** (quoted case-by-case; roughly £1k for simpler builds, ~£2k for more advanced) — pay once and the studio owns the site outright, no contract, no lock-in. There is an **optional site-management subscription at a flat £65/mo** (maintenance/upkeep/fixes, cancel any time). **Never publish any of these figures on the public marketing site** — it's quote-driven; every CTA funnels to "Get a quote". The old Launch/Studio/Pro/Partner tier grid and parts of the Stripe section below describe a retired model and may not match current code — treat them as historical until refreshed.
+> **⚠️ Commercial model & brand — read this first (updated 2026-09-30).** Forma follows the **Direction B brief** (`~/Downloads/FORMA_BRAND_BRIEF.md`, mockup `~/Downloads/direction-b.html`). Four flat monthly tiers, published openly and purchasable self-serve: **Launch £39**, **Studio £59**, **Pro £89** (featured), **Partner £129** (white-label). Tiered by **member count** — limits not decided, always render `[MEMBER LIMIT]`. **Free trial only for annual sign-ups** (length/annual price TBC → placeholders). No setup fees, no contracts, no commission. This supersedes the June 2026 Solo £25 / Studio £59 / Partner £99 model and the retired bespoke-build model.
 
 ### Positioning
 
 Forma targets the ~8,000 independent fitness and wellness studios in the UK that are underserved by existing tools. Studios like Burn Mat Studio fall between generic website builders (too rigid), enterprise platforms like Mindbody/Glofox (overpriced, clunky), and custom freelance builds (can't scale).
 
-Forma's approach: productised builds that look custom. Every studio gets a unique visual identity — no cookie-cutter sites. Hybrid model starting with manual builds, evolving toward a multi-tenant platform.
+Forma's approach: a self-serve, multi-tenant platform where each studio gets a hosted, branded storefront + booking + payments + admin dashboard. White-labelled at the Partner tier, Forma-branded below. Owners sign up and buy a plan themselves — no sales call.
 
-**Tagline:** "Book. Pay. Breathe."
+**Big idea / hero line:** "Your studio. Your members. Your money." (the old "Book. Pay. Breathe." tagline is retired)
 
-### Commercial model
+### Commercial model — self-serve SaaS, 4 flat tiers
 
-- **One-off build cost, quoted case-by-case.** Simpler builds ~£1k, more advanced ~£2k. Paid once.
-- After the build is paid: **nothing else owed.** No contract, no lock-in, no dark patterns — the studio owns the site.
-- **Optional site-management subscription:** flat **£65/mo**, maintenance/upkeep/fixes, cancel any time.
-- No setup fees, no revenue commission. Stripe Connect Standard for per-studio payments (studios own their Stripe account).
-- **These numbers are internal.** Public pages describe the *shape* of the deal (pay once, yours to keep, optional flat-monthly management) and funnel to "Get a quote" — never list figures.
+| Tier | Price | Notes |
+|---|---|---|
+| **Launch** | £39/mo | `[MEMBER LIMIT]` |
+| **Studio** | £59/mo | `[MEMBER LIMIT]` |
+| **Pro** ★ | £89/mo | Featured plan ("most studios") — inverted volt card |
+| **Partner** | £129/mo | White-label |
 
-> The retired four-tier table (Launch £69 / Studio £89 / Pro £119 / Partner £159) and "blended ARPU ~£67/mo" are kept out of this file on purpose. If you find that grid referenced elsewhere, it's stale.
+- **Big idea:** *Your studio. Your members. Your money.* Flat fee, never a percentage.
+- **No setup fees, no contracts, no commission** — studios pay only Stripe's own fee (Stripe Connect Standard).
+- **Free trial for annual sign-ups only.** `[TRIAL LENGTH]`, `[ANNUAL PRICE]` until decided.
+- Never invent member limits, stats, results or testimonials. The Burn Mat testimonial on the homepage is real; don't add others.
 
 ### Market
 
@@ -72,28 +76,15 @@ Forma's approach: productised builds that look custom. Every studio gets a uniqu
 - ARR potential: ~£5.7M
 - Target customers: Pilates, yoga, HIIT, barre, dance fitness, PT studios — small teams (1-5 instructors), class-based businesses
 
-## Forma brand
+## Forma brand (Direction B, 2026-09-30)
 
-### Palette
+The full spec is the brief. Summary:
 
-| Token | Colour | Hex |
-|---|---|---|
-| Parchment | Off-white background | `#FFFCF9` |
-| Terracotta | Primary accent | `#C2714F` |
-| Espresso | Dark text / headings | `#2C1810` |
-| Bark | Secondary dark | `#5C3D2E` |
-
-Warm, earthy, premium but approachable. Not tech-bro SaaS energy. Think artisan coffee shop, not dashboard factory.
-
-### Typography
-
-- **Headings:** Instrument Serif
-- **Body & Logo:** Satoshi
-- **Data / Code / Labels:** IBM Plex Mono
-
-### Logo
-
-Outline-only wordmark in **Satoshi Black**. Simple, clean, no icon. The word "forma" is the logo.
+- **Name lives in one place:** `apps/marketing/config/brand.ts`. The name "Forma" will probably change — never hard-code it in logo contexts. The mark contains no letterforms.
+- **Colour tokens** (`apps/marketing/styles/tokens.css`, mirrored in `tokens.json`): ink `#121212`, surface `#1E1E1E`, border `#2A2A2A`, border-strong `#3A3A3A`, text `#FFFFFF`, text-secondary `#BDBDBD`, text-muted `#8A8A8A`, **volt `#D6FF3D`** (primary accent), coral `#FF6B4A` (sparingly), paper `#FFFFFF`, paper-2 `#F4F4F2`, ink-soft `#595955`. Dark-first. Volt is a fill, never text on light; text on volt is always ink. One volt CTA per viewport.
+- **Type:** Bricolage Grotesque 700/800 (display) + Manrope 400–700 (body), via `next/font/google`. Satoshi, Instrument Serif and IBM Plex Mono are retired.
+- **Radius:** 8 / 12 / 20 / pill. Borders over shadows. Motion 150–200ms `cubic-bezier(0.2,0,0,1)`, respect reduced motion.
+- **Voice:** short, direct, owner-to-owner, British English. No hype words, no emoji, no invented facts.
 
 ## Database
 
@@ -124,16 +115,23 @@ The wizard saves progress to `onboarding_submissions` as the owner advances thro
 
 ## Stripe Billing
 
-### Products (4 subscriptions, monthly recurring)
+### Products (4 subscriptions)
 
 | Product | Price | Stripe metadata |
 |---|---|---|
-| Forma Launch | £69/mo | plan_tier: launch |
-| Forma Studio | £89/mo | plan_tier: studio |
-| Forma Pro | £119/mo | plan_tier: pro |
-| Forma Partner | £159/mo | plan_tier: partner |
+| Forma Launch | £39/mo | plan_tier: launch |
+| Forma Studio | £59/mo | plan_tier: studio |
+| Forma Pro | £89/mo | plan_tier: pro |
+| Forma Partner | £129/mo | plan_tier: partner |
 
-All subscriptions are monthly with no commitment — cancel anytime.
+Monthly, no commitment — cancel anytime. Annual plans carry the free trial.
+
+### Current state (2026-10-03) — read before the spec below
+
+- Checkout and webhook are built (`app/api/checkout/subscribe`, `app/api/webhooks/stripe`). Prices are looked up by key `forma_<tier>_monthly` / `forma_<tier>_annual`; `pnpm stripe:setup` creates the monthly ones. Annual prices don't exist yet.
+- **The webhook does NOT auto-provision.** It marks `onboarding_submissions` as paid, emails the owner and `ADMIN_EMAIL`, and a person sets the studio up by hand. Studios/profiles/memberships/auth are shared with the live Burn Mat operation and there's no multi-tenant dashboard to log in to yet. Don't add provisioning without the owner's go-ahead.
+- `onboarding_submissions` does not exist in Forma DB yet. Its migration is `supabase/migrations/20261003000000_onboarding_submissions.sql` (new table only). Until it's applied, the wizard can't save or check out.
+- The spec below is the target, not what's live.
 
 ### API routes
 
@@ -199,12 +197,12 @@ NEXT_PUBLIC_SITE_URL=https://useforma.co.uk
 - Components in `components/` with subdirectories: `components/marketing/`, `components/onboarding/`, `components/ui/`
 - API routes in `app/api/` for Stripe checkout, webhooks, and billing portal
 - `lib/` for shared utilities: `lib/supabase.ts`, `lib/stripe.ts`, `lib/resend.ts`, `lib/provisioning.ts` (studio creation logic used by the webhook)
-- Respect the brand: Instrument Serif for headings, Satoshi for body, warm earthy palette throughout
+- Respect the brand: Bricolage Grotesque for display, Manrope for body, ink/volt tokens throughout
 
 ## When working on this project
 
 - This is a marketing site — design quality and copywriting matter as much as code quality
-- Every page should feel premium and warm, not generic SaaS template
+- Every page should feel bold and confident — the challenger on the owner's side — not generic SaaS template
 - The onboarding wizard should feel effortless — progressive disclosure, no walls of form fields
 - The wizard must save progress to `onboarding_submissions` as the owner advances, so partial completions are never lost
 - Don't add studio-specific runtime logic here. If you're querying a studio's classes or bookings, you're in the wrong repo.

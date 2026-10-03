@@ -6,15 +6,22 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "check:contrast": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/check-contrast.ts",
+    "build:logo": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/build-logo.mjs",
+    "stripe:setup": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/stripe-setup.mjs"
   },
   "dependencies": {
     "@forma/db": "workspace:*",
+    "@react-email/components": "^1.0.12",
+    "@react-email/render": "^2.1.0",
     "@supabase/supabase-js": "^2.99.3",
+    "lucide-react": "^1.49.0",
     "next": "16.2.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "resend": "^6.9.4"
+    "resend": "^6.9.4",
+    "stripe": "^23.0.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -23,6 +30,8 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.0",
+    "opentype.js": "1.3.4",
+    "sharp": "0.34.5",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

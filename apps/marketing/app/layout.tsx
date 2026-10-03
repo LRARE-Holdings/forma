@@ -1,17 +1,49 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import { Bricolage_Grotesque, Manrope } from "next/font/google";
+import { brand } from "@/config/brand";
+import tokens from "@/styles/tokens.json";
 import "./globals.css";
 
+// The only two brand typefaces, loaded as variable fonts (one file each;
+// the brand uses Bricolage 700–800 with optical sizing, Manrope 400–700).
+// Exposed as CSS variables consumed by styles/tokens.css.
+const bricolage = Bricolage_Grotesque({
+  subsets: ["latin"],
+  axes: ["opsz"],
+  variable: "--font-bricolage",
+  display: "swap",
+});
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-manrope",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "Forma — Your studio, made online",
-  description:
-    "We design and build custom websites, booking, and payments for independent Pilates, yoga, and fitness studios. Built once, yours to keep.",
+  metadataBase: new URL(brand.url),
+  title: `${brand.name} · ${brand.bigIdea}`,
+  description: brand.description,
   openGraph: {
-    title: "Forma — Your studio, made online",
-    description:
-      "Custom websites and booking suites for independent UK studios. Built once, yours to keep.",
+    title: `${brand.name} · ${brand.bigIdea}`,
+    description: brand.description,
     type: "website",
+    siteName: brand.name,
+    locale: "en_GB",
+    images: [{ url: "/brand/logo/og-default.png", width: 1200, height: 630, alt: brand.bigIdea }],
   },
+  twitter: { card: "summary_large_image", images: ["/brand/logo/og-default.png"] },
+  icons: {
+    icon: [
+      { url: "/brand/logo/favicon.svg", type: "image/svg+xml" },
+      { url: "/brand/logo/favicon.ico", sizes: "16x16 32x32 48x48" },
+    ],
+    apple: "/brand/logo/apple-touch-icon.png",
+  },
+  manifest: "/manifest.webmanifest",
 };
+
+export const viewport: Viewport = { themeColor: tokens.color.ink.value };
 
 export default function RootLayout({
   children,
@@ -19,24 +51,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&display=swap"
-          rel="stylesheet"
-        />
-        {/* Satoshi from Fontshare */}
-        <link
-          href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="en-GB" className={`${bricolage.variable} ${manrope.variable}`}>
       <body className="overflow-x-hidden">{children}</body>
     </html>
   );

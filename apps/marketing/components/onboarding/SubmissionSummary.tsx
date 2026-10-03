@@ -1,20 +1,19 @@
+import type { ReactNode } from "react";
 import type { OnboardingData } from "./OnboardingShell";
+import { PRICING_TIERS } from "@/lib/pricing";
+import { Button } from "@/components/ui/Button";
+import { FieldError, Optional, hintClass, inputClass, labelClass } from "./fields";
 
 interface Props {
   data: OnboardingData;
   onChange: (partial: Partial<OnboardingData>) => void;
-  onSubmitQuote: () => void;
+  onCheckout: () => void;
+  /** The owner came back from Stripe without paying. */
+  cancelled?: boolean;
   onGoToStep: (step: number) => void;
   loading: boolean;
   error?: string;
 }
-
-const tiers = [
-  { id: "launch", label: "Foundation", name: "Launch" },
-  { id: "studio", label: "Growth", name: "Studio" },
-  { id: "pro", label: "Scale", name: "Pro" },
-  { id: "partner", label: "White-label", name: "Partner" },
-];
 
 const moodNames: Record<string, string> = {
   stillness: "Stillness",
@@ -25,214 +24,189 @@ const moodNames: Record<string, string> = {
   velvet: "Velvet",
 };
 
-const inputClass =
-  "w-full px-4 py-3 bg-white border border-sand rounded-[10px] text-[0.92rem] text-espresso placeholder:text-fog focus:border-terracotta focus:ring-1 focus:ring-terracotta/20 focus:outline-none transition-colors";
-
-const labelClass = "text-[0.82rem] font-semibold text-espresso mb-1.5 block";
-
-export default function SubmissionSummary({
-  data,
-  onChange,
-  onSubmitQuote,
+function SummaryCard({
+  title,
+  step,
   onGoToStep,
-  loading,
-  error,
-}: Props) {
+  children,
+}: {
+  title: string;
+  step: number;
+  onGoToStep: (step: number) => void;
+  children: ReactNode;
+}) {
   return (
-    <div>
-      {/* Summary cards */}
-      <div className="space-y-3 mb-8">
-        {/* Studio */}
-        <div className="bg-linen border border-sand rounded-[14px] p-5">
-          <div className="flex justify-between items-start mb-2">
-            <h3 className="text-[0.85rem] font-bold text-espresso">Studio</h3>
-            <button
-              onClick={() => onGoToStep(1)}
-              className="text-[0.72rem] text-terracotta font-medium hover:text-burnt transition-colors"
-            >
-              Edit
-            </button>
-          </div>
-          <div className="space-y-0.5 text-[0.82rem] text-driftwood">
-            <p>{data.studioName}</p>
-            <p>{data.location}</p>
-            <p>{data.studioType}</p>
-            {data.domain && <p>{data.domain}</p>}
-          </div>
-        </div>
+    <section className="rounded-lg border border-border bg-surface p-5">
+      <div className="mb-2 flex items-start justify-between gap-4">
+        <h2 className="font-bold">{title}</h2>
+        <button
+          type="button"
+          onClick={() => onGoToStep(step)}
+          aria-label={`Edit ${title.toLowerCase()}`}
+          className="rounded-sm type-small font-bold text-text underline underline-offset-4 outline-offset-2 hover:text-volt focus-visible:outline-2 focus-visible:outline-volt"
+        >
+          Edit
+        </button>
+      </div>
+      <div className="type-small text-text-secondary">{children}</div>
+    </section>
+  );
+}
 
-        {/* Classes */}
-        <div className="bg-linen border border-sand rounded-[14px] p-5">
-          <div className="flex justify-between items-start mb-2">
-            <h3 className="text-[0.85rem] font-bold text-espresso">Classes</h3>
-            <button
-              onClick={() => onGoToStep(2)}
-              className="text-[0.72rem] text-terracotta font-medium hover:text-burnt transition-colors"
-            >
-              Edit
-            </button>
-          </div>
-          <div className="space-y-1.5">
+export default function SubmissionSummary({ data, onChange, onCheckout, cancelled, onGoToStep, loading, error }: Props) {
+  const nameError = error === "ownerName";
+  const emailError = error === "ownerEmail";
+
+  return (
+    <div className="flex flex-col gap-10">
+      {cancelled && (
+        <p className="rounded-lg border border-border-strong bg-surface p-5 text-text-secondary" role="status">
+          Checkout cancelled. You haven&apos;t been charged, and everything you entered is still here.
+        </p>
+      )}
+      <div className="flex flex-col gap-3">
+        <SummaryCard title="Studio" step={1} onGoToStep={onGoToStep}>
+          <p>{data.studioName}</p>
+          <p>{data.location}</p>
+          <p>{data.studioType}</p>
+          {data.domain && <p>{data.domain}</p>}
+        </SummaryCard>
+
+        <SummaryCard title="Classes" step={2} onGoToStep={onGoToStep}>
+          <ul className="flex flex-col gap-1.5">
             {data.classes
               .filter((c) => c.name.trim())
               .map((cls, i) => (
-                <div
-                  key={i}
-                  className="flex items-center justify-between text-[0.82rem] text-driftwood"
-                >
+                <li key={i} className="flex items-center justify-between gap-4">
                   <span>{cls.name}</span>
-                  <span className="font-mono text-[0.78rem]">
-                    {cls.price ? `£${cls.price}` : "—"}{" "}
-                    {cls.capacity ? `· ${cls.capacity} spots` : ""}
+                  <span className="tabular-nums">
+                    {cls.price ? `£${cls.price}` : "—"} {cls.capacity ? `· ${cls.capacity} spots` : ""}
                   </span>
-                </div>
+                </li>
               ))}
             {data.packs
               .filter((p) => p.name.trim())
               .map((pack, i) => (
-                <div
-                  key={`pack-${i}`}
-                  className="flex items-center justify-between text-[0.82rem] text-driftwood"
-                >
+                <li key={`pack-${i}`} className="flex items-center justify-between gap-4">
                   <span>
-                    {pack.name}{" "}
-                    <span className="text-fog">(pack)</span>
+                    {pack.name} <span className="text-text-muted">(pack)</span>
                   </span>
-                  <span className="font-mono text-[0.78rem]">
-                    {pack.price ? `£${pack.price}` : "—"}
-                  </span>
-                </div>
+                  <span className="tabular-nums">{pack.price ? `£${pack.price}` : "—"}</span>
+                </li>
               ))}
-          </div>
-        </div>
+          </ul>
+        </SummaryCard>
 
-        {/* Team */}
-        <div className="bg-linen border border-sand rounded-[14px] p-5">
-          <div className="flex justify-between items-start mb-2">
-            <h3 className="text-[0.85rem] font-bold text-espresso">Team</h3>
-            <button
-              onClick={() => onGoToStep(3)}
-              className="text-[0.72rem] text-terracotta font-medium hover:text-burnt transition-colors"
-            >
-              Edit
-            </button>
-          </div>
+        <SummaryCard title="Team" step={3} onGoToStep={onGoToStep}>
           {data.team && data.team.length > 0 ? (
-            <div className="space-y-1">
+            <ul className="flex flex-col gap-1">
               {data.team.map((member, i) => (
-                <p key={i} className="text-[0.82rem] text-driftwood">
-                  {member.name || "Unnamed"}{" "}
-                  <span className="text-fog">· {member.role}</span>
-                </p>
+                <li key={i}>
+                  {member.name || "Unnamed"} <span className="text-text-muted">· {member.role}</span>
+                </li>
               ))}
-            </div>
+            </ul>
           ) : (
-            <p className="text-[0.82rem] text-fog">No team members added</p>
+            <p className="text-text-muted">No team members added</p>
           )}
-        </div>
+        </SummaryCard>
 
-        {/* Theme */}
-        <div className="bg-linen border border-sand rounded-[14px] p-5">
-          <div className="flex justify-between items-start mb-2">
-            <h3 className="text-[0.85rem] font-bold text-espresso">Theme</h3>
-            <button
-              onClick={() => onGoToStep(4)}
-              className="text-[0.72rem] text-terracotta font-medium hover:text-burnt transition-colors"
-            >
-              Edit
-            </button>
-          </div>
-          <p className="text-[0.82rem] text-driftwood">
+        <SummaryCard title="Theme" step={4} onGoToStep={onGoToStep}>
+          <p className="flex flex-wrap items-center gap-2">
             {moodNames[data.themeMood] || data.themeMood}
             {data.brandColour && (
-              <span className="inline-flex items-center gap-1.5 ml-2">
+              <span className="inline-flex items-center gap-1.5">
                 <span
-                  className="w-3 h-3 rounded-full border border-sand inline-block"
+                  aria-hidden
+                  className="inline-block size-3 rounded-pill ring-1 ring-border-strong"
                   style={{ backgroundColor: data.brandColour }}
                 />
-                <span className="font-mono text-[0.72rem] text-fog">
-                  {data.brandColour}
-                </span>
+                <span className="tabular-nums text-text-muted">{data.brandColour}</span>
               </span>
             )}
           </p>
-        </div>
+        </SummaryCard>
       </div>
 
-      {/* Plan preference */}
-      <div className="mb-8">
-        <h3 className="text-[0.9rem] font-semibold text-espresso mb-1">
-          Preferred plan
-        </h3>
-        <p className="text-[0.75rem] text-fog mb-3">
-          We&apos;ll discuss pricing on our call
-        </p>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          {tiers.map((tier) => (
-            <button
-              key={tier.id}
-              onClick={() => onChange({ planTier: tier.id })}
-              className={`text-left p-3.5 rounded-[12px] border-[1.5px] transition-all ${
-                data.planTier === tier.id
-                  ? "border-terracotta bg-terracotta/[0.03]"
-                  : "border-sand hover:border-clay bg-white"
-              }`}
-            >
-              <p className="font-mono text-[0.6rem] uppercase tracking-[0.1em] text-fog mb-0.5">
-                {tier.label}
-              </p>
-              <p className="text-[0.85rem] font-bold text-espresso">
-                {tier.name}
-              </p>
-            </button>
-          ))}
+      {/* Plan selection */}
+      <fieldset className="flex flex-col gap-3">
+        <legend className="type-h3">Your plan</legend>
+        <p className="type-small text-text-muted">Pick the plan that fits. Switch or cancel anytime.</p>
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+          {PRICING_TIERS.map((tier) => {
+            const selected = data.planTier === tier.id;
+            return (
+              <button
+                key={tier.id}
+                type="button"
+                aria-pressed={selected}
+                onClick={() => onChange({ planTier: tier.id })}
+                className={`flex flex-col gap-1 rounded-lg border-2 p-4 text-left outline-offset-2 transition-colors duration-(--dur) ease-brand focus-visible:outline-2 focus-visible:outline-volt ${
+                  selected ? "border-volt bg-volt text-ink" : "border-border bg-surface text-text hover:border-text-muted"
+                }`}
+              >
+                <span className={`type-label ${selected ? "text-ink" : "text-text-muted"}`}>
+                  {tier.tag ?? "Pay monthly"}
+                </span>
+                <span className="font-bold">{tier.name}</span>
+                <span className="font-display text-[28px] font-extrabold leading-none tracking-[-0.03em] tabular-nums">
+                  £{tier.priceMonthly}
+                  <span className="font-sans text-[14px] font-medium tracking-normal">/mo</span>
+                </span>
+              </button>
+            );
+          })}
         </div>
-      </div>
+      </fieldset>
 
       {/* Owner details */}
-      <div className="mb-8 space-y-4">
-        <h3 className="text-[0.9rem] font-semibold text-espresso">
-          Your details
-        </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <fieldset className="flex flex-col gap-6">
+        <legend className="mb-2 type-h3">Your details</legend>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           <div>
-            <label className={labelClass}>Your name</label>
+            <label htmlFor="ob-owner-name" className={labelClass}>
+              Your name
+            </label>
             <input
+              id="ob-owner-name"
               type="text"
+              autoComplete="name"
               value={data.ownerName}
               onChange={(e) => onChange({ ownerName: e.target.value })}
               placeholder="Your full name"
+              aria-invalid={nameError || undefined}
+              aria-describedby={nameError ? "ob-owner-name-error" : undefined}
               className={inputClass}
             />
-            {error === "ownerName" && (
-              <p className="text-[0.75rem] text-amber mt-1">
-                Name is required
-              </p>
-            )}
+            {nameError && <FieldError id="ob-owner-name-error">Enter your name.</FieldError>}
           </div>
           <div>
-            <label className={labelClass}>Email</label>
+            <label htmlFor="ob-owner-email" className={labelClass}>
+              Email
+            </label>
             <input
+              id="ob-owner-email"
               type="email"
+              autoComplete="email"
               value={data.ownerEmail}
               onChange={(e) => onChange({ ownerEmail: e.target.value })}
               placeholder="you@yourstudio.com"
+              aria-invalid={emailError || undefined}
+              aria-describedby={emailError ? "ob-owner-email-error" : undefined}
               className={inputClass}
             />
-            {error === "ownerEmail" && (
-              <p className="text-[0.75rem] text-amber mt-1">
-                Valid email is required
-              </p>
-            )}
+            {emailError && <FieldError id="ob-owner-email-error">Enter a valid email address.</FieldError>}
           </div>
         </div>
         <div>
-          <label className={labelClass}>
-            Phone number{" "}
-            <span className="font-normal text-fog">(optional)</span>
+          <label htmlFor="ob-owner-phone" className={labelClass}>
+            Phone number
+            <Optional />
           </label>
           <input
+            id="ob-owner-phone"
             type="tel"
+            autoComplete="tel"
             value={data.ownerPhone}
             onChange={(e) => onChange({ ownerPhone: e.target.value })}
             placeholder="07700 900000"
@@ -240,24 +214,26 @@ export default function SubmissionSummary({
           />
         </div>
         <div>
-          <label className={labelClass}>
-            Anything else we should know?{" "}
-            <span className="font-normal text-fog">(optional)</span>
+          <label htmlFor="ob-notes" className={labelClass}>
+            Anything else we should know?
+            <Optional />
           </label>
           <textarea
+            id="ob-notes"
             value={data.notes}
             onChange={(e) => onChange({ notes: e.target.value })}
-            placeholder="Tell us about your goals, timeline, or any questions..."
+            placeholder="Tell us about your goals, timeline, or any questions"
             rows={3}
-            className={inputClass}
+            className={`${inputClass} resize-none`}
           />
         </div>
         <div>
-          <label className={labelClass}>
-            Referral code{" "}
-            <span className="font-normal text-fog">(optional)</span>
+          <label htmlFor="ob-referral" className={labelClass}>
+            Referral code
+            <Optional />
           </label>
           <input
+            id="ob-referral"
             type="text"
             value={data.referralCode}
             onChange={(e) => onChange({ referralCode: e.target.value })}
@@ -268,32 +244,26 @@ export default function SubmissionSummary({
             spellCheck={false}
           />
           {data.referralCode && (
-            <p className="text-[0.72rem] text-driftwood mt-1.5">
-              Referral applied · we&apos;ll credit{" "}
-              <span className="font-mono text-terracotta">
-                {data.referralCode}
-              </span>
+            <p className={hintClass}>
+              Referral applied. We&apos;ll credit <span className="font-bold text-text">{data.referralCode}</span>.
             </p>
           )}
         </div>
+      </fieldset>
+
+      <div className="flex flex-col gap-3">
+        {error && !nameError && !emailError && (
+          <p className="text-center type-small text-coral" role="alert">
+            {error}
+          </p>
+        )}
+        <Button size="lg" onClick={onCheckout} disabled={loading} className="w-full">
+          {loading ? "Opening checkout…" : `Continue to payment →`}
+        </Button>
+        <p className="text-center type-small text-text-muted">
+          You&apos;ll pay securely with Stripe. No setup fees, no contract, cancel anytime.
+        </p>
       </div>
-
-      {error && error !== "ownerName" && error !== "ownerEmail" && (
-        <p className="text-[0.82rem] text-amber mb-4 text-center">{error}</p>
-      )}
-
-      {/* Submit button */}
-      <button
-        onClick={onSubmitQuote}
-        disabled={loading}
-        className="w-full py-4 bg-terracotta text-parchment rounded-[10px] text-[0.95rem] font-semibold hover:bg-burnt hover:scale-[1.01] transition-all disabled:opacity-60 disabled:hover:scale-100"
-      >
-        {loading ? "Submitting..." : "Request a quote →"}
-      </button>
-
-      <p className="text-[0.72rem] text-fog text-center mt-3">
-        We&apos;ll review your details and get back to you within 48 hours.
-      </p>
     </div>
   );
 }
