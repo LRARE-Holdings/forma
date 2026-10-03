@@ -60,7 +60,8 @@ for (const tier of PRICING_TIERS) {
 
 console.log(`
 Next:
-  1. Add a webhook endpoint for ${brand.url}/api/webhooks/stripe with events:
+  1. Add a webhook endpoint for https://www.${brand.domain}/api/webhooks/stripe
+     (www: the bare domain redirects, and Stripe does not follow redirects) with events:
      checkout.session.completed, customer.subscription.updated,
      customer.subscription.deleted, invoice.payment_failed
   2. Put its signing secret in STRIPE_WEBHOOK_SECRET.`);

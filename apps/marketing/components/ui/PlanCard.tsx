@@ -30,7 +30,7 @@ export function PlanCard({ tier, compact = false }: { tier: PricingTier; compact
 
       {!compact && (
         <>
-          <p className={`type-small ${featured ? "text-ink" : "text-text-secondary"}`}>{tier.cap}</p>
+          {tier.cap && <p className={`type-small ${featured ? "text-ink" : "text-text-secondary"}`}>{tier.cap}</p>}
           <ul className="flex flex-col gap-2 border-t border-current/15 pt-4 type-small">
             {tier.features.map((f) => (
               <li key={f} className="flex gap-2">

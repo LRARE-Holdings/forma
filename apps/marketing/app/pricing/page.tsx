@@ -3,7 +3,7 @@ import SiteHeader from "@/components/site/SiteHeader";
 import SiteFooter from "@/components/site/SiteFooter";
 import PricingRow from "@/components/marketing/PricingRow";
 import { Block, FinalCta } from "@/components/marketing/HomeSections";
-import { ANNUAL_TRIAL, PRICING_TIERS } from "@/lib/pricing";
+import { PRICING_TIERS } from "@/lib/pricing";
 import { brand } from "@/config/brand";
 
 const priceList = PRICING_TIERS.map((t) => `${t.name} £${t.priceMonthly}`).join(", ");
@@ -44,17 +44,11 @@ export default function PricingPage() {
                 One price. <span className="text-volt">No percentage.</span>
               </h1>
               <p className="max-w-[56ch] type-body-l text-text-secondary">
-                Pick a plan by the size of your studio. The price is the same every month, and you keep every pound your
+                Pick the plan that fits your studio. The price is the same every month, and you keep every pound your
                 members pay.
               </p>
             </div>
             <PricingRow />
-            <div className="flex flex-col gap-2 rounded-lg border border-border p-6 md:flex-row md:items-center md:justify-between">
-              <p className="type-h3">Pay annually, start with a free trial.</p>
-              <p className="text-text-secondary">
-                Free for {ANNUAL_TRIAL.length} on annual plans. Annual pricing: {ANNUAL_TRIAL.annualPrice}.
-              </p>
-            </div>
           </div>
         </section>
 

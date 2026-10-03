@@ -116,13 +116,13 @@ export default function ComponentsSection() {
 
       <Sub title="Class schedule row" note="Example timetable for product mockups.">
         <div className="rounded-lg bg-surface px-5">
-          <ScheduleRow time="07:00" duration="50 min" name="Reformer Foundations" instructor="[INSTRUCTOR]" booked={9} capacity={12} />
-          <ScheduleRow time="12:15" duration="45 min" name="Mat Pilates" instructor="[INSTRUCTOR]" booked={14} capacity={14} />
+          <ScheduleRow time="07:00" duration="50 min" name="Reformer Foundations" booked={9} capacity={12} />
+          <ScheduleRow time="12:15" duration="45 min" name="Mat Pilates" booked={14} capacity={14} />
           <ScheduleRow
             time="18:30"
             duration="60 min"
             name="Barre Burn"
-            instructor="[INSTRUCTOR]"
+           
             booked={6}
             capacity={16}
             action={<StatusChip tone="success">Booked</StatusChip>}

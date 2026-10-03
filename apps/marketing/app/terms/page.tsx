@@ -34,7 +34,7 @@ export default function TermsPage() {
 
           <h2 className="mt-10 type-h3 text-ink">3. Plans and billing</h2>
           <p>
-            Forma is offered on flat monthly subscription plans, with current pricing shown on our pricing page. Subscriptions are billed monthly in advance via our payment provider, include the member allowance for your chosen plan, and renew automatically until cancelled. You can cancel at any time from your account; cancellation takes effect at the end of the current billing period and you can export your data on the way out. There is no minimum term and no commission taken on your bookings.
+            Forma is offered on flat monthly subscription plans, with current pricing shown on our pricing page. Subscriptions are billed monthly in advance via our payment provider, include the features of your chosen plan as shown on our pricing page, and renew automatically until cancelled. You can cancel at any time from your account; cancellation takes effect at the end of the current billing period and you can export your data on the way out. There is no minimum term and no commission taken on your bookings.
           </p>
 
           <h2 className="mt-10 type-h3 text-ink">4. Your content</h2>

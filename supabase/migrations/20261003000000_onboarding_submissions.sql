@@ -7,7 +7,7 @@
 -- Written only by the marketing site's server routes using the service role,
 -- so RLS is on with no policies: anon and authenticated clients get nothing.
 --
--- NOT YET APPLIED to Forma DB (yzcerbbiifususbxczns). Apply deliberately.
+-- Applied to Forma DB (yzcerbbiifususbxczns) on 2026-10-03.
 
 create table if not exists public.onboarding_submissions (
   id uuid primary key default gen_random_uuid(),

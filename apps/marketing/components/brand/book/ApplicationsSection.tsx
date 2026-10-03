@@ -3,7 +3,7 @@ import { Logo } from "@/components/brand/Logo";
 import HomeHero from "@/components/marketing/HomeHero";
 import PricingRow from "@/components/marketing/PricingRow";
 import { brand } from "@/config/brand";
-import { SampleWelcomeEmail } from "@/emails/components/BrandLayout";
+import { PaymentReceivedEmail } from "@/emails/transactional";
 import { BookSection, Sub } from "./Book";
 
 function SocialPost() {
@@ -33,7 +33,8 @@ function SocialPost() {
 }
 
 export default async function ApplicationsSection() {
-  const emailHtml = await render(<SampleWelcomeEmail />);
+  // Example data, so the page shows the real email without a real customer.
+  const emailHtml = await render(<PaymentReceivedEmail ownerName="Sam Example" studioName="Example Studio" planName="Studio" />);
 
   return (
     <BookSection
@@ -47,7 +48,7 @@ export default async function ApplicationsSection() {
         </div>
       </Sub>
 
-      <Sub title="Pricing row" note="Pro inverts to volt. Member limits stay as placeholders until they are decided.">
+      <Sub title="Pricing row" note="Pro inverts to volt. Prices only: the full cards with features are on /pricing.">
         <PricingRow compact />
       </Sub>
 
@@ -77,7 +78,7 @@ export default async function ApplicationsSection() {
         }
       >
         <iframe
-          title="Sample welcome email"
+          title="Payment received email, with example data"
           srcDoc={emailHtml}
           className="h-[620px] w-full max-w-[640px] rounded-lg bg-paper-2"
         />

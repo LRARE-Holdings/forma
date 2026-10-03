@@ -1,4 +1,4 @@
-import { PRICING_TIERS, ANNUAL_TRIAL } from "@/lib/pricing";
+import { PRICING_TIERS } from "@/lib/pricing";
 import { PlanCard } from "@/components/ui/PlanCard";
 
 /** Four plan cards, Pro inverted. `compact` is the price-only row from the mockup. */
@@ -11,10 +11,7 @@ export default function PricingRow({ compact = false }: { compact?: boolean }) {
           <PlanCard key={tier.id} tier={tier} compact={compact} />
         ))}
       </div>
-      <p className="type-small text-text-muted">
-        Every plan: no setup fees, no contracts, zero commission. Pay annually and get a free {ANNUAL_TRIAL.length}{" "}
-        trial.
-      </p>
+      <p className="type-small text-text-muted">Every plan: no setup fees, no contracts, zero commission. Cancel anytime.</p>
     </div>
   );
 }
